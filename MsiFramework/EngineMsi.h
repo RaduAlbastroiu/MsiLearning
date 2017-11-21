@@ -1,15 +1,9 @@
 #pragma once
 
 // entry point in framework
+/*
 namespace Framework
 {
-  namespace PrintFunc
-  {
-    listAllTables();
-    printSchemaTbl(int aTable);
-    printRowTbl(int aTable, int aRow);
-  }
-
   namespace LoadFunc
   {
     loadTable(int aTable);
@@ -25,8 +19,9 @@ namespace Framework
     updateColRowTbl(int aTable, int aRow, int aCol, wstring aValue);
   }
 
-  namespace RemoveFunc
+  namespace DeleteFunc
   {
 
   }
 }
+*/
