@@ -20,6 +20,7 @@
 *.suo
 *.db-shm
 *.opendb
+*.ilk
 
 # Compiled Dynamic libraries
 *.so
@@ -40,3 +41,5 @@
 *.exe
 *.out
 *.app
+
+Debug\
