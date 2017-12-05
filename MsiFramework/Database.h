@@ -1,16 +1,24 @@
 #pragma once
+
+#include "stdafx.h"
+#include "Table.h"
+
 class Database
 {
 private:
-  LPCTSTR databasePath;
+  LPCWSTR databasePath;
   MSIHANDLE databaseHandle;
-  
+
+  vector<Table*> tables;
+
+public:
+  Database(wstring aDatabasePath);
+
+  ~Database();
 
   void saveDatabase();
 
-public:
-  Database(LPCTSTR aDatabasePath);
-
-  ~Database();
+  Table* getTable(wstring tableName);
+  // View* getView(wstring sqlQuerry);
 };
 
