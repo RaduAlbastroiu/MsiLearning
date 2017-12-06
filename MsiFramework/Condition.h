@@ -1,18 +1,18 @@
 #pragma once
 
 #include "Record.h"
+#include "Requirement.h"
 
 class Condition
 {
-  wstring targetColumn;
-  vector<pair<> requirements;
+  wstring mTargetColumn;
+  vector<Requirement> mRequirements;
 
 public:
   Condition(wstring aTargetColumn);
-  ~Condition();
 
-  void saveCondition();
-
-  void addRequirements(Record aRequirement);
+  void addRequirements(wstring aRequiredColumn, vector<wstring> aRequirementValues);
+  
+  wstring getTargetColumn();
+  vector<Requirement> getAllRequirements();
 };
-

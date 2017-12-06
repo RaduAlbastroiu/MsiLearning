@@ -6,10 +6,10 @@
 class Database
 {
 private:
-  LPCWSTR databasePath;
-  MSIHANDLE databaseHandle;
+  LPCWSTR mDatabasePath;
+  MSIHANDLE mDatabaseHandle;
 
-  vector<Table*> tables;
+  vector<Table> tables;
 
 public:
   Database(wstring aDatabasePath);
@@ -18,7 +18,6 @@ public:
 
   void saveDatabase();
 
-  Table* getTable(wstring tableName);
-  // View* getView(wstring sqlQuerry);
+  Table getTable(wstring tableName);
 };
 

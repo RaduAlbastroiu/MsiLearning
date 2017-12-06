@@ -5,17 +5,16 @@
 
 class Table
 {
-  MSIHANDLE tableView;
-  wstring tableName;
-  vector<Record*> records;
+  MSIHANDLE mDatabaseHandle;
+  MSIHANDLE mTableView;  
+  wstring mTableName; 
+
+  wstring composeSqlQuerry(Condition aCondition);
 
 public:
-  Table(wstring aTableName, MSIHANDLE aTableView);
+  Table(wstring aTableName, MSIHANDLE aTableView, MSIHANDLE aDatabaseHandle);
   ~Table();
 
-  void saveTable();
-
-  Record getRecord(Condition aCondition);
-  void setRecord(Record aRecord);
+  Record getRecord(Condition aCondition, bool& succeded);
 };
 

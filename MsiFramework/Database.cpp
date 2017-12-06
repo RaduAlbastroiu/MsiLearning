@@ -3,49 +3,42 @@
 
 
 Database::Database(wstring aDatabasePath):
-  databasePath(aDatabasePath.c_str())
+  mDatabasePath(aDatabasePath.c_str())
 {
-  MsiOpenDatabase(databasePath, MSIDBOPEN_DIRECT, &databaseHandle);
+  MsiOpenDatabase(mDatabasePath, MSIDBOPEN_DIRECT, &mDatabaseHandle);
 }
 
 Database::~Database()
 {
-  MsiCloseHandle(databaseHandle);
+  // commit
+  ::MsiDatabaseCommit(mDatabaseHandle);
 
-  for (auto table : tables)
-  {
-    delete(table);
-  }
+  // free handle
+  ::MsiCloseHandle(mDatabaseHandle);
 }
 
 void Database::saveDatabase()
 {
-  for (auto table : tables)
-  {
-    table->saveTable();
-  }
-
-  MsiDatabaseCommit(databaseHandle);
+  MsiDatabaseCommit(mDatabaseHandle);
 }
 
-Table* Database::getTable(wstring tableName)
+Table Database::getTable(wstring tableName)
 {
   wstring sqlQuerryString = L"SELECT * FROM `" + tableName + L"`";
 
   LPCTSTR sqlQuerry = sqlQuerryString.c_str();
 
   MSIHANDLE tableView;
-  UINT errorMessage = ::MsiDatabaseOpenView(databaseHandle, sqlQuerry, &tableView);
+  UINT errorMessage = ::MsiDatabaseOpenView(mDatabaseHandle, sqlQuerry, &tableView);
   if (errorMessage == ERROR_SUCCESS)
   {
-    Table* tb = new Table(tableName, tableView);
-    tables.push_back(tb);
+    // everything is good
+    ;
+  }
 
-    return tb;
-  }
-  else
-  {
-    return nullptr;
-  }
+  Table tb = Table(tableName, tableView, mDatabaseHandle);
+  tables.push_back(tb);
+
+  return tb;
 
 }
