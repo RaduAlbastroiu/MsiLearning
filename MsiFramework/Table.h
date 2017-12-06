@@ -15,6 +15,6 @@ public:
   Table(wstring aTableName, MSIHANDLE aTableView, MSIHANDLE aDatabaseHandle);
   ~Table();
 
-  Record getRecord(Condition aCondition, bool& succeded);
+  RecordCollection getRecords(Condition aCondition, bool& succeded);
 };
 

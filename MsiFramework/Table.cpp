@@ -62,7 +62,7 @@ wstring Table::composeSqlQuerry(Condition aCondition)
   return sqlQuerry;
 }
 
-Record Table::getRecord(Condition aCondition, bool& succeded)
+RecordCollection Table::getRecords(Condition aCondition, bool& succeded)
 {
   LPCTSTR sqlQuerry = composeSqlQuerry(aCondition).c_str();
 
@@ -78,5 +78,5 @@ Record Table::getRecord(Condition aCondition, bool& succeded)
     succeded = false;
   }
 
-  return Record(recordHandle, mTableName, aCondition.getTargetColumn());
+  return RecordCollection(recordHandle, mTableName, aCondition.getTargetColumn());
 }

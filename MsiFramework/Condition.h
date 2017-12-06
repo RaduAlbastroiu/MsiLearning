@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Record.h"
+#include "RecordCollection.h"
 #include "Requirement.h"
 
 class Condition
