@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Condition.h"
-#include "Record.h"
+#include "RecordCollection.h"
 
 class Table
 {
@@ -11,10 +11,13 @@ class Table
 
   wstring composeSqlQuerry(Condition aCondition);
 
+  
+
 public:
   Table(wstring aTableName, MSIHANDLE aTableView, MSIHANDLE aDatabaseHandle);
   ~Table();
 
-  RecordCollection getRecords(Condition aCondition, bool& succeded);
+  RecordCollection getRecordCollection(Condition aCondition);
 };
+
 

@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Table.h"
-
-
+#include "RecordCollection.h"
 
 Table::Table(wstring aTableName, MSIHANDLE aTableView, MSIHANDLE aDatabaseHandle) :
   mTableView(aTableView), mTableName(aTableName), mDatabaseHandle(aDatabaseHandle)
@@ -62,21 +61,17 @@ wstring Table::composeSqlQuerry(Condition aCondition)
   return sqlQuerry;
 }
 
-RecordCollection Table::getRecords(Condition aCondition, bool& succeded)
+RecordCollection Table::getRecordCollection(Condition aCondition)
 {
-  LPCTSTR sqlQuerry = composeSqlQuerry(aCondition).c_str();
+  wstring sqlQuerry = composeSqlQuerry(aCondition);
 
   MSIHANDLE recordHandle;
-  UINT errorMessage = ::MsiDatabaseOpenView(mDatabaseHandle, sqlQuerry, &recordHandle);
+  UINT errorMessage = ::MsiDatabaseOpenView(mDatabaseHandle, sqlQuerry.c_str(), &recordHandle);
 
   if (errorMessage == ERROR_SUCCESS)
   {
-    succeded = true;
-  }
-  else
-  {
-    succeded = false;
+    ;//
   }
 
-  return RecordCollection(recordHandle, mTableName, aCondition.getTargetColumn());
+  return  RecordCollection(recordHandle, mTableName, aCondition.getTargetColumn());
 }

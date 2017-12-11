@@ -16,11 +16,14 @@ class RecordCollection
 
 public:
   RecordCollection(MSIHANDLE aView, wstring aTableName, wstring aColumnName);
-  ~RecordCollection();
+  
 
   vector<SingleRecord> getAllRecords();
   SingleRecord getNextRecord();
 
+  wstring getTableName();
+  wstring getColumnName();
+  wstring getView();
   // maybe later, not sure if it will work
   // bool modifyAllValues(vector<wstring> aValues);
 

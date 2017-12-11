@@ -6,11 +6,6 @@ RecordCollection::RecordCollection(MSIHANDLE aView, wstring aTableName, wstring 
 {
 }
 
-RecordCollection::~RecordCollection()
-{
-  ::MsiCloseHandle(mView);
-}
-
 SingleRecord RecordCollection::createRecord(MSIHANDLE recordHandle)
 {
   DWORD lenght;
@@ -22,8 +17,8 @@ SingleRecord RecordCollection::createRecord(MSIHANDLE recordHandle)
     isGood = true;
   }
 
-  wchar_t value[RECORD_MAX_LENGTH];
-  errorMessage = ::MsiRecordGetString(recordHandle, 1, value, &lenght);
+  wstring value(lenght+1, L'\0');
+  errorMessage = ::MsiRecordGetString(recordHandle, 1, &value[0], &lenght);
   if (errorMessage == ERROR_SUCCESS)
   {
     isGood = true;
@@ -57,10 +52,27 @@ vector<SingleRecord> RecordCollection::getAllRecords()
 SingleRecord RecordCollection::getNextRecord()
 {
   MSIHANDLE handleRecord;
-  errorMessage = ::MsiViewFetch(mView, &handleRecord);
+  auto errorMessage = ::MsiViewFetch(mView, &handleRecord);
 
   if (errorMessage == ERROR_SUCCESS)
   {
     mRecords.push_back(createRecord(handleRecord));
   }
+
+  return SingleRecord(handleRecord, mView, L"");
+}
+
+wstring RecordCollection::getTableName()
+{
+  return wstring();
+}
+
+wstring RecordCollection::getColumnName()
+{
+  return wstring();
+}
+
+wstring RecordCollection::getView()
+{
+  return wstring();
 }
