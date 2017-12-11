@@ -163,6 +163,7 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TestFunctions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MsiEditor.cpp" />
