@@ -1,5 +1,7 @@
 #pragma once
 #include "stdafx.h"
+#include "../MsiFrameworkTree/Node.h"
+#include "../MsiFrameworkTree/NodeCollection.h"
 
 
 void selectUpdate(MSIHANDLE handleTest) {
@@ -110,30 +112,35 @@ void justUpdate(MSIHANDLE handleTest)
 
 }
 
-void msiFramework(LPCTSTR msiPath)
-{
-  Database db = Database(msiPath);
-
-  Table tb = db.getTable(L"Control");
-  Condition cd = Condition(L"Text");
-  cd.addRequirements(L"Dialog_", { L"WelcomeDlg", L"BLAH" });
-  cd.addRequirements(L"X", { L"135" });
-
-  RecordCollection rd = tb.getRecordCollection(cd);
-  vector<SingleRecord> records = rd.getAllRecords();
-  records[0].setValue(L"new value");
-}
+//void msiFramework(LPCTSTR msiPath)
+//{
+  //Database db = Database(msiPath);
+  //
+  //Table tb = db.getTable(L"Control");
+  //Condition cd = Condition(L"Text");
+  //cd.addRequirements(L"Dialog_", { L"WelcomeDlg", L"BLAH" });
+  //cd.addRequirements(L"X", { L"135" });
+  //
+  //RecordCollection rd = tb.getRecordCollection(cd);
+  //vector<SingleRecord> records = rd.getAllRecords();
+  //records[0].setValue(L"new value");
+//}
 
 
 // very sweet in theory
 void msiFrameworkTree(LPCTSTR msiPath)
 {
-  Database db = Database(msiPath);
+  Node database(msiPath);
+  auto value = database.children(L"Control")->children(L"Text", L"Property"); 
 
-  int value = db.children(L"Control").children(L"Text").where("condition").getInt().firstElement();
-  db.children(L"Control").children(L"Text").where("condition").update();
-  db.children(L"Control").children(L"Text").deleteAll();
+  auto s = value->children(L"condition")->select();
   
+
+  database.children(L"Control")->children(L"Text")->update(L"new Value");
+
+  database.children(L"Control")->children(L"Text")->deleteThis();
+
   // join 4 types (inner mostly)
-  db.children(L"Control").joinInner(db.children("Dialog"));
+  database.children(L"Control")->joinStuff(make_unique<NodeProtocol>(database.children(L"Dialog")));
 }
+
