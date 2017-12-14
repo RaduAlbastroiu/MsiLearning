@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DatabaseInfo.h" />
+    <ClInclude Include="LogicCondition.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="NodeCollection.h" />
     <ClInclude Include="NodeProtocol.h" />
@@ -156,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DatabaseInfo.cpp" />
+    <ClCompile Include="LogicCondition.cpp" />
     <ClCompile Include="MsiFrameworkTree.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="NodeCollection.cpp" />

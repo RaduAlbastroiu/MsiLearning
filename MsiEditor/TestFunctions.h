@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "../MsiFrameworkTree/Node.h"
+#include "../MsiFrameworkTree/LogicCondition.h"
 
 
 void selectUpdate(MSIHANDLE handleTest) {
@@ -129,8 +130,11 @@ void justUpdate(MSIHANDLE handleTest)
 // very sweet in theory
 void msiFrameworkTree(LPCTSTR msiPath)
 {
-  Node database(msiPath);
+  //Node database(msiPath);
   //auto value = database.children(L"Control")->children(L"Text")->size(); 
   //value++;
+
+  LogicCondition(LogicCondition(L"Text", vector<wstring>{L"someString", L"anotherString"}).And(L"Dialog", vector<wstring>{L"someValue"}));
+
 }
 

@@ -7,13 +7,13 @@ Node::Node(const DatabaseInfo& aDatabaseInfo, vector<unique_ptr<Node>> aNodeColl
 {
 }
 
-Node::Node(const wstring& databasePath)
+Node::Node(const wstring& aDatabasePath)
 {
   // init database Info
-  // databaseInfo.openDatabase(databasepath);
+  databaseInfo.openDatabase(aDatabasePath);
 }
 
-std::unique_ptr<Node> Node::children(wstring condition)
+unique_ptr<Node> Node::children(wstring condition)
 {
   vector<unique_ptr<Node>> result;
   DatabaseInfo databaseInfoResult;
@@ -37,6 +37,12 @@ std::unique_ptr<Node> Node::children(wstring condition)
   {
     return nullptr;
   }
+}
+
+unique_ptr<Node> Node::children(LogicCondition aCondition)
+{
+  databaseInfo.condition = aCondition;
+  return make_unique<Node>(databaseInfo, nodeCollection);
 }
 
 bool Node::update(wstring newValue)

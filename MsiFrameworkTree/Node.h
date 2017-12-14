@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "DatabaseInfo.h"
+#include "LogicCondition.h"
 
 class Node {
 public:
@@ -12,6 +13,7 @@ public:
   Node(const Node& that) = delete;
 
   virtual unique_ptr<Node> children(wstring condition);
+  virtual unique_ptr<Node> children(LogicCondition aCondition);
 
   virtual bool update(wstring newValue);
   virtual bool deleteThis();
