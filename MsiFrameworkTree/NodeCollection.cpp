@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "NodeCollection.h"
 
+/*
 NodeCollection::NodeCollection(const DatabaseInfo& aDatabaseInfo, vector<unique_ptr<NodeProtocol>> aNodeCollection)
   :databaseInfo(aDatabaseInfo), nodeCollection(move(aNodeCollection))
 {
@@ -74,3 +75,4 @@ std::wstring NodeCollection::getWstring()
 {
   throw std::logic_error("The method or operation is not implemented.");
 }
+*/

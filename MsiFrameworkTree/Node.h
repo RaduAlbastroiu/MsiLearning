@@ -1,34 +1,34 @@
 #pragma once
 #include "stdafx.h"
-#include "NodeProtocol.h"
 #include "DatabaseInfo.h"
 
-class Node: public NodeProtocol {
+class Node {
 public:
 
-  Node(const DatabaseInfo& aDatabaseInfo);
   Node(const wstring& databasePath);
+  Node(const DatabaseInfo& aDatabaseInfo, vector<unique_ptr<Node>> aNodeCollection);
+  
+  // deleted copy constructor
+  Node(const Node& that) = delete;
 
-  unique_ptr<NodeProtocol> children(wstring condition) override;
+  virtual unique_ptr<Node> children(wstring condition);
 
-  // select
-  virtual unique_ptr<NodeProtocol> select();
-  virtual unique_ptr<NodeProtocol> selectInt();
-  virtual unique_ptr<NodeProtocol> selectWstring();
+  virtual bool update(wstring newValue);
+  virtual bool deleteThis();
 
-  // update
-  bool update(wstring newValue) override;
+  virtual int size();
 
-  // delete
-  bool deleteThis() override;
+  virtual unique_ptr<Node> select();
 
-  int getInt() override;
-  wstring getWstring() override;
+  virtual int getInt();
+  virtual wstring getWstring();
 
   // unicorns
-  virtual void joinStuff(unique_ptr<NodeProtocol> aNodeProtocol) override;
+  virtual void joinStuff(unique_ptr<Node> aNodeProtocol);
 
 private:
+  // data
   DatabaseInfo databaseInfo;
+  vector<unique_ptr<Node>> nodeCollection;
 
 };

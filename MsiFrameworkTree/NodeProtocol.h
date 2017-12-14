@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "DatabaseInfo.h"
 
+/*
 class NodeProtocol {
 public:
 
@@ -28,4 +29,4 @@ public:
 private:
 
 };
-
+*/

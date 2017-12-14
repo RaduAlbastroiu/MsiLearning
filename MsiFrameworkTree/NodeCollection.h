@@ -4,6 +4,7 @@
 #include "Node.h"
 #include "DatabaseInfo.h"
 
+/*
 class NodeCollection: public NodeProtocol {
 public:
 
@@ -16,17 +17,13 @@ public:
 
   virtual void size();
 
-  // unicorns
-  virtual void joinStuff(unique_ptr<NodeProtocol> aNodeProtocol) override;
-
-
   virtual unique_ptr<NodeProtocol> select() override;
 
-
   virtual int getInt() override;
-
-
   virtual wstring getWstring() override;
+
+  // unicorns
+  virtual void joinStuff(unique_ptr<NodeProtocol> aNodeProtocol) override;
 
 private:
   // data
@@ -34,3 +31,4 @@ private:
   vector<unique_ptr<NodeProtocol>> nodeCollection;
 
 };
+*/

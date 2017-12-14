@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "../MsiFrameworkTree/Node.h"
-#include "../MsiFrameworkTree/NodeCollection.h"
 
 
 void selectUpdate(MSIHANDLE handleTest) {
@@ -131,16 +130,7 @@ void justUpdate(MSIHANDLE handleTest)
 void msiFrameworkTree(LPCTSTR msiPath)
 {
   Node database(msiPath);
-  auto value = database.children(L"Control")->children(L"Text", L"Property"); 
-
-  auto s = value->children(L"condition")->select();
-  
-
-  database.children(L"Control")->children(L"Text")->update(L"new Value");
-
-  database.children(L"Control")->children(L"Text")->deleteThis();
-
-  // join 4 types (inner mostly)
-  database.children(L"Control")->joinStuff(make_unique<NodeProtocol>(database.children(L"Dialog")));
+  //auto value = database.children(L"Control")->children(L"Text")->size(); 
+  //value++;
 }
 
