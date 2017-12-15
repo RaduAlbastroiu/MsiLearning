@@ -1,51 +1,46 @@
 #include "stdafx.h"
 #include "LogicCondition.h"
 
-LogicCondition::LogicCondition(wstring target, vector<wstring>& expectedValues)
-{
-  composeSqlCondition(target, expectedValues);
-}
-
 LogicCondition::LogicCondition(const LogicCondition& aSubCondition)
 {
-  sqlCondition = L"( " + aSubCondition.getCondition() + L" )";
+  mSqlCondition = L"( " + aSubCondition.getCondition() + L" )";
 }
 
 LogicCondition::LogicCondition(const wstring aSqlCondition)
-  :sqlCondition(aSqlCondition)
+  :mSqlCondition(aSqlCondition)
 {
-}
-
-LogicCondition LogicCondition::And(wstring target, vector<wstring>& expectedValues)
-{
-  sqlCondition += L" AND ";
-  sqlCondition += composeSqlCondition(target, expectedValues);
-
-  return LogicCondition(sqlCondition);
 }
 
 LogicCondition LogicCondition::And(LogicCondition aCondition)
 {
-  sqlCondition += L" AND ";
-  sqlCondition += aCondition.getCondition();
+  mSqlCondition += L" AND ";
+  mSqlCondition += aCondition.getCondition();
 
-  return LogicCondition(sqlCondition);
+  return LogicCondition(mSqlCondition);
 }
 
-LogicCondition LogicCondition::Or(wstring target, vector<wstring>& expectedValues)
+LogicCondition LogicCondition::Or(LogicCondition aCondition)
 {
-  sqlCondition += L" OR ";
-  sqlCondition += composeSqlCondition(target, expectedValues);
+  mSqlCondition += L" OR ";
+  mSqlCondition += aCondition.getCondition();
 
-  return LogicCondition(sqlCondition);
+  return LogicCondition(mSqlCondition);
+}
+
+LogicCondition LogicCondition::Not(LogicCondition aCondition)
+{
+  mSqlCondition += L" NOT ";
+  mSqlCondition += aCondition.getCondition();
+
+  return LogicCondition(mSqlCondition);
 }
 
 std::wstring LogicCondition::getCondition() const
 {
-  return sqlCondition;
+  return mSqlCondition;
 }
 
-std::wstring LogicCondition::composeSqlCondition(wstring target, vector<wstring>& expectedValues)
+std::wstring LogicCondition::composeSqlCondition(wstring target, wstring operation, wstring comparison, vector<wstring>& expectedValues)
 {
   wstring resultSqltCondition = L"( ";
 

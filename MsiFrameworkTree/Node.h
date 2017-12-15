@@ -24,6 +24,7 @@ public:
 
   virtual int getInt();
   virtual wstring getWstring();
+  vector<wstring> getAllRecords();
 
   // unicorns
   virtual void joinStuff(unique_ptr<Node> aNodeProtocol);

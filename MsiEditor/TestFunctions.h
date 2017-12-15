@@ -128,13 +128,22 @@ void justUpdate(MSIHANDLE handleTest)
 
 
 // very sweet in theory
-void msiFrameworkTree(LPCTSTR msiPath)
-{
-  //Node database(msiPath);
-  //auto value = database.children(L"Control")->children(L"Text")->size(); 
-  //value++;
-
-  LogicCondition(LogicCondition(L"Text", vector<wstring>{L"someString", L"anotherString"}).And(L"Dialog", vector<wstring>{L"someValue"}));
-
-}
+//void msiFrameworkTree(LPCTSTR msiPath)
+//{
+//  //Node database(msiPath);
+//  //auto value = database.children(L"Control")->children(L"Text", L"ID")->children(equal(L"Type", L"Button"))->select();
+//  //value++;
+//  //
+//  //LogicCondition({({(L"Text", { L"someString"s, L"anotherString"s }).And({ L"Dialog", {L"someValue"s} })).Or().Or().Or()).And({().And());
+//  //AnyOf{ L"target", {L"x",L""};
+//  //NoneOf();
+//  //Equal();
+//  //NotEqual();
+//  //LessThan();
+//  //LessEqualThan();
+//  //GreaterThan();
+//  //GreaterEqualThan();
+//  //Not();
+//
+//}
 
