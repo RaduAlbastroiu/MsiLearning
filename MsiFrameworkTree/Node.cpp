@@ -3,21 +3,21 @@
 #include "Node.h"
 
 Node::Node(const DatabaseInfo& aDatabaseInfo, vector<unique_ptr<Node>> aNodeCollection)
-  :databaseInfo(aDatabaseInfo), nodeCollection(move(aNodeCollection))
+  :mDatabaseInfo(aDatabaseInfo), mNodeCollection(move(aNodeCollection))
 {
 }
 
 Node::Node(const wstring& aDatabasePath)
 {
   // init database Info
-  databaseInfo.openDatabase(aDatabasePath);
+  mDatabaseInfo.openDatabase(aDatabasePath);
 }
 
 unique_ptr<Node> Node::children(wstring condition)
-{
+{ 
   vector<unique_ptr<Node>> result;
   DatabaseInfo databaseInfoResult;
-  for (const auto& node : nodeCollection)
+  for (const auto& node : mNodeCollection)
   {
     unique_ptr<Node> resultNode = node->children(condition);
     if (resultNode)
@@ -41,8 +41,8 @@ unique_ptr<Node> Node::children(wstring condition)
 
 unique_ptr<Node> Node::children(LogicCondition aCondition)
 {
-  databaseInfo.condition = aCondition;
-  return make_unique<Node>(databaseInfo, nodeCollection);
+  mDatabaseInfo.condition = aCondition;
+  return make_unique<Node>(mDatabaseInfo, mNodeCollection);
 }
 
 bool Node::update(wstring newValue)

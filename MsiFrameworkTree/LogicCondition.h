@@ -8,8 +8,8 @@ public:
   // variadic arg list
 
   template<typename... Types>
-  LogicCondition(const wstring& target, const wstring& expectedValue, const Types& ... expectedValue)
-    :mTarget(target), mExpectedValues{ expectedValue, expectedValue... }
+  LogicCondition(const wstring& target, const wstring& expectedValue, const Types& ... expectedValues)
+    :mTarget(target), mExpectedValues{ expectedValue, expectedValues... }
   {
   }
 

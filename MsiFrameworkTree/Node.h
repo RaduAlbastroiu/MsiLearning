@@ -10,9 +10,9 @@ public:
   Node(const DatabaseInfo& aDatabaseInfo, vector<unique_ptr<Node>> aNodeCollection);
   
   // deleted copy constructor
-  Node(const Node& that) = delete;
+  Node(const Node& something) = delete;
 
-  virtual unique_ptr<Node> children(wstring condition);
+  virtual unique_ptr<Node> children(wstring aCondition);
   virtual unique_ptr<Node> children(LogicCondition aCondition);
 
   virtual bool update(wstring newValue);
@@ -31,7 +31,7 @@ public:
 
 private:
   // data
-  DatabaseInfo databaseInfo;
-  vector<unique_ptr<Node>> nodeCollection;
+  DatabaseInfo mDatabaseInfo;
+  vector<unique_ptr<Node>> mNodeCollection;
 
 };

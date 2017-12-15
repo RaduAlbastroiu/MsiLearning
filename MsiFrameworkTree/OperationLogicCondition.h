@@ -62,7 +62,7 @@ public:
   LessEqualThan(const wstring& target, const wstring& expectedValue)
     :LogicCondition(target, expectedValue)
   {
-    mComparison = L" < ";
+    mComparison = L" <= ";
   }
 };
 
