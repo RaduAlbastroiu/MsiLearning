@@ -2,7 +2,18 @@
 #include "stdafx.h"
 #include "DatabaseInfo.h"
 
-void DatabaseInfo::openDatabase(const wstring aDatabasePath) 
+void DatabaseInfo::addTable(const wstring & aTableName)
+{
+  for (auto table : tableCollection)
+  {
+    if (table.tableName == aTableName)
+      return;
+  }
+
+  tableCollection.push_back(DbInfoTable(aTableName, vector<wstring>{}));
+}
+
+void DatabaseInfo::openDatabase(const wstring aDatabasePath)
 {
   databasePath = aDatabasePath;
 }

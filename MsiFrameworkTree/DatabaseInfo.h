@@ -13,13 +13,14 @@ public:
   MSIHANDLE rootHandle;
   LogicCondition condition;
 
-  struct Table 
-  {
-    wstring tableName;
-    vector<wstring> columns;
-  };
 
-  Table tableName;
+  void addTable(const wstring& aTableName);
+  template<typename... Types>
+  void addColumns(const Types... aColumns)
+  {
+    // add to the last table added
+    tableCollection[tableCollection.size() - 1].columns = vector<wstring>{ aColumns... };
+  }
 
   void openDatabase(const wstring databasePath);
   wstring selectSqlCondition();
@@ -28,6 +29,19 @@ public:
 
 private:
 
-  wstring composeSqlQuerryColumns();
   wstring composeSqlQuerryTables();
+  wstring composeSqlQuerryColumns();
+
+  struct DbInfoTable
+  {
+    // constructor
+    DbInfoTable(wstring aTableName, vector<wstring> aColumns) :
+      tableName(aTableName), columns(aColumns)
+    {}
+
+    wstring tableName;
+    vector<wstring> columns;
+  };
+  vector<DbInfoTable> tableCollection;
+
 };

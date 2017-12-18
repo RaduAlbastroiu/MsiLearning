@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "../MsiFrameworkTree/Node.h"
+#include "../MsiFrameworkTree/Database.h"
 #include "../MsiFrameworkTree/LogicCondition.h"
 
 
@@ -128,22 +128,10 @@ void justUpdate(MSIHANDLE handleTest)
 
 
 // very sweet in theory
-//void msiFrameworkTree(LPCTSTR msiPath)
-//{
-//  //Node database(msiPath);
-//  //auto value = database.children(L"Control")->children(L"Text", L"ID")->children(equal(L"Type", L"Button"))->select();
-//  //value++;
-//  //
-//  //LogicCondition({({(L"Text", { L"someString"s, L"anotherString"s }).And({ L"Dialog", {L"someValue"s} })).Or().Or().Or()).And({().And());
-//  //AnyOf{ L"target", {L"x",L""};
-//  //NoneOf();
-//  //Equal();
-//  //NotEqual();
-//  //LessThan();
-//  //LessEqualThan();
-//  //GreaterThan();
-//  //GreaterEqualThan();
-//  //Not();
-//
-//}
+void msiFrameworkTree(LPCTSTR msiPath)
+{
+ 
+  auto nod = Database(msiPath)->addTable("Control")->addColumns("Text", "Dialog_")->addCondition(Equal(L"Type", L"Text").And(Equal(L"Control", L"Title")))->select()->getAll();
+
+}
 
