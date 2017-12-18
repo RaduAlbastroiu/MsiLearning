@@ -1,10 +1,10 @@
 #pragma once
 #include "stdafx.h"
-#include "Node.h"
 #include "SelectedState.h"
+#include "DatabaseInfo.h"
 #include "Table.h"
 
-class NeutralState : public Node
+class NeutralState
 {
 public:
 
@@ -14,4 +14,6 @@ public:
   unique_ptr<NeutralState> addCondition(LogicCondition aCondition);
   unique_ptr<SelectedState> select();
 
+private:
+  DatabaseInfo mDatabaseInfo;
 };

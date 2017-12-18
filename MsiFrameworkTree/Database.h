@@ -1,8 +1,9 @@
 #pragma once
 #include "stdafx.h"
-#include "NeutralState.h"
+#include "Table.h"
+#include "DatabaseInfo.h"
 
-class Database : public Node
+class Database
 {
 public:
   Database(const wstring& databasePath);
@@ -12,4 +13,5 @@ public:
   wstring mDatabasePath;
 
 private:
+  DatabaseInfo mDatabaseInfo;
 };

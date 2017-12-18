@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
-#include "Node.h"
+#include "DatabaseInfo.h"
 
-class Table : public Node
+class Table
 {
 public:
   Table(const DatabaseInfo& aDatabaseInfo);
@@ -15,4 +15,5 @@ public:
   }
 
 private:
+  DatabaseInfo mDatabaseInfo;
 };

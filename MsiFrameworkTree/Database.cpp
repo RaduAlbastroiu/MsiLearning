@@ -3,7 +3,7 @@
 #include "Database.h"
 
 Database::Database(const wstring& aDatabasePath)
-  :Node(aDatabasePath)
+  :mDatabaseInfo(aDatabasePath)
 {
   // open database
   this->mDatabaseInfo.openDatabase(mDatabasePath);

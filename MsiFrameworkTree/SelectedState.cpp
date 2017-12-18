@@ -4,7 +4,7 @@
 
 
 SelectedState::SelectedState(const DatabaseInfo & aDatabaseInfo)
-  :Node(aDatabaseInfo)
+  :mDatabaseInfo(aDatabaseInfo)
 {
 }
 

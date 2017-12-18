@@ -131,7 +131,8 @@ void justUpdate(MSIHANDLE handleTest)
 void msiFrameworkTree(LPCTSTR msiPath)
 {
  
-  auto nod = Database(msiPath)->addTable("Control")->addColumns("Text", "Dialog_")->addCondition(Equal(L"Type", L"Text").And(Equal(L"Control", L"Title")))->select()->getAll();
+  auto collection = Database(msiPath)->addTable("Control")->addColumns("Text", "Dialog_")->addCondition(Equal(L"Type", L"Text").And(Equal(L"Control", L"Title")))->select()->getAll();
+ 
 
 }
 

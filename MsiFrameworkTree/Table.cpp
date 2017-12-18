@@ -3,8 +3,8 @@
 #include "Table.h"
 
 Table::Table(const DatabaseInfo & aDatabaseInfo)
+  :mDatabaseInfo(aDatabaseInfo)
 {
-  mDatabaseInfo = aDatabaseInfo;
 }
 
 // addColumns implemented in header

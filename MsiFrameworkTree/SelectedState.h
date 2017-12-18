@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
-#include "Node.h"
+#include "DatabaseInfo.h"
 
-class SelectedState : public Node
+class SelectedState
 {
 public:
 
@@ -10,4 +10,6 @@ public:
   vector<wstring> getColumn(const wstring& aColumnName);
   vector<vector<wstring>> getAll();
   
+private:
+  DatabaseInfo mDatabaseInfo;
 };

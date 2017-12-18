@@ -1,7 +1,7 @@
 #include "NeutralState.h"
 
 NeutralState::NeutralState(const DatabaseInfo & aDatabaseInfo)
-  :Node(aDatabaseInfo)
+  :mDatabaseInfo(aDatabaseInfo)
 {
 }
 
