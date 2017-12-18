@@ -10,6 +10,8 @@ public:
 
   unique_ptr<Table> addTable(const wstring& tableName);
 
+  bool runSqlQuerry(const wstring& aSqlQuerry);
+
   wstring mDatabasePath;
 
 private:

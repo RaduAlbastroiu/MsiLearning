@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "Table.h"
 
-Table::Table(const DatabaseInfo & aDatabaseInfo)
-  :mDatabaseInfo(aDatabaseInfo)
+Table::Table(const DatabaseInfo& aDatabaseInfo, const wstring& aTableName)
+  :mDatabaseInfo(aDatabaseInfo), mTableName(aTableName)
 {
 }
 

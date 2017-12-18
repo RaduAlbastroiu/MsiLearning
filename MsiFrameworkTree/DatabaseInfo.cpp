@@ -2,20 +2,17 @@
 #include "stdafx.h"
 #include "DatabaseInfo.h"
 
-void DatabaseInfo::addTable(const wstring & aTableName)
-{
-  for (auto table : tableCollection)
-  {
-    if (table.tableName == aTableName)
-      return;
-  }
-
-  tableCollection.push_back(DbInfoTable(aTableName, vector<wstring>{}));
-}
-
-void DatabaseInfo::openDatabase(const wstring aDatabasePath)
+bool DatabaseInfo::openDatabase(const wstring aDatabasePath)
 {
   databasePath = aDatabasePath;
+
+  LPCTSTR databasePath = aDatabasePath.c_str();
+  mErrorMessage = ::MsiOpenDatabase(databasePath, MSIDBOPEN_DIRECT, &mDatabaseHandle);
+
+  if (mErrorMessage == ERROR_SUCCESS)
+    return true;
+
+  return false;
 }
 
 std::wstring DatabaseInfo::selectSqlCondition()
@@ -38,4 +35,25 @@ std::wstring DatabaseInfo::updateSqlCondition(wstring aNewValue)
 std::wstring DatabaseInfo::deleteSqlCondition()
 {
   return wstring();
+}
+
+bool DatabaseInfo::runSql(const wstring & aSqlQuerry)
+{
+  MSIHANDLE phView;
+  LPCTSTR sqlQuerry = aSqlQuerry.c_str();
+
+  mErrorMessage = ::MsiDatabaseOpenView(mDatabaseHandle, sqlQuerry, &phView);
+  if (mErrorMessage == ERROR_SUCCESS)
+  {
+    mErrorMessage = ::MsiViewExecute(phView, 0);
+    if (mErrorMessage == ERROR_SUCCESS)
+    {
+      mErrorMessage = ::MsiDatabaseCommit(mDatabaseHandle);
+      if (mErrorMessage == ERROR_SUCCESS)
+      {
+        return true;
+      }
+    }
+  }
+  return false;
 }

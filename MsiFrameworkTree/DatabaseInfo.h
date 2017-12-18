@@ -10,24 +10,26 @@ public:
 
   wstring databasePath;
   
-  MSIHANDLE rootHandle;
   LogicCondition condition;
 
-
-  void addTable(const wstring& aTableName);
   template<typename... Types>
-  void addColumns(const Types... aColumns)
+  void addTableWithColumns(const wstring& aTableName, const Types... aColumns)
   {
-    // add to the last table added
-    tableCollection[tableCollection.size() - 1].columns = vector<wstring>{ aColumns... };
+    tableCollection.push_back(aTableName, vector<wstring>{ aColumns... });
   }
 
-  void openDatabase(const wstring databasePath);
+  bool openDatabase(const wstring databasePath);
   wstring selectSqlCondition();
   wstring updateSqlCondition(wstring aNewValue);
   wstring deleteSqlCondition();
 
+  bool runSql(const wstring& aSqlQuerry);
+
 private:
+
+  UINT mErrorMessage = ERROR_SUCCESS;
+
+  MSIHANDLE mDatabaseHandle;
 
   wstring composeSqlQuerryTables();
   wstring composeSqlQuerryColumns();
@@ -43,5 +45,4 @@ private:
     vector<wstring> columns;
   };
   vector<DbInfoTable> tableCollection;
-
 };

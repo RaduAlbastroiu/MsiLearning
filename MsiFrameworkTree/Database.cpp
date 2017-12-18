@@ -6,11 +6,10 @@ Database::Database(const wstring& aDatabasePath)
   :mDatabaseInfo(aDatabasePath)
 {
   // open database
-  this->mDatabaseInfo.openDatabase(mDatabasePath);
+  mDatabaseInfo.openDatabase(mDatabasePath);
 }
 
 unique_ptr<Table> Database::addTable(const wstring& aTableName)
 {
-  mDatabaseInfo.addTable(aTableName);
-  return make_unique<Node>(mDatabaseInfo);
+  return make_unique<Node>(mDatabaseInfo, aTableName);
 }

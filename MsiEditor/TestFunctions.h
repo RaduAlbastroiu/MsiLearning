@@ -132,7 +132,7 @@ void msiFrameworkTree(LPCTSTR msiPath)
 {
  
   auto collection = Database(msiPath)->addTable("Control")->addColumns("Text", "Dialog_")->addCondition(Equal(L"Type", L"Text").And(Equal(L"Control", L"Title")))->select()->getAll();
- 
+  
 
 }
 
