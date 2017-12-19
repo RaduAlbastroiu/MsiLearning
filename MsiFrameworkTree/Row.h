@@ -9,6 +9,7 @@ public:
 
   // check info
   unique_ptr<Element> operator[](const wstring& aColumnName);
+  unique_ptr<Element> getElementFromColumn(const wstring& aColumnName);
 
 private:
   Metadata mMetadata;
@@ -24,7 +25,6 @@ public:
   Element(const wstring& aValue) :mValue(aValue) {}
 
   wstring getAsString();
-  void updateValue(const wstring& aNewValue);
 
 private:
   wstring mValue;

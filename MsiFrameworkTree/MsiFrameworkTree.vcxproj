@@ -157,6 +157,7 @@
     <ClInclude Include="NodeProtocol.h" />
     <ClInclude Include="OperationLogicCondition.h" />
     <ClInclude Include="Row.h" />
+    <ClInclude Include="RowCollection.h" />
     <ClInclude Include="SelectedState.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Table.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="NodeProtocol.cpp" />
     <ClCompile Include="OperationLogicCondition.cpp" />
     <ClCompile Include="Row.cpp" />
+    <ClCompile Include="RowCollection.cpp" />
     <ClCompile Include="SelectedState.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

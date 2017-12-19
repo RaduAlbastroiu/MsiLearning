@@ -15,6 +15,13 @@ bool DatabaseInfo::openDatabase(const wstring aDatabasePath)
   return false;
 }
 
+unique_ptr<Table> DatabaseInfo::select()
+{
+  // database call
+  
+  return make_unique<Table>();
+}
+
 std::wstring DatabaseInfo::selectSqlCondition()
 {
   wstring sqlQuerry = L" SELECT ";
@@ -25,16 +32,6 @@ std::wstring DatabaseInfo::selectSqlCondition()
   sqlQuerry += condition.getCondition();
 
   return sqlQuerry;
-}
-
-std::wstring DatabaseInfo::updateSqlCondition(wstring aNewValue)
-{
-  return wstring();
-}
-
-std::wstring DatabaseInfo::deleteSqlCondition()
-{
-  return wstring();
 }
 
 bool DatabaseInfo::runSql(const wstring & aSqlQuerry)

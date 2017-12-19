@@ -6,12 +6,17 @@ Table::Table(const Metadata & aMetadata, const RowCollection & aRowCollection)
 {
 }
 
-unique_ptr<MetadataSchema> Table::operator[](const wstring & aColumnName)
+unique_ptr<MetadataSchema> Table::getColumnInfo(const wstring & aColumnName)
 {
   return mTableSchema[aColumnName];
 }
 
 std::unique_ptr<Row> Table::operator[](int aRowNumber)
+{
+  return mRowCollection[aRowNumber];
+}
+
+unique_ptr<Row> Table::getRowWithNumber(int aRowNumber)
 {
   return mRowCollection[aRowNumber];
 }

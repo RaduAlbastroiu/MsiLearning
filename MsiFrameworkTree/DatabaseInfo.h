@@ -1,29 +1,22 @@
 #pragma once
 #include "stdafx.h"
+#include "Table.h"
 #include "LogicCondition.h"
 
 class DatabaseInfo
 {
 public:
 
-  DatabaseInfo() = default;
+  bool openDatabase(const wstring databasePath);
+  unique_ptr<Table> select();
 
-  wstring databasePath;
+  bool runSql(const wstring& aSqlQuerry);
   
-  LogicCondition condition;
-
   template<typename... Types>
   void addTableWithColumns(const wstring& aTableName, const Types... aColumns)
   {
     tableCollection.push_back(aTableName, vector<wstring>{ aColumns... });
   }
-
-  bool openDatabase(const wstring databasePath);
-  wstring selectSqlCondition();
-  wstring updateSqlCondition(wstring aNewValue);
-  wstring deleteSqlCondition();
-
-  bool runSql(const wstring& aSqlQuerry);
 
 private:
 
@@ -33,16 +26,13 @@ private:
 
   wstring composeSqlQuerryTables();
   wstring composeSqlQuerryColumns();
+  wstring selectSqlCondition();
 
-  struct DbInfoTable
-  {
-    // constructor
-    DbInfoTable(wstring aTableName, vector<wstring> aColumns) :
-      tableName(aTableName), columns(aColumns)
-    {}
+  vector<Table> tableCollection;
 
-    wstring tableName;
-    vector<wstring> columns;
-  };
-  vector<DbInfoTable> tableCollection;
+  wstring databasePath;
+
+  LogicCondition condition;
+
+
 };

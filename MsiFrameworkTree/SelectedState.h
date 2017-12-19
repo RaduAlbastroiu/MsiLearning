@@ -8,7 +8,8 @@ public:
 
   SelectedState(const DatabaseInfo& aDatabaseInfo);
  
-  vector<vector<wstring>> getAll();
+  unique_ptr<Row> getRow(int aRowNumber);
+  unique_ptr<MetadataSchema> getColumnInfo(const wstring& aColumnName);
   
 private:
   DatabaseInfo mDatabaseInfo;

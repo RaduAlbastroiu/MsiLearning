@@ -57,6 +57,9 @@
     <ClInclude Include="Row.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RowCollection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -99,6 +102,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Row.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RowCollection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

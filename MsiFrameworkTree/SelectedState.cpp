@@ -8,13 +8,13 @@ SelectedState::SelectedState(const DatabaseInfo & aDatabaseInfo)
 {
 }
 
-vector<wstring> SelectedState::getColumn(const wstring & aColumnName)
+unique_ptr<Row> SelectedState::getRow(int aRowNumber)
 {
-  // call databaseINFO
+  return mDatabaseInfo.select()->getRowWithNumber(aRowNumber);
 }
 
-vector<vector<wstring>> SelectedState::getAll()
+unique_ptr<MetadataSchema> SelectedState::getColumnInfo(const wstring & aColumnName)
 {
-  // call databaseINFO
+  return mDatabaseInfo.select()->getColumnInfo(aColumnName);
 }
 

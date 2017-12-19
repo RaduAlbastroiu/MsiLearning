@@ -10,10 +10,11 @@ public:
   Table(const Metadata& aMetadata, const RowCollection& aRowCollection);
 
   // access metadata
-  unique_ptr<MetadataSchema> operator[](const wstring& aColumnName);
+  unique_ptr<MetadataSchema> getColumnInfo(const wstring& aColumnName);
 
   // access row
   unique_ptr<Row> operator[](int aRowNumber);
+  unique_ptr<Row> getRowWithNumber(int aRowNumber);
 
 private:
   // access one column via columnName

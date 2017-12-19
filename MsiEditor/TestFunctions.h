@@ -131,13 +131,17 @@ void justUpdate(MSIHANDLE handleTest)
 void msiFrameworkTree(LPCTSTR msiPath)
 {
  
-  auto collection = Database(msiPath).addTable(L"Control")->addColumns("Text", "Dialog_")->addCondition(Equal(L"Type", L"Text").And(Equal(L"Control", L"Title")))->select()->getAll();
-  bool happened = Database(msiPath).runSqlQuerry(L"SELECT * FROM table Where condition");
+  auto collection = Database(msiPath).addTable(L"Control")->addColumns("Text", "Dialog_")->addCondition(Equal(L"Type", L"Text").And(Equal(L"Control", L"Title")))->select();
+
+  auto row = Database(msiPath).addTable(L"Control")->addColumns(L"text")->select()[2];
+
+  //bool happened = Database(msiPath).runSqlQuerry(L"SELECT * FROM table Where condition");
   
-  auto c = Database(msiPath).addCondition();
+  //auto c = Database(msiPath).addCondition();
   // insert
 
   // delete
-
+  
+  
 }
 
