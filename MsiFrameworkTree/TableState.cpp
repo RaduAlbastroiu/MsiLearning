@@ -11,3 +11,14 @@ unique_ptr<ConditionState> updateColumnWithValue(const wstring& aColumnName, con
 {
   mDatabaseInfo.storeColumnNameAndValueforUpdate(aColumnName, aNewValue);
 }
+
+unique_ptr<ConditionState> TableState::whereConditionIs(LogicCondition aCondition)
+{
+  mDatabaseInfo.condition = aCondition;
+  return make_unique<Node>(mDatabaseInfo);
+}
+
+UINT TableState::deleteAllRows()
+{
+  return mDatabaseInfo.deleteAllRows();
+}

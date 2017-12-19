@@ -17,6 +17,8 @@ public:
   }
 
   unique_ptr<ConditionState> updateColumnWithValue(const wstring& aColumnName, const wstring& aNewValue);
+  unique_ptr<ConditionState> whereConditionIs(LogicCondition aCondition);
+  UINT deleteAllRows();
 
 private:
 

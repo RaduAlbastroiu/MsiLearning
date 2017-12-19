@@ -13,7 +13,11 @@ public:
   unique_ptr<Table> select();
 
   // update
-  bool update();
+  UINT update();
+
+  // delete
+  UINT deleteRows();
+  UINT deleteAllRows();
 
   // run any query
   bool runSql(const wstring& aSqlQuerry);

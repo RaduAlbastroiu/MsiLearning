@@ -12,7 +12,8 @@ public:
 
   unique_ptr<ConditionState> whereConditionIs(LogicCondition aCondition);
   unique_ptr<Table> select();
-  bool update();
+  UINT update();
+  UINT deleteRows();
 
 private:
   DatabaseInfo mDatabaseInfo;

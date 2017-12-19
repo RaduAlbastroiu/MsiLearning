@@ -23,7 +23,12 @@ unique_ptr<Table> ConditionState::select()
   return mDatabaseInfo.select();
 }
 
-bool ConditionState::update()
+UINT ConditionState::update()
 {
   return mDatabaseInfo.update();
+}
+
+UINT ConditionState::deleteRows()
+{
+  return mDatabaseInfo.deleteRow();
 }
