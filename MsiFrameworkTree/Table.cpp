@@ -1,4 +1,5 @@
 #pragma once
+#include "stdafx.h"
 #include "Table.h"
 
 Table::Table(const Metadata & aMetadata, const RowCollection & aRowCollection)

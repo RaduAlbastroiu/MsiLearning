@@ -3,6 +3,12 @@
 #include "Table.h"
 #include "LogicCondition.h"
 
+// type class
+enum class ColumnType {
+  Integer,
+  String
+};
+
 class DatabaseInfo
 {
 public:
@@ -61,10 +67,4 @@ private:
   LogicCondition condition;
 
   vector<pair<wstring, wstring>> updateColumnNameWithValueCollection;
-};
-
-// type class
-enum class ColumnType {
-  Integer,
-  String
 };

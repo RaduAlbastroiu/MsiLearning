@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "Metadata.h"
 
+class Element;
+
 class Row
 {
 public:

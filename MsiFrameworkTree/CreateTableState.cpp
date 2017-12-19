@@ -1,6 +1,6 @@
 #pragma once
+#include "stdafx.h"
 #include "CreateTableState.h"
-
 
 
 CreateTableState::CreateTableState(const DatabaseInfo& aDatabaseInfo)

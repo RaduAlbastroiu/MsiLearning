@@ -1,4 +1,5 @@
 #pragma once
+#include "stdafx.h"
 #include "UpdateState.h"
 
 UpdateState::UpdateState(const DatabaseInfo& aDatabaseInfo)

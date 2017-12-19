@@ -147,7 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Column.h" />
+    <ClInclude Include="CreateTableState.h" />
     <ClInclude Include="DatabaseInfo.h" />
     <ClInclude Include="DatabaseNode.h" />
     <ClInclude Include="InsertState.h" />
@@ -166,7 +166,7 @@
     <ClInclude Include="UpdateState.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Column.cpp" />
+    <ClCompile Include="CreateTableState.cpp" />
     <ClCompile Include="DatabaseInfo.cpp" />
     <ClCompile Include="DatabaseNode.cpp" />
     <ClCompile Include="InsertState.cpp" />

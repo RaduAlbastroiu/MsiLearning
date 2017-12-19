@@ -1,14 +1,15 @@
 #pragma once
 #include "stdafx.h"
-#include "DatabaseInfo.h"
 #include "ConditionState.h"
 #include "UpdateState.h"
 #include "InsertState.h"
+#include "DatabaseInfo.h"
 
 class TableState
 {
 public:
   TableState(const DatabaseInfo& aDatabaseInfo, const wstring& aTableName);
+  ~TableState() = default;
 
   // use columns
   template<typename... Types>
