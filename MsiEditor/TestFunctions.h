@@ -137,9 +137,12 @@ void msiFrameworkTree(LPCTSTR msiPath)
   auto row = Database(msiPath).inTable(L"Control")->withColumns(L"Text", L"Dialog_")->whereConditionIs(Equal(L"Type", L"Text"))->select()->getRowWithNumber(3)->getElementFromColumn(L"Text");
   
   // update
-  auto updated3 = Database(msiPath).inTable(L"Control")->updateColumnWithValue(L"text", L"newValue")->whereConditionIs(Equal(L"Type", L"Text"))->update();
+  auto updated3 = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Type", L"Text"))->updateColumnWithValue(L"text", L"newValue")->update();
 
   // delete
   auto del = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Type", L"Text"))->deleteRows();
+
+  // insert 
+  auto ins = Database(msiPath).inTable(L"Control")->insertInColumnWithValue(L"text", L"newValue")->insertInColumnWithValue(L"Type", L"newValue")->insert();
 }
 

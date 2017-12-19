@@ -11,8 +11,8 @@ public:
   ConditionState(const DatabaseInfo& aDatabaseInfo);
 
   unique_ptr<ConditionState> whereConditionIs(LogicCondition aCondition);
+  unique_ptr<UpdateState> updateColumnWithValue(const wstring& aColumnName, const wstring& aNewValue);
   unique_ptr<Table> select();
-  UINT update();
   UINT deleteRows();
 
 private:

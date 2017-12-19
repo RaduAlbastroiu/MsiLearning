@@ -150,6 +150,7 @@
     <ClInclude Include="Column.h" />
     <ClInclude Include="DatabaseInfo.h" />
     <ClInclude Include="DatabaseNode.h" />
+    <ClInclude Include="InsertState.h" />
     <ClInclude Include="LogicCondition.h" />
     <ClInclude Include="NeutralState.h" />
     <ClInclude Include="Node.h" />
@@ -162,11 +163,13 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Table.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="UpdateState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Column.cpp" />
     <ClCompile Include="DatabaseInfo.cpp" />
     <ClCompile Include="DatabaseNode.cpp" />
+    <ClCompile Include="InsertState.cpp" />
     <ClCompile Include="LogicCondition.cpp" />
     <ClCompile Include="MsiFrameworkTree.cpp" />
     <ClCompile Include="NeutralState.cpp" />
@@ -184,6 +187,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Table.cpp" />
+    <ClCompile Include="UpdateState.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -7,9 +7,15 @@ TableState::TableState(const DatabaseInfo& aDatabaseInfo, const wstring& aTableN
 {
 }
 
-unique_ptr<ConditionState> updateColumnWithValue(const wstring& aColumnName, const wstring& aNewValue)
+unique_ptr<UpdateState> updateColumnWithValue(const wstring& aColumnName, const wstring& aNewValue)
 {
   mDatabaseInfo.storeColumnNameAndValueforUpdate(aColumnName, aNewValue);
+}
+
+std::unique_ptr<InsertState> UpdateState::insertInColumnWithValue(const wstring& aColumnName, const wstring& aValue)
+{
+  mDatabaseInfo.insertInColumnValue(aColumnName, aValue);
+  return make_unique<InsertState>(mDatabaseInfo);
 }
 
 unique_ptr<ConditionState> TableState::whereConditionIs(LogicCondition aCondition)

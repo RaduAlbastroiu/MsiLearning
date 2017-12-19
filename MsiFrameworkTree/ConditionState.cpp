@@ -6,26 +6,21 @@ ConditionState::ConditionState(const DatabaseInfo & aDatabaseInfo)
 {
 }
 
-unique_ptr<TableState> ConditionState::addTable(const wstring& aTableName)
-{
-  mDatabaseInfo.addTable(aTableName);
-  return make_unique<Node>(mDatabaseInfo);
-}
-
 unique_ptr<ConditionState> ConditionState::whereConditionIs(LogicCondition aCondition)
 {
-  mDatabaseInfo.condition = aCondition;
-  return make_unique<Node>(mDatabaseInfo);
+  mDatabaseInfo.updateConditionWith(aCondition);
+  return make_unique<ConditionState>(mDatabaseInfo);
+}
+
+std::unique_ptr<UpdateState> ConditionState::updateColumnWithValue(const wstring& aColumnName, const wstring& aNewValue)
+{
+  mDatabaseInfo.storeColumnNameAndValueforUpdate(aColumnName, aNewValue);
+  return make_unique<UpdateState>(mDatabaseInfo);
 }
 
 unique_ptr<Table> ConditionState::select()
 {
   return mDatabaseInfo.select();
-}
-
-UINT ConditionState::update()
-{
-  return mDatabaseInfo.update();
 }
 
 UINT ConditionState::deleteRows()

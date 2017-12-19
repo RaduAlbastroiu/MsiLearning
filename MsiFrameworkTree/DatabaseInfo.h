@@ -7,8 +7,13 @@ class DatabaseInfo
 {
 public:
 
+  // open the database
   bool openDatabase(const wstring databasePath);
 
+  // update condition with another condition ( add AND )
+  // by default no condition
+  void updateConditionWith(const LogicCondition& anotherCondition);
+  
   // select
   unique_ptr<Table> select();
 
@@ -18,6 +23,10 @@ public:
   // delete
   UINT deleteRows();
   UINT deleteAllRows();
+
+  // insert
+  UINT insertInColumnValue(const wstring& aColumnName, const wstring& aValue);
+  UINT insert();
 
   // run any query
   bool runSql(const wstring& aSqlQuerry);
