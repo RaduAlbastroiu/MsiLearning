@@ -54,3 +54,8 @@ bool DatabaseInfo::runSql(const wstring & aSqlQuerry)
   }
   return false;
 }
+
+void DatabaseInfo::storeColumnNameAndValueforUpdate(const wstring& aColumnName, const wstring& aNewValue)
+{
+  updateColumnNameWithValueCollection.push_back(make_pair(aColumnName, aNewValue));
+}

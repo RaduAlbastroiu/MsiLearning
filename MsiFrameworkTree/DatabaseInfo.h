@@ -8,8 +8,14 @@ class DatabaseInfo
 public:
 
   bool openDatabase(const wstring databasePath);
+
+  // select
   unique_ptr<Table> select();
 
+  // update
+  bool update();
+
+  // run any query
   bool runSql(const wstring& aSqlQuerry);
   
   template<typename... Types>
@@ -17,6 +23,8 @@ public:
   {
     tableCollection.push_back(aTableName, vector<wstring>{ aColumns... });
   }
+
+  void storeColumnNameAndValueforUpdate(const wstring& aColumnName, const wstring& aNewValue);
 
 private:
 
@@ -34,5 +42,5 @@ private:
 
   LogicCondition condition;
 
-
+  vector<pair<wstring, wstring>> updateColumnNameWithValueCollection;
 };

@@ -9,7 +9,7 @@ Database::Database(const wstring& aDatabasePath)
   mDatabaseInfo.openDatabase(mDatabasePath);
 }
 
-unique_ptr<Table> Database::addTable(const wstring& aTableName)
+unique_ptr<Table> Database::inTable(const wstring& aTableName)
 {
   return make_unique<Node>(mDatabaseInfo, aTableName);
 }

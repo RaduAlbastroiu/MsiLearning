@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "DatabaseInfo.h"
+#include "ConditionState.h"
 
 class TableState
 {
@@ -9,11 +10,13 @@ public:
 
   // use columns
   template<typename... Types>
-  unique_ptr<NeutralState> addColumns(const Types& ... aColumns)
+  unique_ptr<ConditionState> withColumns(const Types& ... aColumns)
   {
     mDatabaseInfo.addTableWithColumns(mTableName, aColumns...);
-    return make_unique<NeutralState>(mDatabaseInfo);
+    return make_unique<ConditionState>(mDatabaseInfo);
   }
+
+  unique_ptr<ConditionState> updateColumnWithValue(const wstring& aColumnName, const wstring& aNewValue);
 
 private:
 

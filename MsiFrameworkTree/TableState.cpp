@@ -7,4 +7,7 @@ TableState::TableState(const DatabaseInfo& aDatabaseInfo, const wstring& aTableN
 {
 }
 
-// addColumns implemented in header
+unique_ptr<ConditionState> updateColumnWithValue(const wstring& aColumnName, const wstring& aNewValue)
+{
+  mDatabaseInfo.storeColumnNameAndValueforUpdate(aColumnName, aNewValue);
+}
