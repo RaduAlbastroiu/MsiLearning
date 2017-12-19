@@ -14,6 +14,12 @@ unique_ptr<Table> Database::inTable(const wstring& aTableName)
   return make_unique<Node>(mDatabaseInfo, aTableName);
 }
 
+unique_ptr<CreateTableState> Database::createTable(const wstring& aTableName)
+{
+  mDatabaseInfo.createTable(aTableName);
+  return make_unique<CreateTableState>(mDatabaseInfo);
+}
+
 bool Database::runSqlQuerry(const wstring& aSqlQuerry)
 {
   mDatabaseInfo.runSql(aSqlQuerry);

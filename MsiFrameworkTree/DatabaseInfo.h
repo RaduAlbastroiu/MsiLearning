@@ -28,6 +28,11 @@ public:
   UINT insertInColumnValue(const wstring& aColumnName, const wstring& aValue);
   UINT insert();
 
+  // create a table
+  UINT addColumn(const wstring& aColumnName, const ColumnType& aColumnType);
+  UINT createTable(const wstring& aTableName);
+  UINT addTableToDatabase();
+
   // run any query
   bool runSql(const wstring& aSqlQuerry);
   
@@ -56,4 +61,10 @@ private:
   LogicCondition condition;
 
   vector<pair<wstring, wstring>> updateColumnNameWithValueCollection;
+};
+
+// type class
+enum class ColumnType {
+  Integer,
+  String
 };

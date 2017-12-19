@@ -3,7 +3,6 @@
 #include "../MsiFrameworkTree/Database.h"
 #include "../MsiFrameworkTree/OperationLogicCondition.h"
 
-
 void selectUpdate(MSIHANDLE handleTest) {
   
   UINT errorMessage = ERROR_SUCCESS;
@@ -144,5 +143,8 @@ void msiFrameworkTree(LPCTSTR msiPath)
 
   // insert 
   auto ins = Database(msiPath).inTable(L"Control")->insertInColumnWithValue(L"text", L"newValue")->insertInColumnWithValue(L"Type", L"newValue")->insert();
+
+  // create table
+  auto createTable = Database(msiPath).createTable(L"brandNewTable")->addColumn(L"Size", ColumnType::Integer)->addColumn(L"Name", ColumnType::String)->addTableToDatabase();
 }
 
