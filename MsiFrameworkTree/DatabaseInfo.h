@@ -25,6 +25,7 @@ public:
 
   // update
   UINT update();
+  void storeColumnNameAndValueforUpdate(const wstring& aColumnName, const wstring& aNewValue);
 
   // delete
   UINT deleteRows();
@@ -45,10 +46,8 @@ public:
   template<typename... Types>
   void addTableWithColumns(const wstring& aTableName, const Types... aColumns)
   {
-    tableCollection.push_back(aTableName, vector<wstring>{ aColumns... });
+    mTargetTabel = targetTable(aTableName, vector<wstring>{ aColumns... });
   }
-
-  void storeColumnNameAndValueforUpdate(const wstring& aColumnName, const wstring& aNewValue);
 
 private:
 
@@ -56,15 +55,24 @@ private:
 
   MSIHANDLE mDatabaseHandle;
 
+  wstring selectSqlCondition();
   wstring composeSqlQuerryTables();
   wstring composeSqlQuerryColumns();
-  wstring selectSqlCondition();
 
-  vector<Table> tableCollection;
+  struct targetTable {
+    // constructor
+    targetTable(const wstring& aTableName, vector<wstring> aColumnCollection) 
+      : tableName(aTableName), columnsCollection(aColumnCollection) {}
+
+    wstring tableName;
+    vector<wstring> columnsCollection;
+  };
+  // single table
+  targetTable mTargetTabel;
+
+  Table createTableFromSqlQuerry(const wstring& sqlQuerry);
 
   wstring databasePath;
 
-  LogicCondition condition;
-
-  vector<pair<wstring, wstring>> updateColumnNameWithValueCollection;
+  LogicCondition mCondition;
 };

@@ -15,11 +15,18 @@ bool DatabaseInfo::openDatabase(const wstring aDatabasePath)
   return false;
 }
 
-unique_ptr<Table> DatabaseInfo::select()
+void DatabaseInfo::updateConditionWith(const LogicCondition& anotherCondition)
 {
-  // database call
-  
-  return make_unique<Table>();
+  mCondition = mCondition.And(anotherCondition);
+}
+
+std::unique_ptr<Table> DatabaseInfo::select()
+{
+  wstring sqlSelectQuerry = selectSqlCondition();
+
+  Table resultTable = createTableFromSqlQuerry(sqlSelectQuerry);
+
+  return make_unique<Table>(resultTable);
 }
 
 std::wstring DatabaseInfo::selectSqlCondition()
@@ -29,9 +36,26 @@ std::wstring DatabaseInfo::selectSqlCondition()
   sqlQuerry += L" FROM ";
   sqlQuerry += composeSqlQuerryTables();
   sqlQuerry += L" WHERE ";
-  sqlQuerry += condition.getCondition();
+  sqlQuerry += mCondition.getCondition();
 
   return sqlQuerry;
+}
+
+std::wstring DatabaseInfo::composeSqlQuerryTables()
+{
+  wstring result = L"";
+  result += mTargetTabel.tableName;
+
+  return result;
+}
+
+std::wstring DatabaseInfo::composeSqlQuerryColumns()
+{
+  wstring result = L"";
+  for (auto columnName : mTargetTabel.columnsCollection)
+    result += columnName;
+
+  return result;
 }
 
 bool DatabaseInfo::runSql(const wstring & aSqlQuerry)
@@ -53,9 +77,4 @@ bool DatabaseInfo::runSql(const wstring & aSqlQuerry)
     }
   }
   return false;
-}
-
-void DatabaseInfo::storeColumnNameAndValueforUpdate(const wstring& aColumnName, const wstring& aNewValue)
-{
-  updateColumnNameWithValueCollection.push_back(make_pair(aColumnName, aNewValue));
 }

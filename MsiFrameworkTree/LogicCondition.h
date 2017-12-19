@@ -16,9 +16,9 @@ public:
   LogicCondition(const LogicCondition& aSubCondition);
   LogicCondition(const wstring& aSqlCondition);
   
-  LogicCondition And(LogicCondition& aCondition);
-  LogicCondition Or(LogicCondition& aCondition);
-  LogicCondition Not(LogicCondition& aCondition);
+  LogicCondition And(const LogicCondition& aCondition);
+  LogicCondition Or(const LogicCondition& aCondition);
+  LogicCondition Not(const LogicCondition& aCondition);
 
   wstring getCondition() const;
   
