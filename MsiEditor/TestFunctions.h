@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "../MsiFrameworkTree/Database.h"
-#include "../MsiFrameworkTree/LogicCondition.h"
+#include "../MsiFrameworkTree/OperationLogicCondition.h"
 
 
 void selectUpdate(MSIHANDLE handleTest) {
@@ -131,8 +131,13 @@ void justUpdate(MSIHANDLE handleTest)
 void msiFrameworkTree(LPCTSTR msiPath)
 {
  
-  auto collection = Database(msiPath)->addTable("Control")->addColumns("Text", "Dialog_")->addCondition(Equal(L"Type", L"Text").And(Equal(L"Control", L"Title")))->select()->getAll();
+  auto collection = Database(msiPath).addTable(L"Control")->addColumns("Text", "Dialog_")->addCondition(Equal(L"Type", L"Text").And(Equal(L"Control", L"Title")))->select()->getAll();
+  bool happened = Database(msiPath).runSqlQuerry(L"SELECT * FROM table Where condition");
   
+  auto c = Database(msiPath).addCondition();
+  // insert
+
+  // delete
 
 }
 

@@ -2,6 +2,10 @@
 #include "stdafx.h"
 #include "LogicCondition.h"
 
+
+// operators && || == !=
+
+
 class AnyOf : public LogicCondition
 {
 public:

@@ -1,10 +1,17 @@
 #pragma once
-#include "stdafx.h"
 #include "Table.h"
 
-Table::Table(const DatabaseInfo& aDatabaseInfo, const wstring& aTableName)
-  :mDatabaseInfo(aDatabaseInfo), mTableName(aTableName)
+Table::Table(const Metadata & aMetadata, const RowCollection & aRowCollection)
+  :mTableSchema(aMetadata), mRowCollection(aRowCollection)
 {
 }
 
-// addColumns implemented in header
+unique_ptr<MetadataSchema> Table::operator[](const wstring & aColumnName)
+{
+  return mTableSchema[aColumnName];
+}
+
+std::unique_ptr<Row> Table::operator[](int aRowNumber)
+{
+  return mRowCollection[aRowNumber];
+}

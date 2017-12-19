@@ -13,3 +13,8 @@ unique_ptr<Table> Database::addTable(const wstring& aTableName)
 {
   return make_unique<Node>(mDatabaseInfo, aTableName);
 }
+
+bool Database::runSqlQuerry(const wstring& aSqlQuerry)
+{
+  mDatabaseInfo.runSql(aSqlQuerry);
+}

@@ -1,21 +1,24 @@
 #pragma once
 #include "stdafx.h"
-#include "DatabaseInfo.h"
+#include "Metadata.h"
+#include "Row.h"
+#include "RowCollection.h"
 
 class Table
 {
 public:
-  Table(const DatabaseInfo& aDatabaseInfo, const wstring& aTableName);
+  Table(const Metadata& aMetadata, const RowCollection& aRowCollection);
 
-  template<typename... Types>
-  unique_ptr<NeutralState> addColumns(const Types& ... aColumns)
-  {
-    mDatabaseInfo.addTableWithColumns(mTableName, aColumns...);
-    return make_unique<NeutralState>(mDatabaseInfo);
-  }
+  // access metadata
+  unique_ptr<MetadataSchema> operator[](const wstring& aColumnName);
+
+  // access row
+  unique_ptr<Row> operator[](int aRowNumber);
 
 private:
+  // access one column via columnName
+  Metadata mTableSchema;
 
-  wstring mTableName;
-  DatabaseInfo mDatabaseInfo;
+  RowCollection mRowCollection;
+  
 };

@@ -5,7 +5,7 @@ NeutralState::NeutralState(const DatabaseInfo & aDatabaseInfo)
 {
 }
 
-unique_ptr<Table> NeutralState::addTable(const wstring& aTableName)
+unique_ptr<TableState> NeutralState::addTable(const wstring& aTableName)
 {
   mDatabaseInfo.addTable(aTableName);
   return make_unique<Node>(mDatabaseInfo);
