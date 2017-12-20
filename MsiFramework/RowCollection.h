@@ -5,7 +5,7 @@
 
 class RowCollection {
 public:
-  RowCollection(const vector<Row>& aRowCollection, const TableMetadata& aMetadata);
+  RowCollection(const TableMetadata& aMetadata, const vector<Row>& aRowCollection);
 
   unique_ptr<Row> operator[](int aRowNumber);
   unique_ptr<Row> getRowWithNumber(int aRowNumber);

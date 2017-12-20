@@ -45,9 +45,14 @@ public:
   UINT insert();
 
   // create a table
-  UINT addColumn(const wstring& aColumnName, const ColumnType& aColumnType);
-  UINT createTable(const wstring& aTableName);
+  void createTable(const wstring& aTableName);
+  void createColumn(const wstring& aColumnName, const ColumnType& aColumnType);
+  void createNullableColumn(const wstring& aColumnName, const ColumnType& aColumntType);
+  void createKeyColumn(const wstring& aColumnName, const ColumnType& aColumnType);
   UINT addTableToDatabase();
+
+  // DO NOT FORGET ABOUT 
+  // UINT addRowInTable(Values);
 
   // run any query
   UINT runSql(const wstring& aSqlQuerry);
@@ -58,7 +63,7 @@ public:
     mTargetTabel = targetTable(mTargetTabel.tableName, vector<wstring>{ aColumns... });
   }
 
-private:
+private: 
 
   UINT mErrorMessage = ERROR_SUCCESS;
 
@@ -80,8 +85,20 @@ private:
       : tableName(aTableName), columnsCollection(aColumnCollection) {}
 
     wstring tableName;
+
+    struct Metadata {
+      Metadata(const wstring& aName, const wstring& aType, bool isKeyMember, bool isNullable)
+        :mName(aName), mType(aType), isKeyMember(isKeyMember), isNullable(isNullable) {}
+      
+      wstring mName;
+      wstring mType;
+      bool isKeyMember;
+      bool isNullable;
+    };
+
     vector<wstring> columnsCollection;
     vector<wstring> newValueForColumns;
+    vector<Metadata> columnMetadata;
   };
   // single table
   targetTable mTargetTabel;

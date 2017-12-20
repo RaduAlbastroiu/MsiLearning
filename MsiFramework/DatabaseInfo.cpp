@@ -76,6 +76,29 @@ UINT DatabaseInfo::insert()
   return runSql(insertSqlCondition());
 }
 
+void DatabaseInfo::createTable(const wstring& aTableName)
+{
+  mTargetTabel.tableName = aTableName;
+}
+
+void DatabaseInfo::createColumn(const wstring& aColumnName, const ColumnType& aColumnType)
+{
+  mTargetTabel.columnsCollection.push_back(aColumnName);
+  mTargetTabel.columnMetadata.push_back(Metadata(aColumnName, aColumnType, false, false));
+}
+
+void DatabaseInfo::createNullableColumn(const wstring& aColumnName, const ColumnType& aColumntType)
+{
+  mTargetTabel.columnsCollection.push_back(aColumnName);
+  mTargetTabel.columnMetadata.push_back(Metadata(aColumnName, aColumnType, false, true));
+}
+
+void DatabaseInfo::createKeyColumn(const wstring& aColumnName, const ColumnType& aColumnType)
+{
+  mTargetTabel.columnsCollection.push_back(aColumnName);
+  mTargetTabel.columnMetadata.push_back(Metadata(aColumnName, aColumnType, true, false));
+}
+
 std::wstring DatabaseInfo::selectSqlCondition()
 {
   wstring sqlQuerry = SELECT;

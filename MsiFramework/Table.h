@@ -7,8 +7,7 @@
 class Table
 {
 public:
-  // delete this shit
-  Table() :mRowCollection({}, {}) { }
+
   Table(const TableMetadata& aMetadata, const RowCollection& aRowCollection);
 
   // access metadata
