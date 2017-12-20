@@ -2,6 +2,14 @@
 #include "stdafx.h"
 #include "Table.h"
 #include "LogicCondition.h"
+#define SELECT L" SELECT "
+#define UPDATE L" UPDATE "
+#define DELETE L" DELETE "
+#define INSERTINTO L" INSERT INTO "
+#define VALUES L" VALUES "
+#define SET L" SET "
+#define FROM L" FROM "
+#define WHERE L" WHERE "
 
 // type class
 enum class ColumnType {
@@ -33,7 +41,7 @@ public:
   UINT deleteAllRows();
 
   // insert
-  UINT insertInColumnValue(const wstring& aColumnName, const wstring& aValue);
+  void insertInColumnValue(const wstring& aColumnName, const wstring& aValue);
   UINT insert();
 
   // create a table
@@ -58,8 +66,11 @@ private:
 
   wstring selectSqlCondition();
   wstring updateSqlCondition();
+  wstring insertSqlCondition();
+
   wstring composeSqlQuerryTable();
   wstring composeSqlEnumerateColumns();
+  wstring composeSqlEnumerateColumnValues();
   wstring composeSqlUpdateColumns();
 
   struct targetTable {
