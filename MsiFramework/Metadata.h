@@ -24,7 +24,6 @@ private:
 class Metadata
 {
 public:
-  Metadata();
 
   // add column
   void addColumnInSchema(const wstring& aNameColumn, const wstring& aType, bool aIsKeyMember, bool aIsNullable);

@@ -16,7 +16,7 @@ public:
   unique_ptr<CreateTableState> createTable(const wstring& aTableName);
 
   // run any custom sql
-  bool runSqlQuerry(const wstring& aSqlQuerry);
+  UINT runSqlQuerry(const wstring& aSqlQuerry);
 
 private:
   wstring mDatabasePath;

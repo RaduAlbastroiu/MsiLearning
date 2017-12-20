@@ -9,7 +9,7 @@ UpdateState::UpdateState(const DatabaseInfo& aDatabaseInfo)
 
 unique_ptr<UpdateState> UpdateState::updateColumnWithValue(const wstring& aColumnName, const wstring& aNewValue)
 {
-  mDatabaseInfo.storeColumnNameAndValueforUpdate(aColumnName, aNewValue);
+  mDatabaseInfo.updateColumnWithValue(aColumnName, aNewValue);
   return make_unique<UpdateState>(mDatabaseInfo);
 }
 

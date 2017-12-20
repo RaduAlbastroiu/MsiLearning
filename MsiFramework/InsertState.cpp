@@ -1,4 +1,5 @@
 #pragma once
+#include "stdafx.h"
 #include "InsertState.h"
 
 InsertState::InsertState(const DatabaseInfo& aDatabaseInfo)

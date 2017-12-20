@@ -11,18 +11,23 @@ unique_ptr<Element> Row::operator[](const wstring & aColumnName)
 {
   auto it = mRowData.find(aColumnName);
   if (it != mRowData.end())
-    return make_unique<Element>(mRowData[aColumnName]);
+    return make_unique<Element>(it->second);
 
-  return make_unique<Element>(nullptr);
+  return nullptr;
 }
 
 unique_ptr<Element> Row::getElementFromColumn(const wstring & aColumnName)
 {
   auto it = mRowData.find(aColumnName);
   if (it != mRowData.end())
-    return make_unique<Element>(mRowData[aColumnName]);
+    return make_unique<Element>(it->second);
 
-  return make_unique<Element>(nullptr);
+  return nullptr;
+}
+
+Element::Element(const wstring& aValue)
+  :mValue(aValue)
+{
 }
 
 wstring Element::getAsString()

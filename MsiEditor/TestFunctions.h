@@ -3,111 +3,111 @@
 #include "../MsiFrameworkTree/Database.h"
 #include "../MsiFrameworkTree/OperationLogicCondition.h"
 
-void selectUpdate(MSIHANDLE handleTest) {
+void selectUpdate(MSIHANDLE /*handleTest*/) {
   
-  UINT errorMessage = ERROR_SUCCESS;
-
-  // Open View
-  MSIHANDLE phView;
-  LPCTSTR sqlQuerry = L"SELECT `Text` FROM `Control` WHERE `Dialog_`='WelcomeDlg' AND `X`= 135 ";
-  errorMessage = ::MsiDatabaseOpenView(handleTest, sqlQuerry, &phView);
-  if (errorMessage == ERROR_SUCCESS)
-    cout << " \n YEE";
-
-  // create record
-  MSIHANDLE emptyRecord = ::MsiCreateRecord(2);
-  if (emptyRecord != NULL)
-    cout << " \n Record Created";
-
-  // execute view
-  errorMessage = ::MsiViewExecute(phView, NULL);
-  if (errorMessage == ERROR_SUCCESS)
-    cout << "\n Msi view executed";
-
-
-  MSIHANDLE recordToColumn;
-  errorMessage = ::MsiViewGetColumnInfo(phView, MSICOLINFO_TYPES, &recordToColumn);
-  if (errorMessage == ERROR_SUCCESS)
-    cout << " \n YEE";
-
-  cout << "\n" << ::MsiRecordGetFieldCount(recordToColumn);
-
-  // view fetch
-  DWORD stringLenght = 0;
-  MSIHANDLE phRecord;
-  errorMessage = ::MsiViewFetch(phView, &phRecord);
-  if (errorMessage == ERROR_SUCCESS)
-    cout << "\n Fetch succeeded";
-
-
-
-  // print the string
-  errorMessage = ::MsiRecordGetString(phRecord, 1, L"", &stringLenght);
-  if (errorMessage == ERROR_MORE_DATA)
-    cout << "\n not enough memory";
-
-  stringLenght++;
-  wchar_t stringResult[256];
-  ::MsiRecordGetString(phRecord, 1, stringResult, &stringLenght);
-  wcout << L"\n " << stringResult;
-  stringLenght = 0;
-
-  // modify the record
-  wchar_t newString[256] = L"{\\VerdanaBold13} SELECT then UPDATE";
-  errorMessage = MsiRecordSetString(phRecord, 1, newString);
-  if (errorMessage == ERROR_SUCCESS)
-    cout << "\n string set";
-
-
-
-  // print the string again
-  errorMessage = ::MsiRecordGetString(phRecord, 1, L"", &stringLenght);
-  if (errorMessage == ERROR_MORE_DATA)
-    cout << "\n not enough memory";
-
-  stringLenght++;
-  ::MsiRecordGetString(phRecord, 1, stringResult, &stringLenght);
-  wcout << L"\n " << stringResult;
-  stringLenght = 0;
-
-
-
-  // save the modify
-  errorMessage = ::MsiViewModify(phView, MSIMODIFY_REPLACE, phRecord);
-  if (errorMessage == ERROR_SUCCESS)
-    wcout << L"\n view modified";
-
-  errorMessage = ::MsiDatabaseCommit(handleTest);
-  if (errorMessage == ERROR_SUCCESS)
-    wcout << L"\n committed";
-
-  ::MsiCloseHandle(handleTest);
+  //UINT errorMessage = ERROR_SUCCESS;
+  //
+  //// Open View
+  //MSIHANDLE phView;
+  //LPCTSTR sqlQuerry = L"SELECT `Text` FROM `Control` WHERE `Dialog_`='WelcomeDlg' AND `X`= 135 ";
+  //errorMessage = ::MsiDatabaseOpenView(handleTest, sqlQuerry, &phView);
+  //if (errorMessage == ERROR_SUCCESS)
+  //  cout << " \n YEE";
+  //
+  //// create record
+  //MSIHANDLE emptyRecord = ::MsiCreateRecord(2);
+  //if (emptyRecord != NULL)
+  //  cout << " \n Record Created";
+  //
+  //// execute view
+  //errorMessage = ::MsiViewExecute(phView, NULL);
+  //if (errorMessage == ERROR_SUCCESS)
+  //  cout << "\n Msi view executed";
+  //
+  //
+  //MSIHANDLE recordToColumn;
+  //errorMessage = ::MsiViewGetColumnInfo(phView, MSICOLINFO_TYPES, &recordToColumn);
+  //if (errorMessage == ERROR_SUCCESS)
+  //  cout << " \n YEE";
+  //
+  //cout << "\n" << ::MsiRecordGetFieldCount(recordToColumn);
+  //
+  //// view fetch
+  //DWORD stringLenght = 0;
+  //MSIHANDLE phRecord;
+  //errorMessage = ::MsiViewFetch(phView, &phRecord);
+  //if (errorMessage == ERROR_SUCCESS)
+  //  cout << "\n Fetch succeeded";
+  //
+  //
+  //
+  //// print the string
+  //errorMessage = ::MsiRecordGetString(phRecord, 1, L"", &stringLenght);
+  //if (errorMessage == ERROR_MORE_DATA)
+  //  cout << "\n not enough memory";
+  //
+  //stringLenght++;
+  //wchar_t stringResult[256];
+  //::MsiRecordGetString(phRecord, 1, stringResult, &stringLenght);
+  //wcout << L"\n " << stringResult;
+  //stringLenght = 0;
+  //
+  //// modify the record
+  //wchar_t newString[256] = L"{\\VerdanaBold13} SELECT then UPDATE";
+  //errorMessage = MsiRecordSetString(phRecord, 1, newString);
+  //if (errorMessage == ERROR_SUCCESS)
+  //  cout << "\n string set";
+  //
+  //
+  //
+  //// print the string again
+  //errorMessage = ::MsiRecordGetString(phRecord, 1, L"", &stringLenght);
+  //if (errorMessage == ERROR_MORE_DATA)
+  //  cout << "\n not enough memory";
+  //
+  //stringLenght++;
+  //::MsiRecordGetString(phRecord, 1, stringResult, &stringLenght);
+  //wcout << L"\n " << stringResult;
+  //stringLenght = 0;
+  //
+  //
+  //
+  //// save the modify
+  //errorMessage = ::MsiViewModify(phView, MSIMODIFY_REPLACE, phRecord);
+  //if (errorMessage == ERROR_SUCCESS)
+  //  wcout << L"\n view modified";
+  //
+  //errorMessage = ::MsiDatabaseCommit(handleTest);
+  //if (errorMessage == ERROR_SUCCESS)
+  //  wcout << L"\n committed";
+  //
+  //::MsiCloseHandle(handleTest);
 
 }
 
 
-void justUpdate(MSIHANDLE handleTest)
+void justUpdate(MSIHANDLE /*handleTest*/)
 {
-  UINT errorMessage = ERROR_SUCCESS;
-
-  // Open View
-  MSIHANDLE phView;
-  LPCTSTR sqlQuerry = L"UPDATE `Control` SET `Text`=\'{\\VerdanaBold13} Just UPDATE\' WHERE `Dialog_`='WelcomeDlg' AND `X`= 135";
-  errorMessage = ::MsiDatabaseOpenView(handleTest, sqlQuerry, &phView);
-  if (errorMessage != ERROR_SUCCESS)
-    return;
-
-  cout << " \n Open view";
-
-  if (ERROR_SUCCESS != ::MsiViewExecute(phView, 0))
-    return;
-
-  cout << "\n executed";
-
-
-  errorMessage = ::MsiDatabaseCommit(handleTest);
-  if (errorMessage == ERROR_SUCCESS)
-    wcout << L"\n committed";
+  //UINT errorMessage = ERROR_SUCCESS;
+  //
+  //// Open View
+  //MSIHANDLE phView;
+  //LPCTSTR sqlQuerry = L"UPDATE `Control` SET `Text`=\'{\\VerdanaBold13} Just UPDATE\' WHERE `Dialog_`='WelcomeDlg' AND `X`= 135";
+  //errorMessage = ::MsiDatabaseOpenView(handleTest, sqlQuerry, &phView);
+  //if (errorMessage != ERROR_SUCCESS)
+  //  return;
+  //
+  //cout << " \n Open view";
+  //
+  //if (ERROR_SUCCESS != ::MsiViewExecute(phView, 0))
+  //  return;
+  //
+  //cout << "\n executed";
+  //
+  //
+  //errorMessage = ::MsiDatabaseCommit(handleTest);
+  //if (errorMessage == ERROR_SUCCESS)
+  //  wcout << L"\n committed";
 
 }
 
@@ -134,17 +134,22 @@ void msiFrameworkTree(LPCTSTR msiPath)
 
   // select
   auto row = Database(msiPath).inTable(L"Control")->withColumns(L"Text", L"Dialog_")->whereConditionIs(Equal(L"Type", L"Text"))->select()->getRowWithNumber(3)->getElementFromColumn(L"Text");
-  
-  // update
-  auto updated3 = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Type", L"Text"))->updateColumnWithValue(L"text", L"newValue")->update();
-
-  // delete
-  auto del = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Type", L"Text"))->deleteRows();
-
-  // insert 
-  auto ins = Database(msiPath).inTable(L"Control")->insertInColumnWithValue(L"text", L"newValue")->insertInColumnWithValue(L"Type", L"newValue")->insert();
-
-  // create table
-  auto createTable = Database(msiPath).createTable(L"brandNewTable")->addColumn(L"Size", ColumnType::Integer)->addColumn(L"Name", ColumnType::String)->addTableToDatabase();
+  row;
+  //
+  //// update
+  //auto updated3 = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Type", L"Text"))->updateColumnWithValue(L"text", L"newValue")->update();
+  //updated3;
+  //
+  //// delete
+  //auto del = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Type", L"Text"))->deleteRows();
+  //del;
+  //
+  //// insert 
+  //auto ins = Database(msiPath).inTable(L"Control")->insertInColumnWithValue(L"text", L"newValue")->insertInColumnWithValue(L"Type", L"newValue")->insert();
+  //ins;
+  //
+  //// create table
+  //auto createTable = Database(msiPath).createTable(L"brandNewTable")->addColumn(L"Size", ColumnType::Integer)->addColumn(L"Name", ColumnType::String)->addTableToDatabase();
+  //createTable;
 }
 

@@ -2,14 +2,15 @@
 #include "stdafx.h"
 #include "TableState.h"
 
-TableState::TableState(const DatabaseInfo& aDatabaseInfo, const wstring& aTableName)
-  :mDatabaseInfo(aDatabaseInfo), mTableName(aTableName)
+TableState::TableState(const DatabaseInfo& aDatabaseInfo)
+  :mDatabaseInfo(aDatabaseInfo)
 {
 }
 
 unique_ptr<UpdateState> TableState::updateColumnWithValue(const wstring& aColumnName, const wstring& aNewValue)
 {
-  mDatabaseInfo.storeColumnNameAndValueforUpdate(aColumnName, aNewValue);
+  mDatabaseInfo.updateColumnWithValue(aColumnName, aNewValue);
+  return make_unique<UpdateState>(mDatabaseInfo);
 }
 
 std::unique_ptr<InsertState> TableState::insertInColumnWithValue(const wstring& aColumnName, const wstring& aValue)
@@ -20,8 +21,8 @@ std::unique_ptr<InsertState> TableState::insertInColumnWithValue(const wstring& 
 
 unique_ptr<ConditionState> TableState::whereConditionIs(LogicCondition aCondition)
 {
-  mDatabaseInfo.condition = aCondition;
-  return make_unique<Node>(mDatabaseInfo);
+  mDatabaseInfo.updateConditionWith(aCondition);
+  return make_unique<ConditionState>(mDatabaseInfo);
 }
 
 UINT TableState::deleteAllRows()

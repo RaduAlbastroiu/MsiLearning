@@ -39,12 +39,6 @@
     <ClInclude Include="OperationLogicCondition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DatabaseNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NeutralState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SelectedState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -64,6 +58,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CreateTableState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConditionState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,12 +89,6 @@
     <ClCompile Include="OperationLogicCondition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DatabaseNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NeutralState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SelectedState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -117,6 +108,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CreateTableState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConditionState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

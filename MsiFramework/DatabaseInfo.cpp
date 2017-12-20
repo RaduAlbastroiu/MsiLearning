@@ -2,22 +2,24 @@
 #include "stdafx.h"
 #include "DatabaseInfo.h"
 
-bool DatabaseInfo::openDatabase(const wstring aDatabasePath)
+DatabaseInfo::DatabaseInfo(const wstring aDatabasePath)
+  :mCondition(L"")
 {
-  databasePath = aDatabasePath;
+  mDatabasePath = aDatabasePath;
 
   LPCTSTR databasePath = aDatabasePath.c_str();
   mErrorMessage = ::MsiOpenDatabase(databasePath, MSIDBOPEN_DIRECT, &mDatabaseHandle);
 
-  if (mErrorMessage == ERROR_SUCCESS)
-    return true;
-
-  return false;
 }
 
 void DatabaseInfo::updateConditionWith(const LogicCondition& anotherCondition)
 {
   mCondition = mCondition.And(anotherCondition);
+}
+
+void DatabaseInfo::setTargetTable(const wstring& aTableName)
+{
+  mTargetTabel = targetTable(aTableName, vector<wstring> {});
 }
 
 std::unique_ptr<Table> DatabaseInfo::select()
@@ -27,6 +29,21 @@ std::unique_ptr<Table> DatabaseInfo::select()
   Table resultTable = createTableFromSqlQuerry(sqlSelectQuerry);
 
   return make_unique<Table>(resultTable);
+}
+
+UINT DatabaseInfo::update()
+{
+  wstring sqlUpdateQuerry = updateSqlCondition();
+  
+  mErrorMessage = runSql(sqlUpdateQuerry);
+
+  return mErrorMessage;
+}
+
+void DatabaseInfo::updateColumnWithValue(const wstring& aColumnName, const wstring& aNewValue)
+{
+  mTargetTabel.columnsCollection.push_back(aColumnName);
+  mTargetTabel.newValueForColumns.push_back(aNewValue);
 }
 
 std::wstring DatabaseInfo::selectSqlCondition()
@@ -58,7 +75,7 @@ std::wstring DatabaseInfo::composeSqlQuerryColumns()
   return result;
 }
 
-bool DatabaseInfo::runSql(const wstring & aSqlQuerry)
+UINT DatabaseInfo::runSql(const wstring & aSqlQuerry)
 {
   MSIHANDLE phView;
   LPCTSTR sqlQuerry = aSqlQuerry.c_str();
@@ -72,9 +89,9 @@ bool DatabaseInfo::runSql(const wstring & aSqlQuerry)
       mErrorMessage = ::MsiDatabaseCommit(mDatabaseHandle);
       if (mErrorMessage == ERROR_SUCCESS)
       {
-        return true;
+        return ERROR_SUCCESS;
       }
     }
   }
-  return false;
+  return mErrorMessage;
 }

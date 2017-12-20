@@ -2,7 +2,18 @@
 #include "stdafx.h"
 #include "Metadata.h"
 
-class Element;
+
+// maybe extend
+class Element
+{
+public:
+  Element(const wstring& aValue);
+
+  wstring getAsString();
+
+private:
+  wstring mValue;
+};
 
 class Row
 {
@@ -18,16 +29,4 @@ private:
 
   map<wstring, Element> mRowData;
 
-};
-
-// maybe extend
-class Element
-{
-public:
-  Element(const wstring& aValue) :mValue(aValue) {}
-
-  wstring getAsString();
-
-private:
-  wstring mValue;
 };

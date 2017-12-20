@@ -8,8 +8,7 @@
 class TableState
 {
 public:
-  TableState(const DatabaseInfo& aDatabaseInfo, const wstring& aTableName);
-  ~TableState() = default;
+  TableState(const DatabaseInfo& aDatabaseInfo);
 
   // use columns
   template<typename... Types>
@@ -26,6 +25,5 @@ public:
 
 private:
 
-  wstring mTableName;
   DatabaseInfo mDatabaseInfo;
 };

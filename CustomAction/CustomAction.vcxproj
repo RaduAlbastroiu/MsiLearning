@@ -183,11 +183,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MsiFramework\MsiFramework.vcxproj">
-      <Project>{34cfa137-b52e-4568-9db7-d4c20068db2c}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="CustomAction.def" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -13,19 +13,20 @@ class DatabaseInfo
 {
 public:
 
-  // open the database
-  bool openDatabase(const wstring databasePath);
+  // default constructor
+  DatabaseInfo(const wstring databasePath);
 
   // update condition with another condition ( add AND )
   // by default no condition
   void updateConditionWith(const LogicCondition& anotherCondition);
   
   // select
+  void setTargetTable(const wstring& aTableName);
   unique_ptr<Table> select();
 
   // update
   UINT update();
-  void storeColumnNameAndValueforUpdate(const wstring& aColumnName, const wstring& aNewValue);
+  void updateColumnWithValue(const wstring& aColumnName, const wstring& aNewValue);
 
   // delete
   UINT deleteRows();
@@ -41,7 +42,7 @@ public:
   UINT addTableToDatabase();
 
   // run any query
-  bool runSql(const wstring& aSqlQuerry);
+  UINT runSql(const wstring& aSqlQuerry);
   
   template<typename... Types>
   void addTableWithColumns(const wstring& aTableName, const Types... aColumns)
@@ -56,23 +57,26 @@ private:
   MSIHANDLE mDatabaseHandle;
 
   wstring selectSqlCondition();
+  wstring updateSqlCondition();
   wstring composeSqlQuerryTables();
   wstring composeSqlQuerryColumns();
 
   struct targetTable {
     // constructor
+    targetTable();
     targetTable(const wstring& aTableName, vector<wstring> aColumnCollection) 
       : tableName(aTableName), columnsCollection(aColumnCollection) {}
 
     wstring tableName;
     vector<wstring> columnsCollection;
+    vector<wstring> newValueForColumns;
   };
   // single table
   targetTable mTargetTabel;
 
   Table createTableFromSqlQuerry(const wstring& sqlQuerry);
 
-  wstring databasePath;
+  wstring mDatabasePath;
 
   LogicCondition mCondition;
 };

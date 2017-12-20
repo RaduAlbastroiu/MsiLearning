@@ -6,12 +6,12 @@ LogicCondition::LogicCondition(const LogicCondition& aSubCondition)
   mSqlCondition = L"( " + aSubCondition.getCondition() + L" )";
 }
 
-LogicCondition::LogicCondition(const wstring aSqlCondition)
+LogicCondition::LogicCondition(const wstring& aSqlCondition)
   :mSqlCondition(aSqlCondition)
 {
 }
 
-LogicCondition LogicCondition::And(const LogicCondition aCondition)
+LogicCondition LogicCondition::And(const LogicCondition& aCondition)
 {
   mSqlCondition += L" AND ";
   mSqlCondition += aCondition.getCondition();
@@ -19,7 +19,7 @@ LogicCondition LogicCondition::And(const LogicCondition aCondition)
   return LogicCondition(mSqlCondition);
 }
 
-LogicCondition LogicCondition::Or(const LogicCondition aCondition)
+LogicCondition LogicCondition::Or(const LogicCondition& aCondition)
 {
   mSqlCondition += L" OR ";
   mSqlCondition += aCondition.getCondition();
@@ -27,7 +27,7 @@ LogicCondition LogicCondition::Or(const LogicCondition aCondition)
   return LogicCondition(mSqlCondition);
 }
 
-LogicCondition LogicCondition::Not(const LogicCondition aCondition)
+LogicCondition LogicCondition::Not(const LogicCondition& aCondition)
 {
   mSqlCondition += L" NOT ";
   mSqlCondition += aCondition.getCondition();

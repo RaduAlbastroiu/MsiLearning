@@ -1,10 +1,16 @@
 #pragma once
+#include "stdafx.h"
 #include "ConditionState.h"
+#include "TableState.h"
+#include "UpdateState.h"
+
 
 ConditionState::ConditionState(const DatabaseInfo & aDatabaseInfo)
   :mDatabaseInfo(aDatabaseInfo)
 {
 }
+
+ConditionState::~ConditionState() = default;
 
 unique_ptr<ConditionState> ConditionState::whereConditionIs(LogicCondition aCondition)
 {
@@ -14,7 +20,7 @@ unique_ptr<ConditionState> ConditionState::whereConditionIs(LogicCondition aCond
 
 std::unique_ptr<UpdateState> ConditionState::updateColumnWithValue(const wstring& aColumnName, const wstring& aNewValue)
 {
-  mDatabaseInfo.storeColumnNameAndValueforUpdate(aColumnName, aNewValue);
+  mDatabaseInfo.updateColumnWithValue(aColumnName, aNewValue);
   return make_unique<UpdateState>(mDatabaseInfo);
 }
 
@@ -25,5 +31,5 @@ unique_ptr<Table> ConditionState::select()
 
 UINT ConditionState::deleteRows()
 {
-  return mDatabaseInfo.deleteRow();
+  return mDatabaseInfo.deleteRows();
 }

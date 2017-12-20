@@ -95,6 +95,9 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>msi.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -109,6 +112,9 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>msi.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -127,6 +133,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>msi.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -145,14 +154,16 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>msi.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ConditionState.h" />
     <ClInclude Include="CreateTableState.h" />
     <ClInclude Include="DatabaseInfo.h" />
-    <ClInclude Include="DatabaseNode.h" />
     <ClInclude Include="InsertState.h" />
     <ClInclude Include="LogicCondition.h" />
-    <ClInclude Include="NeutralState.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="NodeCollection.h" />
     <ClInclude Include="NodeProtocol.h" />
@@ -166,13 +177,12 @@
     <ClInclude Include="UpdateState.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConditionState.cpp" />
     <ClCompile Include="CreateTableState.cpp" />
     <ClCompile Include="DatabaseInfo.cpp" />
-    <ClCompile Include="DatabaseNode.cpp" />
     <ClCompile Include="InsertState.cpp" />
     <ClCompile Include="LogicCondition.cpp" />
     <ClCompile Include="MsiFrameworkTree.cpp" />
-    <ClCompile Include="NeutralState.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="NodeCollection.cpp" />
     <ClCompile Include="NodeProtocol.cpp" />
