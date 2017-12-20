@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "Table.h"
 
-Table::Table(const Metadata & aMetadata, const RowCollection & aRowCollection)
+Table::Table(const TableMetadata & aMetadata, const RowCollection & aRowCollection)
   :mTableSchema(aMetadata), mRowCollection(aRowCollection)
 {
 }

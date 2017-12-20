@@ -21,7 +21,7 @@ private:
 };
 
 
-class Metadata
+class TableMetadata
 {
 public:
 

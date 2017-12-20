@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
-#include "../MsiFrameworkTree/Database.h"
-#include "../MsiFrameworkTree/OperationLogicCondition.h"
+#include "../MsiFramework/Database.h"
+#include "../MsiFramework/OperationLogicCondition.h"
 
 void selectUpdate(MSIHANDLE /*handleTest*/) {
   
@@ -135,21 +135,21 @@ void msiFrameworkTree(LPCTSTR msiPath)
   // select
   auto row = Database(msiPath).inTable(L"Control")->withColumns(L"Text", L"Dialog_")->whereConditionIs(Equal(L"Type", L"Text"))->select()->getRowWithNumber(3)->getElementFromColumn(L"Text");
   row;
-  //
-  //// update
-  //auto updated3 = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Type", L"Text"))->updateColumnWithValue(L"text", L"newValue")->update();
-  //updated3;
-  //
-  //// delete
-  //auto del = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Type", L"Text"))->deleteRows();
-  //del;
-  //
-  //// insert 
-  //auto ins = Database(msiPath).inTable(L"Control")->insertInColumnWithValue(L"text", L"newValue")->insertInColumnWithValue(L"Type", L"newValue")->insert();
-  //ins;
-  //
-  //// create table
-  //auto createTable = Database(msiPath).createTable(L"brandNewTable")->addColumn(L"Size", ColumnType::Integer)->addColumn(L"Name", ColumnType::String)->addTableToDatabase();
-  //createTable;
+
+  // update
+  auto updated3 = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Type", L"Text"))->updateColumnWithValue(L"text", L"newValue")->update();
+  updated3;
+
+  // delete
+  auto del = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Type", L"Text"))->deleteRows();
+  del;
+
+  // insert 
+  auto ins = Database(msiPath).inTable(L"Control")->insertInColumnWithValue(L"text", L"newValue")->insertInColumnWithValue(L"Type", L"newValue")->insert();
+  ins;
+
+  // create table
+  auto createTable = Database(msiPath).createTable(L"brandNewTable")->addColumn(L"Size", ColumnType::Integer)->addColumn(L"Name", ColumnType::String)->addTableToDatabase();
+  createTable;
 }
 

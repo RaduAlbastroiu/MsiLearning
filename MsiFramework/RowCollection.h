@@ -1,11 +1,11 @@
 #pragma once
 #include "stdafx.h"
 #include "Row.h"
-#include "Metadata.h"
+#include "TableMetadata.h"
 
 class RowCollection {
 public:
-  RowCollection(const vector<Row>& aRowCollection, const Metadata& aMetadata);
+  RowCollection(const vector<Row>& aRowCollection, const TableMetadata& aMetadata);
 
   unique_ptr<Row> operator[](int aRowNumber);
   unique_ptr<Row> getRowWithNumber(int aRowNumber);
@@ -13,6 +13,6 @@ public:
   bool addRow(const map<wstring, Element>& aRowData);
 
 private:
-  Metadata mMetadata;
+  TableMetadata mMetadata;
   vector<Row> mRowCollection;
 };

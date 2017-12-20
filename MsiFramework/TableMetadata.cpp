@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "Metadata.h"
+#include "TableMetadata.h"
 
-void Metadata::addColumnInSchema(const wstring& aNameColumn, const wstring& aType, bool aIsKeyMember, bool aIsNullable)
+void TableMetadata::addColumnInSchema(const wstring& aNameColumn, const wstring& aType, bool aIsKeyMember, bool aIsNullable)
 {
   auto newColumnInfo = MetadataSchema(aNameColumn, aType, aIsKeyMember, aIsNullable);
   mMetadataCollection.insert(pair<wstring, MetadataSchema>(aNameColumn, newColumnInfo));
 }
 
-unique_ptr<MetadataSchema> Metadata::operator[](const wstring& aColumnName)
+unique_ptr<MetadataSchema> TableMetadata::operator[](const wstring& aColumnName)
 {
   auto it = mMetadataCollection.find(aColumnName);
   if (it != mMetadataCollection.end())

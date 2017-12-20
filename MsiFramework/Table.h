@@ -1,13 +1,13 @@
 #pragma once
 #include "stdafx.h"
-#include "Metadata.h"
+#include "TableMetadata.h"
 #include "Row.h"
 #include "RowCollection.h"
 
 class Table
 {
 public:
-  Table(const Metadata& aMetadata, const RowCollection& aRowCollection);
+  Table(const TableMetadata& aMetadata, const RowCollection& aRowCollection);
 
   // access metadata
   unique_ptr<MetadataSchema> getColumnInfo(const wstring& aColumnName);
@@ -18,7 +18,7 @@ public:
 
 private:
   // access one column via columnName
-  Metadata mTableSchema;
+  TableMetadata mTableSchema;
 
   RowCollection mRowCollection;
   

@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "Row.h"
 
-Row::Row(const Metadata&  aMetadata, const map<wstring, Element> aRowData)
+Row::Row(const TableMetadata&  aMetadata, const map<wstring, Element> aRowData)
   :mMetadata(aMetadata), mRowData(aRowData)
 {
 }

@@ -25,7 +25,7 @@
     <ClCompile Include="DatabaseInfo.cpp" />
     <ClCompile Include="InsertState.cpp" />
     <ClCompile Include="LogicCondition.cpp" />
-    <ClCompile Include="Metadata.cpp" />
+    <ClCompile Include="TableMetadata.cpp" />
     <ClCompile Include="MsiFrameworkTree.cpp" />
     <ClCompile Include="OperationLogicCondition.cpp" />
     <ClCompile Include="Row.cpp" />
@@ -48,7 +48,7 @@
     <ClInclude Include="DatabaseInfo.h" />
     <ClInclude Include="InsertState.h" />
     <ClInclude Include="LogicCondition.h" />
-    <ClInclude Include="Metadata.h" />
+    <ClInclude Include="TableMetadata.h" />
     <ClInclude Include="OperationLogicCondition.h" />
     <ClInclude Include="Row.h" />
     <ClInclude Include="RowCollection.h" />

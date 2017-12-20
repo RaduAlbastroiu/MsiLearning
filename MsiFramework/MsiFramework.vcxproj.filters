@@ -33,9 +33,6 @@
     <ClCompile Include="LogicCondition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Metadata.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MsiFrameworkTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,6 +60,9 @@
     <ClCompile Include="UpdateState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TableMetadata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConditionState.h">
@@ -81,9 +81,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LogicCondition.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Metadata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OperationLogicCondition.h">
@@ -111,6 +108,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UpdateState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TableMetadata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

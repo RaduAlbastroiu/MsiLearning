@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "RowCollection.h"
 
-RowCollection::RowCollection(const vector<Row>& aRowCollection, const Metadata& aMetadata)
+RowCollection::RowCollection(const vector<Row>& aRowCollection, const TableMetadata& aMetadata)
   :mRowCollection(aRowCollection), mMetadata(aMetadata)
 {
 }
