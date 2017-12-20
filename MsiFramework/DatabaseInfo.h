@@ -45,9 +45,9 @@ public:
   UINT runSql(const wstring& aSqlQuerry);
   
   template<typename... Types>
-  void addTableWithColumns(const wstring& aTableName, const Types... aColumns)
+  void addTableWithColumns(const Types... aColumns)
   {
-    mTargetTabel = targetTable(aTableName, vector<wstring>{ aColumns... });
+    mTargetTabel = targetTable(mTargetTabel.tableName, vector<wstring>{ aColumns... });
   }
 
 private:
@@ -58,12 +58,13 @@ private:
 
   wstring selectSqlCondition();
   wstring updateSqlCondition();
-  wstring composeSqlQuerryTables();
-  wstring composeSqlQuerryColumns();
+  wstring composeSqlQuerryTable();
+  wstring composeSqlEnumerateColumns();
+  wstring composeSqlUpdateColumns();
 
   struct targetTable {
     // constructor
-    targetTable();
+    targetTable() = default;
     targetTable(const wstring& aTableName, vector<wstring> aColumnCollection) 
       : tableName(aTableName), columnsCollection(aColumnCollection) {}
 

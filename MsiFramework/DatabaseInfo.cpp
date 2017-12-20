@@ -46,19 +46,66 @@ void DatabaseInfo::updateColumnWithValue(const wstring& aColumnName, const wstri
   mTargetTabel.newValueForColumns.push_back(aNewValue);
 }
 
+UINT DatabaseInfo::deleteRows()
+{
+  return 0;
+}
+
+UINT DatabaseInfo::deleteAllRows()
+{
+  return 0;
+}
+
+UINT DatabaseInfo::insertInColumnValue(const wstring & /*aColumnName*/, const wstring & /*aValue*/)
+{
+  return 0;
+}
+
+UINT DatabaseInfo::insert()
+{
+  return 0;
+}
+
+UINT DatabaseInfo::addColumn(const wstring & /*aColumnName*/, const ColumnType & /*aColumnType*/)
+{
+  return 0;
+}
+
+UINT DatabaseInfo::createTable(const wstring & /*aTableName*/)
+{
+  return 0;
+}
+
+UINT DatabaseInfo::addTableToDatabase()
+{
+  return 0;
+}
+
 std::wstring DatabaseInfo::selectSqlCondition()
 {
   wstring sqlQuerry = L" SELECT ";
-  sqlQuerry += composeSqlQuerryColumns();
+  sqlQuerry += composeSqlEnumerateColumns();
   sqlQuerry += L" FROM ";
-  sqlQuerry += composeSqlQuerryTables();
+  sqlQuerry += composeSqlQuerryTable();
   sqlQuerry += L" WHERE ";
   sqlQuerry += mCondition.getCondition();
 
   return sqlQuerry;
 }
 
-std::wstring DatabaseInfo::composeSqlQuerryTables()
+std::wstring DatabaseInfo::updateSqlCondition()
+{
+  wstring sqlQuerry = L" UPDATE ";
+  sqlQuerry += composeSqlQuerryTable();
+  sqlQuerry += L" SET ";
+  //
+  sqlQuerry += L" WHERE ";
+  sqlQuerry += mCondition.getCondition();
+  
+  return sqlQuerry;
+}
+
+std::wstring DatabaseInfo::composeSqlQuerryTable()
 {
   wstring result = L"";
   result += mTargetTabel.tableName;
@@ -66,13 +113,39 @@ std::wstring DatabaseInfo::composeSqlQuerryTables()
   return result;
 }
 
-std::wstring DatabaseInfo::composeSqlQuerryColumns()
+std::wstring DatabaseInfo::composeSqlEnumerateColumns()
 {
+  // add columns with comas
   wstring result = L"";
   for (auto columnName : mTargetTabel.columnsCollection)
-    result += columnName;
+    result += columnName + L", ";
+ 
+  // delete last coma
+  result.pop_back();
+  result.pop_back();
 
   return result;
+}
+
+std::wstring DatabaseInfo::composeSqlUpdateColumns()
+{
+  // add columns = value with comas
+  wstring result = L"";
+  for (size_t i = 0; i < mTargetTabel.columnsCollection.size(); i++)
+  {
+    result += mTargetTabel.columnsCollection[i] + L" = " + mTargetTabel.newValueForColumns[i] + L", ";
+  }
+
+  // delete las coma
+  result.pop_back();
+  result.pop_back();
+
+  return result;
+}
+
+Table DatabaseInfo::createTableFromSqlQuerry(const wstring & /*sqlQuerry*/)
+{
+  return Table();
 }
 
 UINT DatabaseInfo::runSql(const wstring & aSqlQuerry)

@@ -14,7 +14,7 @@ public:
   template<typename... Types>
   unique_ptr<ConditionState> withColumns(const Types& ... aColumns)
   {
-    mDatabaseInfo.addTableWithColumns(mTableName, aColumns...);
+    mDatabaseInfo.addTableWithColumns(aColumns...);
     return make_unique<ConditionState>(mDatabaseInfo);
   }
 
