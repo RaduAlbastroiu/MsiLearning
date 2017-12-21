@@ -11,10 +11,9 @@ class AnyOf : public LogicCondition
 public:
   template<typename... Types>
   AnyOf(const wstring& target, const wstring& expectedValue, const Types& ... expectedValues)
-    :LogicCondition(target, expectedValue, expectedValue...)
+    :mListOperation(L" OR "), mComparison(L" = "), LogicCondition(target, expectedValue, expectedValue...)
   {
-    mListOperation = L" OR ";
-    mComparison = L" = ";
+    mSqlCondition = composeSqlCondition(target, mListOperation, mComparison, mExpectedValues);
   }
 };
 
@@ -23,10 +22,9 @@ class NoneOf : public LogicCondition
 public:
   template<typename... Types>
   NoneOf(const wstring& target, const wstring& expectedValue, const Types& ... expectedValues)
-    :LogicCondition(target, expectedValue, expectedValue...)
+    :mListOperation(L" AND "), mComparison(L" <> "), LogicCondition(target, expectedValue, expectedValue...)
   {
-    mListOperation = L" AND ";
-    mComparison = L" <> ";
+    mSqlCondition = composeSqlCondition(target, mListOperation, mComparison, mExpectedValues);
   }
 };
 
@@ -37,6 +35,7 @@ public:
     :LogicCondition(target, expectedValue)
   {
     mComparison = L" = ";
+    mSqlCondition = composeSqlCondition(target, mListOperation, mComparison, mExpectedValues);
   }
 };
 
@@ -47,6 +46,7 @@ public:
     :LogicCondition(target, expectedValue)
   {
     mComparison = L" <> ";
+    mSqlCondition = composeSqlCondition(target, mListOperation, mComparison, mExpectedValues);
   }
 };
 
@@ -57,6 +57,7 @@ public:
     :LogicCondition(target, expectedValue)
   {
     mComparison = L" < ";
+    mSqlCondition = composeSqlCondition(target, mListOperation, mComparison, mExpectedValues);
   }
 };
 
@@ -67,6 +68,7 @@ public:
     :LogicCondition(target, expectedValue)
   {
     mComparison = L" <= ";
+    mSqlCondition = composeSqlCondition(target, mListOperation, mComparison, mExpectedValues);
   }
 };
 
@@ -77,6 +79,7 @@ public:
     :LogicCondition(target, expectedValue)
   {
     mComparison = L" > ";
+    mSqlCondition = composeSqlCondition(target, mListOperation, mComparison, mExpectedValues);
   }
 };
 
@@ -87,5 +90,6 @@ public:
     :LogicCondition(target, expectedValue)
   {
     mComparison = L" >= ";
+    mSqlCondition = composeSqlCondition(target, mListOperation, mComparison, mExpectedValues);
   }
 };

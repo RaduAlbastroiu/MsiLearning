@@ -5,7 +5,6 @@
 Database::Database(const wstring& aDatabasePath)
   :mDatabaseInfo(aDatabasePath), mDatabasePath(aDatabasePath)
 {
-  // open database
 }
 
 unique_ptr<TableState> Database::inTable(const wstring& aTableName)

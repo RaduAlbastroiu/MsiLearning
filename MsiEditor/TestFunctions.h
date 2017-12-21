@@ -132,8 +132,10 @@ void msiFrameworkTree(LPCTSTR msiPath)
  
   //auto collection = Database(msiPath).addTable(L"Control")->addColumns("Text", "Dialog_")->addCondition(Equal(L"Type", L"Text").And(Equal(L"Control", L"Title")))->select();
 
+  auto x = Equal(L"Type", L"Text").And(NotEqual(L"Text", L"Dialog_")).Or(LessEqualThan(L"Text", L"Dialog_")).getCondition();
+
   // select
-  auto row = Database(msiPath).inTable(L"Control")->withColumns(L"Text", L"Dialog_")->whereConditionIs(Equal(L"Type", L"Text"))->select()->getRowWithNumber(3)->getElementFromColumn(L"Text");
+  auto row = Database(msiPath).inTable(L"Control")->withColumns(L"Text", L"Dialog_")->whereConditionIs(Equal(L"Type", L"Text"))->select();
   row;
 
   // update

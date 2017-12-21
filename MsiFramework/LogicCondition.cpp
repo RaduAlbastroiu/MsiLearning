@@ -3,7 +3,10 @@
 
 LogicCondition::LogicCondition(const LogicCondition& aSubCondition)
 {
-  mSqlCondition = L"( " + aSubCondition.getCondition() + L" )";
+  if (aSubCondition.getCondition().size())
+  {
+    mSqlCondition = L"( " + aSubCondition.getCondition() + L" )";
+  }
 }
 
 LogicCondition::LogicCondition(const wstring& aSqlCondition)
@@ -47,12 +50,12 @@ std::wstring LogicCondition::composeSqlCondition(wstring target, wstring operati
   for (auto it = expectedValues.begin(); it != expectedValues.end(); it++)
   {
     if (it != expectedValues.begin())
-      resultSqltCondition += L" OR ";
+      resultSqltCondition += mListOperation;
 
-    resultSqltCondition += target + L" = " + *it;
+    resultSqltCondition += target + mComparison + *it;
   }
 
-  resultSqltCondition = L" )";
+  resultSqltCondition += L" )";
 
   return resultSqltCondition;
 }

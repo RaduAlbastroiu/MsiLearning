@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "DatabaseInfo.h"
 
-DatabaseInfo::DatabaseInfo(const wstring aDatabasePath)
+DatabaseInfo::DatabaseInfo(const wstring& aDatabasePath)
   :mCondition(L"")
 {
   mDatabasePath = aDatabasePath;
@@ -14,7 +14,14 @@ DatabaseInfo::DatabaseInfo(const wstring aDatabasePath)
 
 void DatabaseInfo::updateConditionWith(const LogicCondition& anotherCondition)
 {
-  mCondition = mCondition.And(anotherCondition);
+  if (mCondition.getCondition().size())
+  {
+    mCondition = mCondition.And(anotherCondition);
+  }
+  else
+  {
+    mCondition = anotherCondition;
+  }
 }
 
 void DatabaseInfo::setTargetTable(const wstring& aTableName)
@@ -221,9 +228,10 @@ Table DatabaseInfo::createTableFromSqlQuerry(const wstring & /*sqlQuerry*/)
 
 UINT DatabaseInfo::runSql(const wstring & aSqlQuerry)
 {
-  MSIHANDLE phView;
-  LPCTSTR sqlQuerry = aSqlQuerry.c_str();
-
+//  MSIHANDLE phView;
+//  LPCTSTR sqlQuerry = aSqlQuerry.c_str();
+  wcout << aSqlQuerry << "\n\n";
+  /*
   mErrorMessage = ::MsiDatabaseOpenView(mDatabaseHandle, sqlQuerry, &phView);
   if (mErrorMessage == ERROR_SUCCESS)
   {
@@ -238,4 +246,6 @@ UINT DatabaseInfo::runSql(const wstring & aSqlQuerry)
     }
   }
   return mErrorMessage;
+  */
+  return 0;
 }

@@ -56,7 +56,7 @@ class DatabaseInfo
 public:
 
   // default constructor
-  DatabaseInfo(const wstring databasePath);
+  DatabaseInfo(const wstring& databasePath);
 
   // update condition with another condition ( add AND )
   // by default no condition
