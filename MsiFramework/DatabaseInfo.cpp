@@ -48,10 +48,10 @@ void DatabaseInfo::updateColumnWithValue(const wstring& aColumnName, const wstri
 
 UINT DatabaseInfo::deleteRows()
 {
-  wstring sqlDeleteQuerry = DELETE;
-  sqlDeleteQuerry += FROM;
+  wstring sqlDeleteQuerry = SQLDELETE;
+  sqlDeleteQuerry += SQLFROM;
   sqlDeleteQuerry += composeSqlQuerryTable();
-  sqlDeleteQuerry += WHERE;
+  sqlDeleteQuerry += SQLWHERE;
   sqlDeleteQuerry += mCondition.getCondition();
 
   return runSql(sqlDeleteQuerry);
@@ -59,7 +59,7 @@ UINT DatabaseInfo::deleteRows()
 
 UINT DatabaseInfo::deleteAllRows()
 {
-  wstring sqlDeleteQuerry = L" DELETE FROM ";
+  wstring sqlDeleteQuerry = SQLDELETE;
   sqlDeleteQuerry += composeSqlQuerryTable();
   
   return runSql(sqlDeleteQuerry);
@@ -84,10 +84,10 @@ void DatabaseInfo::createTable(const wstring& aTableName)
 void DatabaseInfo::createColumn(const wstring& aColumnName, const ColumnType& aColumnType)
 {
   mTargetTabel.columnsCollection.push_back(aColumnName);
-  mTargetTabel.columnMetadata.push_back(Metadata(aColumnName, aColumnType, false, false));
+  mTargetTabel.columnMetadata.push_back(Metadata{ aColumnName, aColumnType, false, false });
 }
 
-void DatabaseInfo::createNullableColumn(const wstring& aColumnName, const ColumnType& aColumntType)
+void DatabaseInfo::createNullableColumn(const wstring& aColumnName, const ColumnType& aColumnType)
 {
   mTargetTabel.columnsCollection.push_back(aColumnName);
   mTargetTabel.columnMetadata.push_back(Metadata(aColumnName, aColumnType, false, true));
@@ -99,13 +99,22 @@ void DatabaseInfo::createKeyColumn(const wstring& aColumnName, const ColumnType&
   mTargetTabel.columnMetadata.push_back(Metadata(aColumnName, aColumnType, true, false));
 }
 
+UINT DatabaseInfo::addTableToDatabase()
+{
+  wstring sqlCreateTableQuerry = SQLCREATE;
+  sqlCreateTableQuerry += SQLTABLE;
+  sqlCreateTableQuerry += L"( " + composeSqlColumnTypes() + L" )";
+
+  return runSql(sqlCreateTableQuerry);
+}
+
 std::wstring DatabaseInfo::selectSqlCondition()
 {
-  wstring sqlQuerry = SELECT;
+  wstring sqlQuerry = SQLSELECT;
   sqlQuerry += composeSqlEnumerateColumns();
-  sqlQuerry += FROM;
+  sqlQuerry += SQLFROM;
   sqlQuerry += composeSqlQuerryTable();
-  sqlQuerry += WHERE;
+  sqlQuerry += SQLWHERE;
   sqlQuerry += mCondition.getCondition();
 
   return sqlQuerry;
@@ -113,11 +122,11 @@ std::wstring DatabaseInfo::selectSqlCondition()
 
 std::wstring DatabaseInfo::updateSqlCondition()
 {
-  wstring sqlQuerry = UPDATE;
+  wstring sqlQuerry = SQLUPDATE;
   sqlQuerry += composeSqlQuerryTable();
-  sqlQuerry += SET;
+  sqlQuerry += SQLSET;
   sqlQuerry += composeSqlUpdateColumns();
-  sqlQuerry += WHERE;
+  sqlQuerry += SQLWHERE;
   sqlQuerry += mCondition.getCondition();
   
   return sqlQuerry;
@@ -125,10 +134,10 @@ std::wstring DatabaseInfo::updateSqlCondition()
 
 std::wstring DatabaseInfo::insertSqlCondition()
 {
-  wstring sqlInsertQuerry = INSERTINTO;
+  wstring sqlInsertQuerry = SQLINSERTINTO;
   sqlInsertQuerry += composeSqlQuerryTable();
   sqlInsertQuerry += L" (" + composeSqlEnumerateColumns() + L")";
-  sqlInsertQuerry += VALUES;
+  sqlInsertQuerry += SQLVALUES;
   sqlInsertQuerry += L"( " + composeSqlEnumerateColumnValues() + L")";
 
   return sqlInsertQuerry;
@@ -188,9 +197,26 @@ std::wstring DatabaseInfo::composeSqlUpdateColumns()
   return result;
 }
 
+std::wstring DatabaseInfo::composeSqlColumnTypes()
+{
+  // add columns, dataType with comas
+  wstring result = L"";
+  for (size_t i = 0; i < mTargetTabel.columnsCollection.size(); i++)
+  {
+    result += mTargetTabel.columnsCollection[i] + L" = " + mTargetTabel.columnMetadata[i].mTypeString + L", ";
+  }
+
+  // delete las coma
+  result.pop_back();
+  result.pop_back();
+
+  return result;
+}
+
 Table DatabaseInfo::createTableFromSqlQuerry(const wstring & /*sqlQuerry*/)
 {
-  return Table();
+  auto metadata = TableMetadata();
+  return Table(metadata, RowCollection(metadata, vector<Row> {}));
 }
 
 UINT DatabaseInfo::runSql(const wstring & aSqlQuerry)

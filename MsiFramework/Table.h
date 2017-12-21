@@ -7,7 +7,6 @@
 class Table
 {
 public:
-
   Table(const TableMetadata& aMetadata, const RowCollection& aRowCollection);
 
   // access metadata

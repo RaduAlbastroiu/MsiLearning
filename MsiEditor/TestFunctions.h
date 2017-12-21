@@ -149,6 +149,6 @@ void msiFrameworkTree(LPCTSTR msiPath)
   ins;
 
   // create table
-  auto createTable = Database(msiPath).createTable(L"brandNewTable")->addColumn(L"Size", ColumnType::Integer)->addColumn(L"Name", ColumnType::String)->addTableToDatabase();
+  auto createTable = Database(msiPath).createTable(L"brandNewTable")->createColumn(L"Size", ColumnType::Integer)->createColumn(L"Name", ColumnType::String)->addTableToDatabase();
   createTable;
 }

@@ -2,19 +2,53 @@
 #include "stdafx.h"
 #include "Table.h"
 #include "LogicCondition.h"
-#define SELECT L" SELECT "
-#define UPDATE L" UPDATE "
-#define DELETE L" DELETE "
-#define INSERTINTO L" INSERT INTO "
-#define VALUES L" VALUES "
-#define SET L" SET "
-#define FROM L" FROM "
-#define WHERE L" WHERE "
+#define SQLSELECT L" SELECT "
+#define SQLUPDATE L" UPDATE "
+#define SQLDELETE L" DELETE "
+#define SQLINSERTINTO L" INSERT INTO "
+#define SQLVALUES L" VALUES "
+#define SQLSET L" SET "
+#define SQLFROM L" FROM "
+#define SQLWHERE L" WHERE "
+#define SQLCREATE L" CREATE "
+#define SQLTABLE L" TABLE "
+
 
 // type class
-enum class ColumnType {
+enum class ColumnType
+{
   Integer,
-  String
+  String,
+};
+
+struct Metadata {
+  Metadata(const wstring& aName, const ColumnType aType, bool isKeyMember, bool isNullable)
+    :mName(aName), mType(aType), isKeyMember(isKeyMember), isNullable(isNullable) 
+  {
+    if (mType == ColumnType::Integer)
+      mTypeString = L" int ";
+    if (mType == ColumnType::String)
+      mTypeString = L" varchar(255) ";
+  }
+
+  wstring mName;
+  wstring mTypeString;
+  ColumnType mType;
+  bool isKeyMember;
+  bool isNullable;
+};
+
+struct targetTable {
+  // constructor
+  targetTable() = default;
+  targetTable(const wstring& aTableName, vector<wstring> aColumnCollection)
+    : tableName(aTableName), columnsCollection(aColumnCollection) {}
+
+  wstring tableName;
+
+  vector<wstring> columnsCollection;
+  vector<wstring> newValueForColumns;
+  vector<Metadata> columnMetadata;
 };
 
 class DatabaseInfo
@@ -77,29 +111,8 @@ private:
   wstring composeSqlEnumerateColumns();
   wstring composeSqlEnumerateColumnValues();
   wstring composeSqlUpdateColumns();
+  wstring composeSqlColumnTypes();
 
-  struct targetTable {
-    // constructor
-    targetTable() = default;
-    targetTable(const wstring& aTableName, vector<wstring> aColumnCollection) 
-      : tableName(aTableName), columnsCollection(aColumnCollection) {}
-
-    wstring tableName;
-
-    struct Metadata {
-      Metadata(const wstring& aName, const wstring& aType, bool isKeyMember, bool isNullable)
-        :mName(aName), mType(aType), isKeyMember(isKeyMember), isNullable(isNullable) {}
-      
-      wstring mName;
-      wstring mType;
-      bool isKeyMember;
-      bool isNullable;
-    };
-
-    vector<wstring> columnsCollection;
-    vector<wstring> newValueForColumns;
-    vector<Metadata> columnMetadata;
-  };
   // single table
   targetTable mTargetTabel;
 
