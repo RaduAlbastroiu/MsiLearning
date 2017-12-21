@@ -12,7 +12,7 @@ ConditionState::ConditionState(const DatabaseInfo & aDatabaseInfo)
 
 ConditionState::~ConditionState() = default;
 
-unique_ptr<ConditionState> ConditionState::whereConditionIs(LogicCondition aCondition)
+unique_ptr<ConditionState> ConditionState::whereConditionIs(const LogicCondition& aCondition)
 {
   mDatabaseInfo.updateConditionWith(aCondition);
   return make_unique<ConditionState>(mDatabaseInfo);

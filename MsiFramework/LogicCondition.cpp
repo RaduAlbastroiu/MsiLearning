@@ -3,10 +3,7 @@
 
 LogicCondition::LogicCondition(const LogicCondition& aSubCondition)
 {
-  if (aSubCondition.getCondition().size())
-  {
-    mSqlCondition = L"( " + aSubCondition.getCondition() + L" )";
-  }
+  mSqlCondition = L"( " + aSubCondition.getCondition() + L" )";
 }
 
 LogicCondition::LogicCondition(const wstring& aSqlCondition)

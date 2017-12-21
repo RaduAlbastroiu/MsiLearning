@@ -3,7 +3,6 @@
 #include "DatabaseInfo.h"
 
 DatabaseInfo::DatabaseInfo(const wstring& aDatabasePath)
-  :mCondition(L"")
 {
   mDatabasePath = aDatabasePath;
 
@@ -14,14 +13,7 @@ DatabaseInfo::DatabaseInfo(const wstring& aDatabasePath)
 
 void DatabaseInfo::updateConditionWith(const LogicCondition& anotherCondition)
 {
-  if (mCondition.getCondition().size())
-  {
-    mCondition = mCondition.And(anotherCondition);
-  }
-  else
-  {
-    mCondition = anotherCondition;
-  }
+  mConditions.push_back(anotherCondition);
 }
 
 void DatabaseInfo::setTargetTable(const wstring& aTableName)
@@ -32,6 +24,7 @@ void DatabaseInfo::setTargetTable(const wstring& aTableName)
 std::unique_ptr<Table> DatabaseInfo::select()
 {
   wstring sqlSelectQuerry = selectSqlCondition();
+  runSql(sqlSelectQuerry);
 
   Table resultTable = createTableFromSqlQuerry(sqlSelectQuerry);
 
@@ -59,7 +52,7 @@ UINT DatabaseInfo::deleteRows()
   sqlDeleteQuerry += SQLFROM;
   sqlDeleteQuerry += composeSqlQuerryTable();
   sqlDeleteQuerry += SQLWHERE;
-  sqlDeleteQuerry += mCondition.getCondition();
+  sqlDeleteQuerry += composeSqlCondition();
 
   return runSql(sqlDeleteQuerry);
 }
@@ -122,7 +115,7 @@ std::wstring DatabaseInfo::selectSqlCondition()
   sqlQuerry += SQLFROM;
   sqlQuerry += composeSqlQuerryTable();
   sqlQuerry += SQLWHERE;
-  sqlQuerry += mCondition.getCondition();
+  sqlQuerry += composeSqlCondition();
 
   return sqlQuerry;
 }
@@ -134,7 +127,7 @@ std::wstring DatabaseInfo::updateSqlCondition()
   sqlQuerry += SQLSET;
   sqlQuerry += composeSqlUpdateColumns();
   sqlQuerry += SQLWHERE;
-  sqlQuerry += mCondition.getCondition();
+  sqlQuerry += composeSqlCondition();
   
   return sqlQuerry;
 }
@@ -218,6 +211,26 @@ std::wstring DatabaseInfo::composeSqlColumnTypes()
   result.pop_back();
 
   return result;
+}
+
+std::wstring DatabaseInfo::composeSqlCondition()
+{
+  // add condition AND condtion...
+  wstring result = L"";
+  for (const auto& condition : mConditions)
+  {
+    result += condition.getCondition() + L" AND ";
+  }
+
+  // delete last AND
+  result.pop_back();
+  result.pop_back();
+  result.pop_back();
+  result.pop_back();
+  result.pop_back();
+
+  return result;
+
 }
 
 Table DatabaseInfo::createTableFromSqlQuerry(const wstring & /*sqlQuerry*/)

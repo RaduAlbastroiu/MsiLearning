@@ -112,6 +112,7 @@ private:
   wstring composeSqlEnumerateColumnValues();
   wstring composeSqlUpdateColumns();
   wstring composeSqlColumnTypes();
+  wstring composeSqlCondition();
 
   // single table
   targetTable mTargetTabel;
@@ -120,5 +121,5 @@ private:
 
   wstring mDatabasePath;
 
-  LogicCondition mCondition;
+  vector<LogicCondition> mConditions;
 };
