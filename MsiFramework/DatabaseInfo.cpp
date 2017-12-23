@@ -145,8 +145,9 @@ std::wstring DatabaseInfo::insertSqlCondition()
 
 std::wstring DatabaseInfo::composeSqlQuerryTable()
 {
-  wstring result = L"";
+  wstring result = L"`";
   result += mTargetTabel.tableName;
+  result += L"`";
 
   return result;
 }
@@ -155,11 +156,12 @@ std::wstring DatabaseInfo::composeSqlQuerryTable()
 std::wstring DatabaseInfo::composeSqlEnumerateColumns()
 {
   // add columns with comas
-  wstring result = L"";
+  wstring result = L"`";
   for (auto columnName : mTargetTabel.columnsCollection)
-    result += columnName + L", ";
+    result += columnName + L"`, `";
  
   // delete last coma
+  result.pop_back();
   result.pop_back();
   result.pop_back();
 
@@ -170,11 +172,12 @@ std::wstring DatabaseInfo::composeSqlEnumerateColumns()
 std::wstring DatabaseInfo::composeSqlEnumerateColumnValues()
 {
   // add columns with comas
-  wstring result = L"";
+  wstring result = L"`";
   for (auto columnValue : mTargetTabel.newValueForColumns)
-    result += columnValue + L", ";
+    result += columnValue + L"`, `";
 
   // delete last coma
+  result.pop_back();
   result.pop_back();
   result.pop_back();
 
@@ -184,13 +187,14 @@ std::wstring DatabaseInfo::composeSqlEnumerateColumnValues()
 std::wstring DatabaseInfo::composeSqlUpdateColumns()
 {
   // add columns = value with comas
-  wstring result = L"";
+  wstring result = L"`";
   for (size_t i = 0; i < mTargetTabel.columnsCollection.size(); i++)
   {
-    result += mTargetTabel.columnsCollection[i] + L" = " + mTargetTabel.newValueForColumns[i] + L", ";
+    result += mTargetTabel.columnsCollection[i] + L"` = `" + mTargetTabel.newValueForColumns[i] + L"`, `";
   }
 
   // delete las coma
+  result.pop_back();
   result.pop_back();
   result.pop_back();
 
@@ -200,13 +204,14 @@ std::wstring DatabaseInfo::composeSqlUpdateColumns()
 std::wstring DatabaseInfo::composeSqlColumnTypes()
 {
   // add columns, dataType with comas
-  wstring result = L"";
+  wstring result = L"`";
   for (size_t i = 0; i < mTargetTabel.columnsCollection.size(); i++)
   {
-    result += mTargetTabel.columnsCollection[i] + L" = " + mTargetTabel.columnMetadata[i].mTypeString + L", ";
+    result += mTargetTabel.columnsCollection[i] + L"` = `" + mTargetTabel.columnMetadata[i].mTypeString + L"`, `";
   }
 
   // delete las coma
+  result.pop_back();
   result.pop_back();
   result.pop_back();
 
@@ -241,10 +246,10 @@ Table DatabaseInfo::createTableFromSqlQuerry(const wstring & /*sqlQuerry*/)
 
 UINT DatabaseInfo::runSql(const wstring & aSqlQuerry)
 {
-//  MSIHANDLE phView;
-//  LPCTSTR sqlQuerry = aSqlQuerry.c_str();
+  MSIHANDLE phView;
+  LPCTSTR sqlQuerry = aSqlQuerry.c_str();
   wcout << aSqlQuerry << "\n\n";
-  /*
+  
   mErrorMessage = ::MsiDatabaseOpenView(mDatabaseHandle, sqlQuerry, &phView);
   if (mErrorMessage == ERROR_SUCCESS)
   {
@@ -259,6 +264,4 @@ UINT DatabaseInfo::runSql(const wstring & aSqlQuerry)
     }
   }
   return mErrorMessage;
-  */
-  return 0;
 }

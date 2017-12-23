@@ -135,22 +135,22 @@ void msiFrameworkTree(LPCTSTR msiPath)
   //auto x = Equal(L"Type", L"Text").And(NotEqual(L"Text", L"Dialog_")).Or(LessEqualThan(L"Text", L"Dialog_")).getCondition();
  
   // select
-  auto row = Database(msiPath).inTable(L"Control")->withColumns(L"Text", L"Dialog_")->whereConditionIs(Equal(L"Type", L"Text").And(NotEqual(L"Text", L"Dialog_")).Or(LessEqualThan(L"Text", L"Dialog_")))->select();
-  row;
+  //auto row = Database(msiPath).inTable(L"Control")->withColumns(L"Text", L"Dialog_")->whereConditionIs(Equal(L"Type", L"Text").And(NotEqual(L"Text", L"Dialog_")).Or(LessEqualThan(L"Text", L"Dialog_")))->select();
+  //row;
 
-  //// update
-  //auto updated3 = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Type", L"Text"))->updateColumnWithValue(L"text", L"newValue")->update();
-  //updated3;
-  //
-  //// delete
-  //auto del = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Type", L"Text"))->deleteRows();
-  //del;
-  //
-  //// insert 
-  //auto ins = Database(msiPath).inTable(L"Control")->insertInColumnWithValue(L"text", L"newValue")->insertInColumnWithValue(L"Type", L"newValue")->insert();
-  //ins;
-  //
-  //// create table
-  //auto createTable = Database(msiPath).createTable(L"brandNewTable")->createColumn(L"Size", ColumnType::Integer)->createColumn(L"Name", ColumnType::String)->addTableToDatabase();
-  //createTable;
+  // update
+  auto updated3 = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Control", L"Y").And(Equal(L"Dialog_", L"ErrorDlg")))->updateColumnWithValue(L"Text", L"[ButtonText_Yes]123456")->update();
+  updated3;
+  
+  // delete
+  auto del = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Type", L"Text"))->deleteRows();
+  del;
+  
+  // insert 
+  auto ins = Database(msiPath).inTable(L"Control")->insertInColumnWithValue(L"text", L"newValue")->insertInColumnWithValue(L"Type", L"newValue")->insert();
+  ins;
+  
+  // create table
+  auto createTable = Database(msiPath).createTable(L"brandNewTable")->createColumn(L"Size", ColumnType::Integer)->createColumn(L"Name", ColumnType::String)->addTableToDatabase();
+  createTable;
 }
