@@ -8,12 +8,7 @@ DatabaseInfo::DatabaseInfo(const wstring& aDatabasePath)
 
   LPCTSTR databasePath = aDatabasePath.c_str();
   mErrorMessage = ::MsiOpenDatabase(databasePath, MSIDBOPEN_DIRECT, &mDatabaseHandle);
-  int i = 0;
-  // open failed
-  if (mErrorMessage == ERROR_OPEN_FAILED)
-  {
-    i++;
-  }
+
 }
 
 void DatabaseInfo::updateConditionWith(const LogicCondition& anotherCondition)
@@ -195,7 +190,7 @@ std::wstring DatabaseInfo::composeSqlUpdateColumns()
   wstring result = L"`";
   for (size_t i = 0; i < mTargetTabel.columnsCollection.size(); i++)
   {
-    result += mTargetTabel.columnsCollection[i] + L"` = `" + mTargetTabel.newValueForColumns[i] + L"`, `";
+    result += mTargetTabel.columnsCollection[i] + L"` = '" + mTargetTabel.newValueForColumns[i] + L"', `";
   }
 
   // delete las coma
@@ -256,7 +251,7 @@ UINT DatabaseInfo::runSql(const wstring & aSqlQuerry)
   wcout << aSqlQuerry << "\n\n";
   
   mErrorMessage = ::MsiDatabaseOpenView(mDatabaseHandle, sqlQuerry, &phView);
-  if (mErrorMessage == ERROR_INVALID_HANDLE)
+  if (mErrorMessage == ERROR_SUCCESS)
   {
     mErrorMessage = ::MsiViewExecute(phView, 0);
     if (mErrorMessage == ERROR_SUCCESS)

@@ -86,28 +86,35 @@ void selectUpdate(MSIHANDLE /*handleTest*/) {
 }
 
 
-void justUpdate(MSIHANDLE /*handleTest*/)
+void justUpdate(LPCTSTR msiPath)
 {
-  //UINT errorMessage = ERROR_SUCCESS;
-  //
-  //// Open View
-  //MSIHANDLE phView;
-  //LPCTSTR sqlQuerry = L"UPDATE `Control` SET `Text`=\'{\\VerdanaBold13} Just UPDATE\' WHERE `Dialog_`='WelcomeDlg' AND `X`= 135";
-  //errorMessage = ::MsiDatabaseOpenView(handleTest, sqlQuerry, &phView);
-  //if (errorMessage != ERROR_SUCCESS)
-  //  return;
-  //
-  //cout << " \n Open view";
-  //
-  //if (ERROR_SUCCESS != ::MsiViewExecute(phView, 0))
-  //  return;
-  //
-  //cout << "\n executed";
-  //
-  //
-  //errorMessage = ::MsiDatabaseCommit(handleTest);
-  //if (errorMessage == ERROR_SUCCESS)
-  //  wcout << L"\n committed";
+  UINT errorMessage = ERROR_SUCCESS;
+  
+  MSIHANDLE handleTest;
+  errorMessage = ::MsiOpenDatabase(msiPath, MSIDBOPEN_DIRECT, &handleTest);
+  if (errorMessage == ERROR_SUCCESS)
+  {
+    wcout << L"yes";
+  }
+
+  // Open View
+  MSIHANDLE phView;
+  LPCTSTR sqlQuerry = L" UPDATE `Control` SET `Text` = '[ButtonText_Yes]123456' WHERE ( ( ( (`Control`='Y') ) ) AND ( ( (`Dialog_`='ErrorDlg') ) ) )";
+  errorMessage = ::MsiDatabaseOpenView(handleTest, sqlQuerry, &phView);
+  if (errorMessage == ERROR_BAD_QUERY_SYNTAX)
+    return;
+  
+  cout << " \n Open view";
+  
+  if (ERROR_SUCCESS != ::MsiViewExecute(phView, 0))
+    return;
+  
+  cout << "\n executed";
+  
+  
+  errorMessage = ::MsiDatabaseCommit(handleTest);
+  if (errorMessage == ERROR_SUCCESS)
+    wcout << L"\n committed";
 
 }
 
