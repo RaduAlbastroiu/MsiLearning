@@ -8,7 +8,12 @@ DatabaseInfo::DatabaseInfo(const wstring& aDatabasePath)
 
   LPCTSTR databasePath = aDatabasePath.c_str();
   mErrorMessage = ::MsiOpenDatabase(databasePath, MSIDBOPEN_DIRECT, &mDatabaseHandle);
-
+  int i = 0;
+  // open failed
+  if (mErrorMessage == ERROR_OPEN_FAILED)
+  {
+    i++;
+  }
 }
 
 void DatabaseInfo::updateConditionWith(const LogicCondition& anotherCondition)
@@ -251,7 +256,7 @@ UINT DatabaseInfo::runSql(const wstring & aSqlQuerry)
   wcout << aSqlQuerry << "\n\n";
   
   mErrorMessage = ::MsiDatabaseOpenView(mDatabaseHandle, sqlQuerry, &phView);
-  if (mErrorMessage == ERROR_SUCCESS)
+  if (mErrorMessage == ERROR_INVALID_HANDLE)
   {
     mErrorMessage = ::MsiViewExecute(phView, 0);
     if (mErrorMessage == ERROR_SUCCESS)
