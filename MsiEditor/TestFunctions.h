@@ -99,7 +99,7 @@ void justUpdate(LPCTSTR msiPath)
 
   // Open View
   MSIHANDLE phView;
-  LPCTSTR sqlQuerry = L" UPDATE `Control` SET `Text` = '[ButtonText_Yes]123456' WHERE ( ( ( (`Control`='Y') ) ) AND ( ( (`Dialog_`='ErrorDlg') ) ) )";
+  LPCTSTR sqlQuerry = L" DELETE  FROM `Condition` WHERE ( ( ( ( `Level` = 12 ) ) ) )";
   errorMessage = ::MsiDatabaseOpenView(handleTest, sqlQuerry, &phView);
   if (errorMessage == ERROR_BAD_QUERY_SYNTAX)
     return;
@@ -136,7 +136,7 @@ void justUpdate(LPCTSTR msiPath)
 // very sweet in theory
 void msiFrameworkTree(LPCTSTR msiPath)
 {
- 
+  auto database = Database(msiPath);
   //auto collection = Database(msiPath).addTable(L"Control")->addColumns("Text", "Dialog_")->addCondition(Equal(L"Type", L"Text").And(Equal(L"Control", L"Title")))->select();
 
   //auto x = Equal(L"Type", L"Text").And(NotEqual(L"Text", L"Dialog_")).Or(LessEqualThan(L"Text", L"Dialog_")).getCondition();
@@ -146,18 +146,22 @@ void msiFrameworkTree(LPCTSTR msiPath)
   //row;
 
   // update
-  auto updated3 = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Control", L"Y").And(Equal(L"Dialog_", L"ErrorDlg")))->updateColumnWithValue(L"Text", L"[ButtonText_Yes]123456")->update();
-  updated3;
-  
-  // delete
-  auto del = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Type", L"Text"))->deleteRows();
-  del;
+  //auto updated3 = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg").And(Equal(L"Control", L"Next")))->updateColumnWithValue(L"Text", L"Modified")->update();
+  //updated3;
   
   // insert 
-  auto ins = Database(msiPath).inTable(L"Control")->insertInColumnWithValue(L"text", L"newValue")->insertInColumnWithValue(L"Type", L"newValue")->insert();
+  auto ins = database.inTable(L"Condition")->insertInColumnWithValue(L"Feature_", L"1")->insertInColumnWithValue(L"Level", L"11")->insertInColumnWithValue(L"Condition", L"someValue")->insert();
   ins;
   
-  // create table
-  auto createTable = Database(msiPath).createTable(L"brandNewTable")->createColumn(L"Size", ColumnType::Integer)->createColumn(L"Name", ColumnType::String)->addTableToDatabase();
-  createTable;
+  // insert 
+  auto ins2 = database.inTable(L"Condition")->insertInColumnWithValue(L"Feature_", L"1")->insertInColumnWithValue(L"Level", L"12")->insertInColumnWithValue(L"Condition", L"someValue")->insert();
+  ins2;
+
+  // delete
+  auto del = database.inTable(L"Condition")->whereConditionIs(Equal(L"Level", 12))->deleteRows();
+  del;
+  
+  //// create table
+  //auto createTable = Database(msiPath).createTable(L"brandNewTable")->createColumn(L"Size", ColumnType::Integer)->createColumn(L"Name", ColumnType::String)->addTableToDatabase();
+  //createTable;
 }

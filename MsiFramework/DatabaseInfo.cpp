@@ -172,9 +172,9 @@ std::wstring DatabaseInfo::composeSqlEnumerateColumns()
 std::wstring DatabaseInfo::composeSqlEnumerateColumnValues()
 {
   // add columns with comas
-  wstring result = L"`";
+  wstring result = L"'";
   for (auto columnValue : mTargetTabel.newValueForColumns)
-    result += columnValue + L"`, `";
+    result += columnValue + L"', '";
 
   // delete last coma
   result.pop_back();

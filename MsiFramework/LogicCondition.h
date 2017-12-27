@@ -7,10 +7,24 @@ public:
   // override operators
   // variadic arg list
 
+  // for strings
   template<typename... Types>
   LogicCondition(const wstring& target, const wstring& expectedValue, const Types& ... expectedValues)
-    :mTarget(target), mExpectedValues{ expectedValue, expectedValues... }
+    :mTarget(target)
   {
+    vector<wstring> temp = { expectedValue, expectedValues... };
+    std::transform(temp.begin(), temp.end(), back_inserter(mExpectedValues), 
+                   [](auto element) { return L"'" + element + L"'"; });
+  }
+
+  // for integers
+  template<typename... Types>
+  LogicCondition(const wstring& target, const int expectedValue, const Types& ... expectedValues)
+    :mTarget(target)
+  {
+    vector<int> temp = {expectedValue, expectedValues...};
+    std::transform(temp.begin(), temp.end(), back_inserter(mExpectedValues), 
+                   [](auto element) { return to_wstring(element); });
   }
 
   LogicCondition(const LogicCondition& aSubCondition);

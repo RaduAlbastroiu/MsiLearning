@@ -49,7 +49,7 @@ std::wstring LogicCondition::composeSqlCondition(wstring target, wstring operati
     if (it != expectedValues.begin())
       resultSqltCondition += mListOperation;
 
-    resultSqltCondition += L"`" + target + L"`" + mComparison + L"'" + *it + L"'";
+    resultSqltCondition += L"`" + target + L"`" + mComparison + *it;
   }
 
   resultSqltCondition += L" )";

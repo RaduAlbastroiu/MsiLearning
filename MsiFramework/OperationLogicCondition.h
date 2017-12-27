@@ -37,6 +37,13 @@ public:
     mComparison = L" = ";
     mSqlCondition = composeSqlCondition(target, mListOperation, mComparison, mExpectedValues);
   }
+
+  Equal(const wstring& target, const int expectedValue)
+    :LogicCondition(target, expectedValue)
+  {
+    mComparison = L" = ";
+    mSqlCondition = composeSqlCondition(target, mListOperation, mComparison, mExpectedValues);
+  }
 };
 
 class NotEqual : public LogicCondition
