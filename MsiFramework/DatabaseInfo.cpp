@@ -101,11 +101,14 @@ void DatabaseInfo::createKeyColumn(const wstring& aColumnName, const ColumnType&
 
 UINT DatabaseInfo::addTableToDatabase()
 {
+  // no working implementation
+  /*
   wstring sqlCreateTableQuerry = SQLCREATE;
   sqlCreateTableQuerry += SQLTABLE;
   sqlCreateTableQuerry += L"( " + composeSqlColumnTypes() + L" )";
 
   return runSql(sqlCreateTableQuerry);
+  */
 }
 
 std::wstring DatabaseInfo::selectSqlCondition()

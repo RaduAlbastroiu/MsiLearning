@@ -14,6 +14,18 @@ unique_ptr<CreateTableState> CreateTableState::createColumn(const wstring& aColu
   return make_unique<CreateTableState>(mDatabaseInfo);
 }
 
+unique_ptr<CreateTableState> CreateTableState::createNullableColumn(const wstring& aColumnName, const ColumnType& aColumnType)
+{
+  mDatabaseInfo.createNullableColumn(aColumnName, aColumnType);
+  return make_unique<CreateTableState>(mDatabaseInfo);
+}
+
+unique_ptr<CreateTableState> CreateTableState::createKeyColumn(const wstring& aColumnName, const ColumnType& aColumnType)
+{
+  mDatabaseInfo.createKeyColumn(aColumnName, aColumnType);
+  return make_unique<CreateTableState>(mDatabaseInfo);
+}
+
 UINT CreateTableState::addTableToDatabase()
 {
   return mDatabaseInfo.addTableToDatabase();

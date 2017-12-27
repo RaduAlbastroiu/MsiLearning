@@ -99,7 +99,7 @@ void justUpdate(LPCTSTR msiPath)
 
   // Open View
   MSIHANDLE phView;
-  LPCTSTR sqlQuerry = L" DELETE  FROM `Condition` WHERE ( ( ( ( `Level` = 12 ) ) ) )";
+  LPCTSTR sqlQuerry = L"CREATE TABLE Persons";
   errorMessage = ::MsiDatabaseOpenView(handleTest, sqlQuerry, &phView);
   if (errorMessage == ERROR_BAD_QUERY_SYNTAX)
     return;
@@ -144,28 +144,26 @@ void msiFrameworkTree(LPCTSTR msiPath)
   // select
   //auto row = Database(msiPath).inTable(L"Control")->withColumns(L"Text", L"Dialog_")->whereConditionIs(Equal(L"Type", L"Text").And(NotEqual(L"Text", L"Dialog_")).Or(LessEqualThan(L"Text", L"Dialog_")))->select();
   //row;
-  
-  // insert 
-  auto ins = database.inTable(L"Condition")->insertInColumnWithValue(L"Feature_", L"1")->insertInColumnWithValue(L"Level", L"11")->insertInColumnWithValue(L"Condition", L"someValue")->insert();
-  ins;
-  
-  // insert 
-  auto ins2 = database.inTable(L"Condition")->insertInColumnWithValue(L"Feature_", L"1")->insertInColumnWithValue(L"Level", L"12")->insertInColumnWithValue(L"Condition", L"someValue")->insert();
-  ins2;
-  
-  // insert 
-  auto ins3 = database.inTable(L"Condition")->insertInColumnWithValue(L"Feature_", L"1")->insertInColumnWithValue(L"Level", L"13")->insertInColumnWithValue(L"Condition", L"someValue")->insert();
-  ins3;
 
   // update
-  auto updated3 = Database(msiPath).inTable(L"Condition")->whereConditionIs(LessThan(L"Level", 14))->updateColumnWithValue(L"Level", L"32")->update();
-  updated3;
-
-  // delete
-  auto del = database.inTable(L"Condition")->whereConditionIs(Equal(L"Level", 13))->deleteRows();
-  del;
+  //auto updated3 = database.inTable(L"Condition")->whereConditionIs(Equal(L"Level", 11))->updateColumnWithValue(L"Condition", L"32")->update();
+  //updated3;
+  //
+  //// insert 
+  //auto ins = database.inTable(L"Condition")->insertInColumnWithValue(L"Feature_", L"1")->insertInColumnWithValue(L"Level", L"11")->insertInColumnWithValue(L"Condition", L"someValue")->insert();
+  //ins;
+  //
+  //// insert 
+  //auto ins2 = database.inTable(L"Condition")->insertInColumnWithValue(L"Feature_", L"1")->insertInColumnWithValue(L"Level", L"12")->insertInColumnWithValue(L"Condition", L"someValue")->insert();
+  //ins2;
+  //
+  //// insert 
+  //auto ins3 = database.inTable(L"Condition")->insertInColumnWithValue(L"Feature_", L"1")->insertInColumnWithValue(L"Level", L"13")->insertInColumnWithValue(L"Condition", L"someValue")->insert();
+  //ins3;
+  //
+  //
+  //// delete
+  //auto del = database.inTable(L"Condition")->whereConditionIs(Equal(L"Level", 13))->deleteRows();
+  //del;
   
-  //// create table
-  //auto createTable = Database(msiPath).createTable(L"brandNewTable")->createColumn(L"Size", ColumnType::Integer)->createColumn(L"Name", ColumnType::String)->addTableToDatabase();
-  //createTable;
 }
