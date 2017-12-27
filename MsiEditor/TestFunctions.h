@@ -144,10 +144,6 @@ void msiFrameworkTree(LPCTSTR msiPath)
   // select
   //auto row = Database(msiPath).inTable(L"Control")->withColumns(L"Text", L"Dialog_")->whereConditionIs(Equal(L"Type", L"Text").And(NotEqual(L"Text", L"Dialog_")).Or(LessEqualThan(L"Text", L"Dialog_")))->select();
   //row;
-
-  // update
-  //auto updated3 = Database(msiPath).inTable(L"Control")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg").And(Equal(L"Control", L"Next")))->updateColumnWithValue(L"Text", L"Modified")->update();
-  //updated3;
   
   // insert 
   auto ins = database.inTable(L"Condition")->insertInColumnWithValue(L"Feature_", L"1")->insertInColumnWithValue(L"Level", L"11")->insertInColumnWithValue(L"Condition", L"someValue")->insert();
@@ -156,9 +152,17 @@ void msiFrameworkTree(LPCTSTR msiPath)
   // insert 
   auto ins2 = database.inTable(L"Condition")->insertInColumnWithValue(L"Feature_", L"1")->insertInColumnWithValue(L"Level", L"12")->insertInColumnWithValue(L"Condition", L"someValue")->insert();
   ins2;
+  
+  // insert 
+  auto ins3 = database.inTable(L"Condition")->insertInColumnWithValue(L"Feature_", L"1")->insertInColumnWithValue(L"Level", L"13")->insertInColumnWithValue(L"Condition", L"someValue")->insert();
+  ins3;
+
+  // update
+  auto updated3 = Database(msiPath).inTable(L"Condition")->whereConditionIs(LessThan(L"Level", 14))->updateColumnWithValue(L"Level", L"32")->update();
+  updated3;
 
   // delete
-  auto del = database.inTable(L"Condition")->whereConditionIs(Equal(L"Level", 12))->deleteRows();
+  auto del = database.inTable(L"Condition")->whereConditionIs(Equal(L"Level", 13))->deleteRows();
   del;
   
   //// create table
