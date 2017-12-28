@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "RowCollection.h"
 
-RowCollection::RowCollection(const TableMetadata& aMetadata, const vector<Row>& aRowCollection)
-  :mRowCollection(aRowCollection), mMetadata(aMetadata)
+RowCollection::RowCollection(const TableMetadata& aMetadata)
+  :mMetadata(aMetadata)
 {
 }
 

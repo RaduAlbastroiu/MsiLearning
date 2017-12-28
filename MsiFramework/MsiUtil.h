@@ -10,6 +10,7 @@ namespace MsiUtil
   UINT getStringFromRecord(MSIHANDLE recordHandle, int fieldNumber, wstring& resultString);
 
   UINT getColumnsInfo(MSIHANDLE recordHandle, map<wstring, wstring>& columnsInfo);
+  UINT getPrimaryKeys(MSIHANDLE databaseHandle, const wstring& tableName, vector<wstring>& output);
 
   UINT commit(MSIHANDLE databaseHandle);
 }

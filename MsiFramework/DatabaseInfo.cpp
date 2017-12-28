@@ -24,7 +24,6 @@ void DatabaseInfo::setTargetTable(const wstring& aTableName)
 std::unique_ptr<Table> DatabaseInfo::select()
 {
   wstring sqlSelectQuerry = selectSqlCondition();
-  runSql(sqlSelectQuerry);
 
   Table resultTable = createTableFromSqlQuerry(sqlSelectQuerry);
 
@@ -84,19 +83,19 @@ void DatabaseInfo::createTable(const wstring& aTableName)
 void DatabaseInfo::createColumn(const wstring& aColumnName, const ColumnType& aColumnType)
 {
   mTargetTabel.columnsCollection.push_back(aColumnName);
-  mTargetTabel.columnMetadata.push_back(Metadata{ aColumnName, aColumnType, false, false });
+  mTargetTabel.columnMetadata.push_back(TargetMetadata{ aColumnName, aColumnType, false, false });
 }
 
 void DatabaseInfo::createNullableColumn(const wstring& aColumnName, const ColumnType& aColumnType)
 {
   mTargetTabel.columnsCollection.push_back(aColumnName);
-  mTargetTabel.columnMetadata.push_back(Metadata(aColumnName, aColumnType, false, true));
+  mTargetTabel.columnMetadata.push_back(TargetMetadata(aColumnName, aColumnType, false, true));
 }
 
 void DatabaseInfo::createKeyColumn(const wstring& aColumnName, const ColumnType& aColumnType)
 {
   mTargetTabel.columnsCollection.push_back(aColumnName);
-  mTargetTabel.columnMetadata.push_back(Metadata(aColumnName, aColumnType, true, false));
+  mTargetTabel.columnMetadata.push_back(TargetMetadata(aColumnName, aColumnType, true, false));
 }
 
 UINT DatabaseInfo::addTableToDatabase()
@@ -106,9 +105,8 @@ UINT DatabaseInfo::addTableToDatabase()
   wstring sqlCreateTableQuerry = SQLCREATE;
   sqlCreateTableQuerry += SQLTABLE;
   sqlCreateTableQuerry += L"( " + composeSqlColumnTypes() + L" )";
-
-  return runSql(sqlCreateTableQuerry);
   */
+  return runSql(L"");
 }
 
 std::wstring DatabaseInfo::selectSqlCondition()
@@ -241,30 +239,81 @@ std::wstring DatabaseInfo::composeSqlCondition()
 
 }
 
-Table DatabaseInfo::createTableFromSqlQuerry(const wstring & /*sqlQuerry*/)
+void DatabaseInfo::populateMetadataForTargetColumns()
 {
-  auto metadata = TableMetadata();
-  return Table(metadata, RowCollection(metadata, vector<Row> {}));
+  map<wstring, wstring> columnsInfo;
+  vector<wstring> primaryKeys;
+
+  MsiUtil::getColumnsInfo(mDatabaseHandle, columnsInfo);
+  MsiUtil::getPrimaryKeys(mDatabaseHandle, mTargetTabel.tableName, primaryKeys);
+
+  mTargetTabel.columnsCollection.clear();
+  for (const auto& [columnName, columnType] : columnsInfo)
+  {
+    mTargetTabel.columnsCollection.push_back(columnName);
+
+    bool nullable = (columnType[0] < L'a');
+    bool isKey = find(primaryKeys.begin(), primaryKeys.end(), columnName) != primaryKeys.end();
+
+    bool isInt = (columnType[0] == L'i' || columnType[0] == L'j');
+
+    if (isInt)
+    {
+      mTargetTabel.columnMetadata.push_back(TargetMetadata(columnName, ColumnType::Integer, isKey, nullable));
+    }
+    else
+    {
+      mTargetTabel.columnMetadata.push_back(TargetMetadata(columnName, ColumnType::String, isKey, nullable));
+    }
+  }
+
+}
+
+TableMetadata DatabaseInfo::generateMetadataFromTarget()
+{
+  return TableMetadata();
+}
+
+Table DatabaseInfo::createTableFromSqlQuerry(const wstring& sqlQuerry)
+{
+  auto s = sqlQuerry;
+
+  // takes target columns and get metadata
+  populateMetadataForTargetColumns();
+
+  // generate real metadata obj for selected table
+  auto metadata = generateMetadataFromTarget();
+
+  // create rowCollection
+  auto rowCollection = RowCollection(metadata);
+  
+  // populate row collection
+
+
+  return Table(metadata, rowCollection);
 }
 
 UINT DatabaseInfo::runSql(const wstring & aSqlQuerry)
 {
-  MSIHANDLE phView;
-  LPCTSTR sqlQuerry = aSqlQuerry.c_str();
-  wcout << aSqlQuerry << "\n\n";
-  
-  mErrorMessage = ::MsiDatabaseOpenView(mDatabaseHandle, sqlQuerry, &phView);
-  if (mErrorMessage == ERROR_SUCCESS)
-  {
-    mErrorMessage = ::MsiViewExecute(phView, 0);
-    if (mErrorMessage == ERROR_SUCCESS)
-    {
-      mErrorMessage = ::MsiDatabaseCommit(mDatabaseHandle);
-      if (mErrorMessage == ERROR_SUCCESS)
-      {
-        return ERROR_SUCCESS;
-      }
-    }
-  }
-  return mErrorMessage;
+
+  return MsiUtil::runSqlQuerryCommit(mDatabaseHandle, aSqlQuerry);
+
+  //MSIHANDLE phView;
+  //LPCTSTR sqlQuerry = aSqlQuerry.c_str();
+  //wcout << aSqlQuerry << "\n\n";
+  //
+  //mErrorMessage = ::MsiDatabaseOpenView(mDatabaseHandle, sqlQuerry, &phView);
+  //if (mErrorMessage == ERROR_SUCCESS)
+  //{
+  //  mErrorMessage = ::MsiViewExecute(phView, 0);
+  //  if (mErrorMessage == ERROR_SUCCESS)
+  //  {
+  //    mErrorMessage = ::MsiDatabaseCommit(mDatabaseHandle);
+  //    if (mErrorMessage == ERROR_SUCCESS)
+  //    {
+  //      return ERROR_SUCCESS;
+  //    }
+  //  }
+  //}
+  //return mErrorMessage;
 }

@@ -99,6 +99,26 @@ namespace MsiUtil
     return errorMessage;
   }
 
+  UINT getPrimaryKeys(MSIHANDLE databaseHandle, const wstring & tableName, vector<wstring>& output)
+  {
+    LPCTSTR tableNameP = tableName.c_str();
+    MSIHANDLE outputHandle;
+    
+    UINT errorMessage = ::MsiDatabaseGetPrimaryKeys(databaseHandle, tableNameP, &outputHandle);
+    if (errorMessage == ERROR_SUCCESS)
+    {
+      int nrKeys = getFieldCount(outputHandle);
+      output.clear();
+      wstring extracted = L"";
+      for (int i = 1; i <= nrKeys; i++)
+      {
+        getStringFromRecord(outputHandle, i, extracted);
+        output.push_back(extracted);
+      }
+    }
+    return errorMessage;
+  }
+
   UINT commit(MSIHANDLE databaseHandle)
   {
     return ::MsiDatabaseCommit(databaseHandle);

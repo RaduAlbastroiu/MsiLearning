@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "Table.h"
 #include "LogicCondition.h"
+#include "MsiUtil.h"
+
 #define SQLSELECT L" SELECT "
 #define SQLUPDATE L" UPDATE "
 #define SQLDELETE L" DELETE "
@@ -21,8 +23,8 @@ enum class ColumnType
   String,
 };
 
-struct Metadata {
-  Metadata(const wstring& aName, const ColumnType aType, bool isKeyMember, bool isNullable)
+struct TargetMetadata {
+  TargetMetadata(const wstring& aName, const ColumnType aType, bool isKeyMember, bool isNullable)
     :mName(aName), mType(aType), isKeyMember(isKeyMember), isNullable(isNullable) 
   {
     if (mType == ColumnType::Integer)
@@ -48,7 +50,7 @@ struct targetTable {
 
   vector<wstring> columnsCollection;
   vector<wstring> newValueForColumns;
-  vector<Metadata> columnMetadata;
+  vector<TargetMetadata> columnMetadata;
 };
 
 class DatabaseInfo
@@ -113,6 +115,9 @@ private:
   wstring composeSqlUpdateColumns();
   wstring composeSqlColumnTypes();
   wstring composeSqlCondition();
+
+  void populateMetadataForTargetColumns();
+  TableMetadata generateMetadataFromTarget();
 
   // single table
   targetTable mTargetTabel;

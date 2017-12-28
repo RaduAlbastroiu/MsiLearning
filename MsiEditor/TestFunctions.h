@@ -99,23 +99,13 @@ void justUpdate(LPCTSTR msiPath)
 
   // Open View
   MSIHANDLE phView;
-  LPCTSTR sqlQuerry = L"CREATE TABLE Persons";
-  errorMessage = ::MsiDatabaseOpenView(handleTest, sqlQuerry, &phView);
-  if (errorMessage == ERROR_BAD_QUERY_SYNTAX)
-    return;
-  
-  cout << " \n Open view";
-  
-  if (ERROR_SUCCESS != ::MsiViewExecute(phView, 0))
-    return;
-  
-  cout << "\n executed";
-  
-  
-  errorMessage = ::MsiDatabaseCommit(handleTest);
-  if (errorMessage == ERROR_SUCCESS)
-    wcout << L"\n committed";
+  LPCTSTR sqlQuerry = L" SELECT `Control`, `Text` FROM `Control` WHERE ( ( ( `Dialog_` = 'WelcomeDlg' ) ) )";
+  MsiUtil::openView(handleTest, sqlQuerry, phView);
 
+  map<wstring, wstring> columns;
+  MsiUtil::getColumnsInfo(phView, columns);
+  
+  errorMessage = MsiUtil::commit(handleTest);
 }
 
 //void msiFramework(LPCTSTR msiPath)
@@ -142,11 +132,11 @@ void msiFrameworkTree(LPCTSTR msiPath)
   //auto x = Equal(L"Type", L"Text").And(NotEqual(L"Text", L"Dialog_")).Or(LessEqualThan(L"Text", L"Dialog_")).getCondition();
  
   // select
-  //auto row = Database(msiPath).inTable(L"Control")->withColumns(L"Text", L"Dialog_")->whereConditionIs(Equal(L"Type", L"Text").And(NotEqual(L"Text", L"Dialog_")).Or(LessEqualThan(L"Text", L"Dialog_")))->select();
-  //row;
+  auto row = database.inTable(L"Control")->withColumns(L"Control", L"Text")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->select();
+  row;
 
-  // update
-  //auto updated3 = database.inTable(L"Condition")->whereConditionIs(Equal(L"Level", 11))->updateColumnWithValue(L"Condition", L"32")->update();
+  //// update
+  //auto updated3 = database.inTable(L"Condition")->whereConditionIs(Equal(L"Level", 11))->updateColumnWithValue(L"Condition", L"16")->update();
   //updated3;
   //
   //// insert 
@@ -160,7 +150,6 @@ void msiFrameworkTree(LPCTSTR msiPath)
   //// insert 
   //auto ins3 = database.inTable(L"Condition")->insertInColumnWithValue(L"Feature_", L"1")->insertInColumnWithValue(L"Level", L"13")->insertInColumnWithValue(L"Condition", L"someValue")->insert();
   //ins3;
-  //
   //
   //// delete
   //auto del = database.inTable(L"Condition")->whereConditionIs(Equal(L"Level", 13))->deleteRows();
