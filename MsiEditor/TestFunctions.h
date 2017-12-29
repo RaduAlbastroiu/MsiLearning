@@ -91,21 +91,18 @@ void justUpdate(LPCTSTR msiPath)
   UINT errorMessage = ERROR_SUCCESS;
   
   MSIHANDLE handleTest;
-  errorMessage = ::MsiOpenDatabase(msiPath, MSIDBOPEN_DIRECT, &handleTest);
-  if (errorMessage == ERROR_SUCCESS)
-  {
-    wcout << L"yes";
-  }
-
-  // Play with table data extraction
+  MsiUtil::openDatabase(msiPath, handleTest);
 
   // Open View
   MSIHANDLE phView;
   LPCTSTR sqlQuerry = L" SELECT `Control`, `Text` FROM `Control` WHERE ( ( ( `Dialog_` = 'WelcomeDlg' ) ) )";
   MsiUtil::openView(handleTest, sqlQuerry, phView);
 
-  map<wstring, wstring> columns;
-  MsiUtil::getColumnsInfo(phView, columns);
+  vector<map<wstring, wstring>> resultMap;
+  MsiUtil::getSelectedTable(phView, vector<wstring>{L"Control", L"Text"}, resultMap);
+
+  //map<wstring, wstring> columns;
+  //MsiUtil::getColumnsInfo(phView, columns);
   
   errorMessage = MsiUtil::commit(handleTest);
 }

@@ -111,7 +111,7 @@ private:
 
   void populateMetadataForTargetColumns(MSIHANDLE selectRecord);
   TableMetadata generateMetadataFromTarget();
-  RowCollection generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE selectRecord);
+  RowCollection generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE aViewHandle);
 
   // single table
   targetTable mTargetTabel;

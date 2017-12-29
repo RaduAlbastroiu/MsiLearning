@@ -283,27 +283,44 @@ TableMetadata DatabaseInfo::generateMetadataFromTarget()
   return tableMetadata;
 }
 
-RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE /*selectRecord*/)
+RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE aViewHandle)
 {
   RowCollection resultRowCollection(aTableMetadata);
+
+  vector<map<wstring, wstring>> tableData;
+  MsiUtil::getSelectedTable(aViewHandle, mTargetTabel.columnsCollection, tableData);
+
+  map<wstring, Element> rowData;
+  for (const auto& row : tableData)
+  {
+    // map[wstring, wstring] -> map [wstring, Element]
+    for (const auto&[columnName, value] : row)
+    {
+      Element element(value);
+      rowData[columnName] = element;
+    }
+
+    // add map(row) to row collection
+    resultRowCollection.addRow(rowData);
+  }
 
   return resultRowCollection;
 }
 
 Table DatabaseInfo::createTableFromSqlQuerry(const wstring& sqlQuerry)
 {
-  MSIHANDLE selectRecord;
+  MSIHANDLE viewHandle;
   // open select view
-  MsiUtil::openView(mDatabaseHandle, sqlQuerry, selectRecord);
+  MsiUtil::openView(mDatabaseHandle, sqlQuerry, viewHandle);
 
   // takes target columns and get metadata
-  populateMetadataForTargetColumns(selectRecord);
+  populateMetadataForTargetColumns(viewHandle);
 
   // generate real metadata obj for selected table
   auto metadata = generateMetadataFromTarget();
 
   // create rowCollection
-  auto rowCollection = generateRowCollection(metadata, selectRecord);
+  auto rowCollection = generateRowCollection(metadata, viewHandle);
   
   // populate row collection
 
