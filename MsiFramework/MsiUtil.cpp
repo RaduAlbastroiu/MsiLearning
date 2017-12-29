@@ -3,6 +3,10 @@
 
 namespace MsiUtil 
 {
+  UINT openDatabase(const wstring & filePath, MSIHANDLE& handleDatabase)
+  {
+    return ::MsiOpenDatabase(filePath, MSIDBOPEN_DIRECT, &handleDatabase);
+  }
 
   UINT openView(MSIHANDLE aTargetHandle, const wstring & aSqlQuerry, MSIHANDLE & outputHandle)
   {
@@ -117,6 +121,29 @@ namespace MsiUtil
       }
     }
     return errorMessage;
+  }
+
+  UINT getSelectedTable(MSIHANDLE viewHandle, vector<wstring> columnNames, vector<map<wstring, wstring>>& resultTable)
+  {
+    MSIHANDLE fetch;
+    UINT errorMessage = ERROR_SUCCESS;
+    while (true)
+    {
+      // fetch next row
+      errorMessage = ::MsiViewFetch(viewHandle, &fetch);
+      if (errorMessage != ERROR_SUCCESS)
+        return errorMessage;
+      
+      wstring extracted = L"";
+      map<wstring, wstring> row;
+      for (size_t i = 0; i < columnNames.size(); i++)
+      {
+        MsiUtil::getStringFromRecord(fetch, i + 1, extracted);
+        row[columnNames[i]] = extracted;
+      }
+      resultTable.push_back(row);
+    }
+    return ERROR_SUCCESS;
   }
 
   UINT commit(MSIHANDLE databaseHandle)
