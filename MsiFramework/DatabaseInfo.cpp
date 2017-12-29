@@ -239,12 +239,12 @@ std::wstring DatabaseInfo::composeSqlCondition()
 
 }
 
-void DatabaseInfo::populateMetadataForTargetColumns()
+void DatabaseInfo::populateMetadataForTargetColumns(MSIHANDLE selectRecord)
 {
   map<wstring, wstring> columnsInfo;
   vector<wstring> primaryKeys;
 
-  MsiUtil::getColumnsInfo(mDatabaseHandle, columnsInfo);
+  MsiUtil::getColumnsInfo(selectRecord, columnsInfo);
   MsiUtil::getPrimaryKeys(mDatabaseHandle, mTargetTabel.tableName, primaryKeys);
 
   mTargetTabel.columnsCollection.clear();
@@ -266,31 +266,49 @@ void DatabaseInfo::populateMetadataForTargetColumns()
       mTargetTabel.columnMetadata.push_back(TargetMetadata(columnName, ColumnType::String, isKey, nullable));
     }
   }
-
 }
 
 TableMetadata DatabaseInfo::generateMetadataFromTarget()
 {
-  return TableMetadata();
+  auto tableMetadata = TableMetadata();
+
+  for (auto& columnMetadata : mTargetTabel.columnMetadata)
+  {
+    tableMetadata.addColumnInSchema(columnMetadata.mName,
+      columnMetadata.mType,
+      columnMetadata.isKeyMember,
+      columnMetadata.isNullable);
+  }
+
+  return tableMetadata;
+}
+
+RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE /*selectRecord*/)
+{
+  RowCollection resultRowCollection(aTableMetadata);
+
+  return resultRowCollection;
 }
 
 Table DatabaseInfo::createTableFromSqlQuerry(const wstring& sqlQuerry)
 {
-  auto s = sqlQuerry;
+  MSIHANDLE selectRecord;
+  // open select view
+  MsiUtil::openView(mDatabaseHandle, sqlQuerry, selectRecord);
 
   // takes target columns and get metadata
-  populateMetadataForTargetColumns();
+  populateMetadataForTargetColumns(selectRecord);
 
   // generate real metadata obj for selected table
   auto metadata = generateMetadataFromTarget();
 
   // create rowCollection
-  auto rowCollection = RowCollection(metadata);
+  auto rowCollection = generateRowCollection(metadata, selectRecord);
   
   // populate row collection
 
-
-  return Table(metadata, rowCollection);
+  Table t(metadata, rowCollection);
+  return t;
 }
 
 UINT DatabaseInfo::runSql(const wstring & aSqlQuerry)

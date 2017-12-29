@@ -97,6 +97,8 @@ void justUpdate(LPCTSTR msiPath)
     wcout << L"yes";
   }
 
+  // Play with table data extraction
+
   // Open View
   MSIHANDLE phView;
   LPCTSTR sqlQuerry = L" SELECT `Control`, `Text` FROM `Control` WHERE ( ( ( `Dialog_` = 'WelcomeDlg' ) ) )";
@@ -132,7 +134,7 @@ void msiFrameworkTree(LPCTSTR msiPath)
   //auto x = Equal(L"Type", L"Text").And(NotEqual(L"Text", L"Dialog_")).Or(LessEqualThan(L"Text", L"Dialog_")).getCondition();
  
   // select
-  auto row = database.inTable(L"Control")->withColumns(L"Control", L"Text")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->select();
+  auto row = database.inTable(L"Control")->withColumns(L"Control", L"X")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->select();
   row;
 
   //// update

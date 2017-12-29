@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "TableMetadata.h"
 
-void TableMetadata::addColumnInSchema(const wstring& aNameColumn, const wstring& aType, bool aIsKeyMember, bool aIsNullable)
+void TableMetadata::addColumnInSchema(const wstring& aNameColumn, ColumnType aType, bool aIsKeyMember, bool aIsNullable)
 {
   auto newColumnInfo = MetadataSchema(aNameColumn, aType, aIsKeyMember, aIsNullable);
   mMetadataCollection.insert(pair<wstring, MetadataSchema>(aNameColumn, newColumnInfo));
@@ -17,7 +17,7 @@ unique_ptr<MetadataSchema> TableMetadata::operator[](const wstring& aColumnName)
 }
 
 
-MetadataSchema::MetadataSchema(const wstring& aNameColumn, const wstring& aType, bool aIsKeyMember, bool aIsNullable)
+MetadataSchema::MetadataSchema(const wstring& aNameColumn, ColumnType aType, bool aIsKeyMember, bool aIsNullable)
   : mName(aNameColumn), mType(aType), isKeyMember(aIsKeyMember), isNullable(aIsNullable) 
 {
 }

@@ -16,13 +16,6 @@
 #define SQLTABLE L" TABLE "
 
 
-// type class
-enum class ColumnType
-{
-  Integer,
-  String,
-};
-
 struct TargetMetadata {
   TargetMetadata(const wstring& aName, const ColumnType aType, bool isKeyMember, bool isNullable)
     :mName(aName), mType(aType), isKeyMember(isKeyMember), isNullable(isNullable) 
@@ -116,8 +109,9 @@ private:
   wstring composeSqlColumnTypes();
   wstring composeSqlCondition();
 
-  void populateMetadataForTargetColumns();
+  void populateMetadataForTargetColumns(MSIHANDLE selectRecord);
   TableMetadata generateMetadataFromTarget();
+  RowCollection generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE selectRecord);
 
   // single table
   targetTable mTargetTabel;
