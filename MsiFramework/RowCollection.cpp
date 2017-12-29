@@ -21,10 +21,22 @@ unique_ptr<Row> RowCollection::getRowWithNumber(int aRowNumber)
   return make_unique<Row>(mRowCollection[aRowNumber]);
 }
 
-bool RowCollection::addRow(const map<wstring, Element>& aRowData)
+bool RowCollection::addRow(map<wstring, wstring>& aRowData)
 {
-  mRowCollection.push_back(Row(mMetadata, aRowData));
+  map<wstring, Element> rowData;
 
-  // notify DatabaseInfo 
+  for (const auto&[columnName, value] : aRowData)
+  {
+    Element element(value);
+    
+    element.setIsInt(mMetadata[columnName]->mType == ColumnType::Integer);
+    element.setKeyMember(mMetadata[columnName]->isKeyMember);
+    element.setNullable(mMetadata[columnName]->isNullable);
+
+    rowData[columnName] = element;
+  }
+
+  mRowCollection.push_back(Row(mMetadata, rowData));
+
   return true;
 }

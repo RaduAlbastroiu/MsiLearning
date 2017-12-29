@@ -10,7 +10,7 @@ public:
   unique_ptr<Row> operator[](int aRowNumber);
   unique_ptr<Row> getRowWithNumber(int aRowNumber);
 
-  bool addRow(const map<wstring, Element>& aRowData);
+  bool addRow(map<wstring, wstring>& aRowData);
 
 private:
   TableMetadata mMetadata;
