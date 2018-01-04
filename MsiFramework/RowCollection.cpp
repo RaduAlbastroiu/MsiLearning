@@ -26,14 +26,14 @@ int RowCollection::getNumberOfRows()
   return mRowCollection.size();
 }
 
-bool RowCollection::addRow(map<wstring, wstring>& aRowData)
+bool RowCollection::addRow(map<wstring, wstring>& aRowData, MSIHANDLE aRowHandle)
 {
 
   map<wstring, Element> rowData;
-
+  int i = 1;
   for (const auto& row : aRowData)
   {
-    Element element(row.second, row.first, mMetadata.getTableName());
+    Element element(row.second, row.first, mMetadata.getTableName(), aRowHandle, i++);
     
     element.setIsInt(mMetadata[row.first]->mType == ColumnType::Integer);
     element.setKeyMember(mMetadata[row.first]->isKeyMember);
@@ -42,7 +42,7 @@ bool RowCollection::addRow(map<wstring, wstring>& aRowData)
     rowData.insert(std::pair<wstring, Element>(row.first, element));
   }
 
-  mRowCollection.push_back(Row(mMetadata, rowData));
+  mRowCollection.push_back(Row(mMetadata, rowData, aRowHandle));
 
   return true;
 }

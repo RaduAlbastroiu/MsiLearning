@@ -3,7 +3,7 @@
 class Element
 {
 public:
-  Element(const wstring& aValue, const wstring& aColumnName, const wstring& aTableName);
+  Element(const wstring& aValue, const wstring& aColumnName, const wstring& aTableName, MSIHANDLE aRowHandle, UINT aFieldNumber);
 
   wstring getAsString();
   int getAsInt();
@@ -17,6 +17,7 @@ public:
   void setNullable(bool isNullable);
   void setKeyMember(bool isKeyMember);
   void setIsInt(bool isInt);
+  
 
 private:
   wstring mTable;
@@ -26,5 +27,7 @@ private:
   bool mIsKeyMember;
   bool mIsInt;
 
-  // updater
+  // update data
+  MSIHANDLE mRowHandle;
+  UINT mFieldNumber;
 };

@@ -124,7 +124,7 @@ namespace MsiUtil
     return errorMessage;
   }
 
-  UINT getSelectedTable(MSIHANDLE viewHandle, vector<wstring> columnNames, vector<map<wstring, wstring>>& resultTable)
+  UINT getSelectedTable(MSIHANDLE viewHandle, vector<wstring> columnNames, vector<map<wstring, wstring>>& resultTable, vector<MSIHANDLE>& resultTableHandles)
   {
     MSIHANDLE fetch;
     UINT errorMessage = ERROR_SUCCESS;
@@ -134,7 +134,9 @@ namespace MsiUtil
       errorMessage = ::MsiViewFetch(viewHandle, &fetch);
       if (errorMessage != ERROR_SUCCESS)
         return errorMessage;
-      
+      else
+        resultTableHandles.push_back(fetch);
+
       wstring extracted = L"";
       map<wstring, wstring> row;
       for (size_t i = 0; i < columnNames.size(); i++)

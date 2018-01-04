@@ -302,12 +302,14 @@ RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMet
   RowCollection resultRowCollection(aTableMetadata);
 
   vector<map<wstring, wstring>> tableData;
-  MsiUtil::getSelectedTable(aViewHandle, mTargetTabel.columnsCollection, tableData);
+  vector<MSIHANDLE> tableHandles;
+  MsiUtil::getSelectedTable(aViewHandle, mTargetTabel.columnsCollection, tableData, tableHandles);
 
   // add map(row) to row collection
+  int i = 0;
   for (auto &row : tableData)
   {
-    resultRowCollection.addRow(row);
+    resultRowCollection.addRow(row, tableHandles[i++]);
   }
 
   return resultRowCollection;
@@ -328,7 +330,7 @@ Table DatabaseInfo::createTableFromSqlQuerry(const wstring& sqlQuerry)
   // create rowCollection
   auto rowCollection = generateRowCollection(metadata, viewHandle);
   
-  Table t(metadata, rowCollection, mDatabaseHandle);
+  Table t(metadata, rowCollection, viewHandle);
   return t;
 }
 

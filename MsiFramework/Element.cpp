@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "Element.h"
 
-Element::Element(const wstring & aValue, const wstring & aColumnName, const wstring & aTableName)
-  :mValue(aValue), mColumn(aColumnName), mTable(aTableName)
+Element::Element(const wstring & aValue, const wstring & aColumnName, const wstring & aTableName, MSIHANDLE aRowHandle, UINT aFieldNumber)
+  :mValue(aValue), mColumn(aColumnName), mTable(aTableName), mRowHandle(aRowHandle), mFieldNumber(aFieldNumber)
 {
 }
 

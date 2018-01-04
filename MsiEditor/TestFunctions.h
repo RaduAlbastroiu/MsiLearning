@@ -102,8 +102,8 @@ void justUpdate(LPCTSTR msiPath)
   wstring err;
   MsiUtil::getLastError(err);
 
-  vector<map<wstring, wstring>> resultMap;
-  MsiUtil::getSelectedTable(phView, vector<wstring>{L"Control", L"Text", L"Type"}, resultMap);
+  //vector<map<wstring, wstring>> resultMap;
+  //MsiUtil::getSelectedTable(phView, vector<wstring>{L"Control", L"Text", L"Type"}, resultMap);
 
   //map<wstring, wstring> columns;
   //MsiUtil::getColumnsInfo(phView, columns);

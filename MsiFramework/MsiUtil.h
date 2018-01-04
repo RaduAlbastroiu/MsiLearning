@@ -13,7 +13,7 @@ namespace MsiUtil
   UINT getColumnsInfo(MSIHANDLE recordHandle, map<wstring, wstring>& columnsInfo);
   UINT getPrimaryKeys(MSIHANDLE databaseHandle, const wstring& tableName, vector<wstring>& output);
 
-  UINT getSelectedTable(MSIHANDLE viewHandle, vector<wstring> columnNames, vector < map<wstring, wstring> >& resultTable);
+  UINT getSelectedTable(MSIHANDLE viewHandle, vector<wstring> columnNames, vector < map<wstring, wstring> >& resultTable, vector<MSIHANDLE>& resultTableHandles);
 
   UINT getLastError(wstring& error);
 

@@ -72,9 +72,6 @@
     <ClCompile Include="Element.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UpdaterDatabase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConditionState.h">
@@ -132,9 +129,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Element.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UpdaterDatabase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

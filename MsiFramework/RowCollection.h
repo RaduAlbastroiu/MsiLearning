@@ -12,11 +12,11 @@ public:
 
   int getNumberOfRows();
 
-  bool addRow(map<wstring, wstring>& aRowData);
+  bool addRow(map<wstring, wstring>& aRowData, MSIHANDLE aRowHandle);
 
 private:
   TableMetadata mMetadata;
   vector<Row> mRowCollection;
 
-  // updater
+  MSIHANDLE rowHandle;
 };

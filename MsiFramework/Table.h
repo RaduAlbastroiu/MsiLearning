@@ -3,12 +3,11 @@
 #include "TableMetadata.h"
 #include "Row.h"
 #include "RowCollection.h"
-#include "UpdaterDatabase.h"
 
 class Table
 {
 public:
-  Table(const TableMetadata& aMetadata, const RowCollection& aRowCollection, const MSIHANDLE aDatabaseHandle);
+  Table(const TableMetadata& aMetadata, const RowCollection& aRowCollection, const MSIHANDLE aTableHandle);
 
   // access metadata
   unique_ptr<MetadataSchema> getColumnInfo(const wstring& aColumnName);
@@ -25,6 +24,5 @@ private:
 
   RowCollection mRowCollection;
 
-  UpdaterDatabase mUpdater;
-  
+  MSIHANDLE mTableHandle;
 };

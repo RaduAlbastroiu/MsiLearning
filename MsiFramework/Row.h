@@ -6,7 +6,7 @@
 class Row
 {
 public:
-  Row(const TableMetadata&  aMetadata, const map<wstring, Element> aRowData);
+  Row(const TableMetadata&  aMetadata, const map<wstring, Element> aRowData, MSIHANDLE aROwHandle);
 
   // check info
   unique_ptr<Element> operator[](const wstring& aColumnName);
@@ -16,6 +16,7 @@ private:
   TableMetadata mMetadata;
 
   map<wstring, Element> mRowData;
-
-  // updater
+  
+  wstring mTableName;
+  MSIHANDLE mRowHandle;
 };

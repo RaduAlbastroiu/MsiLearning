@@ -42,7 +42,6 @@
     </ClCompile>
     <ClCompile Include="Table.cpp" />
     <ClCompile Include="TableState.cpp" />
-    <ClCompile Include="UpdaterDatabase.cpp" />
     <ClCompile Include="UpdateState.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -64,7 +63,6 @@
     <ClInclude Include="Table.h" />
     <ClInclude Include="TableState.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="UpdaterDatabase.h" />
     <ClInclude Include="UpdateState.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
