@@ -15,7 +15,7 @@ wstring Element::getAsString()
 
 int Element::getAsInt()
 {
-  if (isInt)
+  if (isInt())
     return stoi(mValue);
   else
     return 0xfffffff;

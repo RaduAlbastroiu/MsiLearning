@@ -23,17 +23,18 @@ unique_ptr<Row> RowCollection::getRowWithNumber(int aRowNumber)
 
 bool RowCollection::addRow(map<wstring, wstring>& aRowData)
 {
+
   map<wstring, Element> rowData;
 
-  for (const auto&[columnName, value] : aRowData)
+  for (const auto& row : aRowData)
   {
-    Element element(value);
+    Element element(row.second);
     
-    element.setIsInt(mMetadata[columnName]->mType == ColumnType::Integer);
-    element.setKeyMember(mMetadata[columnName]->isKeyMember);
-    element.setNullable(mMetadata[columnName]->isNullable);
+    element.setIsInt(mMetadata[row.first]->mType == ColumnType::Integer);
+    element.setKeyMember(mMetadata[row.first]->isKeyMember);
+    element.setNullable(mMetadata[row.first]->isNullable);
 
-    rowData[columnName] = element;
+    rowData.insert(std::pair<wstring, Element>(row.first, element));
   }
 
   mRowCollection.push_back(Row(mMetadata, rowData));

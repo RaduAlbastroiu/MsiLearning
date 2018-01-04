@@ -290,18 +290,10 @@ RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMet
   vector<map<wstring, wstring>> tableData;
   MsiUtil::getSelectedTable(aViewHandle, mTargetTabel.columnsCollection, tableData);
 
-  map<wstring, Element> rowData;
-  for (const auto& row : tableData)
+  // add map(row) to row collection
+  for (auto &row : tableData)
   {
-    // map[wstring, wstring] -> map [wstring, Element]
-    for (const auto&[columnName, value] : row)
-    {
-      Element element(value);
-      rowData[columnName] = element;
-    }
-
-    // add map(row) to row collection
-    resultRowCollection.addRow(rowData);
+    resultRowCollection.addRow(row);
   }
 
   return resultRowCollection;

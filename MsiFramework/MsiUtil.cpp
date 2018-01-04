@@ -3,8 +3,9 @@
 
 namespace MsiUtil 
 {
-  UINT openDatabase(const wstring & filePath, MSIHANDLE& handleDatabase)
+  UINT openDatabase(const wstring & aFilePath, MSIHANDLE& handleDatabase)
   {
+    LPCWSTR filePath = aFilePath.c_str();
     return ::MsiOpenDatabase(filePath, MSIDBOPEN_DIRECT, &handleDatabase);
   }
 
