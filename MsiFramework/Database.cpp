@@ -7,6 +7,11 @@ Database::Database(const wstring& aDatabasePath)
 {
 }
 
+Database::Database(const MSIHANDLE handleToDatabase)
+  :mDatabaseInfo(handleToDatabase)
+{
+}
+
 unique_ptr<TableState> Database::inTable(const wstring& aTableName)
 {
   mDatabaseInfo.setTargetTable(aTableName);

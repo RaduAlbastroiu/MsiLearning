@@ -3,11 +3,13 @@
 #include "TableState.h"
 #include "CreateTableState.h"
 #include "DatabaseInfo.h"
+#include "OperationLogicCondition.h"
 
 class Database
 {
 public:
   Database(const wstring& databasePath);
+  Database(const MSIHANDLE handleToDatabase);
 
   // use table
   unique_ptr<TableState> inTable(const wstring& aTableName);

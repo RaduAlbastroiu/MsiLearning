@@ -26,6 +26,7 @@ public:
 class TableMetadata
 {
 public:
+  TableMetadata(const wstring& tableName);
 
   // add column
   void addColumnInSchema(const wstring& aNameColumn, ColumnType aType, bool aIsKeyMember, bool aIsNullable);
@@ -33,8 +34,12 @@ public:
   // check info
   unique_ptr<MetadataSchema> operator[](const wstring& aColumnName);
 
+  wstring getTableName();
+
 private:
 
+  wstring mTableName;
+  
   // collection of columns
   map<wstring, MetadataSchema> mMetadataCollection;
 

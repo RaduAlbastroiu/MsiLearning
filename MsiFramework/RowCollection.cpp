@@ -33,7 +33,7 @@ bool RowCollection::addRow(map<wstring, wstring>& aRowData)
 
   for (const auto& row : aRowData)
   {
-    Element element(row.second);
+    Element element(row.second, row.first, mMetadata.getTableName());
     
     element.setIsInt(mMetadata[row.first]->mType == ColumnType::Integer);
     element.setKeyMember(mMetadata[row.first]->isKeyMember);

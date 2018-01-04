@@ -53,6 +53,7 @@ public:
 
   // default constructor
   DatabaseInfo(const wstring& databasePath);
+  DatabaseInfo(const MSIHANDLE handleToDatabase);
 
   // update condition with another condition ( add AND )
   // by default no condition
@@ -114,7 +115,7 @@ private:
   wstring composeSqlCondition();
 
   void populateMetadataForTargetColumns(MSIHANDLE selectRecord);
-  TableMetadata generateMetadataFromTarget();
+  TableMetadata generateMetadataFromTarget(const wstring& aTableName);
   RowCollection generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE aViewHandle);
 
   // single table

@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "TableMetadata.h"
 
+TableMetadata::TableMetadata(const wstring & aTableName)
+  :mTableName(aTableName)
+{
+}
+
 void TableMetadata::addColumnInSchema(const wstring& aNameColumn, ColumnType aType, bool aIsKeyMember, bool aIsNullable)
 {
   auto newColumnInfo = MetadataSchema(aNameColumn, aType, aIsKeyMember, aIsNullable);
@@ -14,6 +19,11 @@ unique_ptr<MetadataSchema> TableMetadata::operator[](const wstring& aColumnName)
     return make_unique<MetadataSchema>(it->second);
 
   return nullptr;
+}
+
+wstring TableMetadata::getTableName()
+{
+  return mTableName;
 }
 
 

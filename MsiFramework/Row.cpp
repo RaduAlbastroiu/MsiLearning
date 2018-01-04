@@ -2,55 +2,6 @@
 #include "stdafx.h"
 #include "Row.h"
 
-
-Element::Element(const wstring& aValue)
-  :mValue(aValue)
-{
-}
-
-wstring Element::getAsString()
-{
-  return mValue;
-}
-
-int Element::getAsInt()
-{
-  if (isInt())
-    return stoi(mValue);
-  else
-    return 0xfffffff;
-}
-
-bool Element::isNullable()
-{
-  return mIsNullable;
-}
-
-bool Element::isKeyMember()
-{
-  return mIsKeyMember;
-}
-
-bool Element::isInt()
-{
-  return mIsInt;
-}
-
-void Element::setNullable(bool isNullable)
-{
-  mIsNullable = isNullable;
-}
-
-void Element::setKeyMember(bool isKeyMember)
-{
-  mIsKeyMember = isKeyMember;
-}
-
-void Element::setIsInt(bool isInt)
-{
-  mIsInt = isInt;
-}
-
 Row::Row(const TableMetadata&  aMetadata, const map<wstring, Element> aRowData)
   :mMetadata(aMetadata), mRowData(aRowData)
 {

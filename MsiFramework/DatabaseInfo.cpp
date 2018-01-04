@@ -6,9 +6,13 @@ DatabaseInfo::DatabaseInfo(const wstring& aDatabasePath)
 {
   mDatabasePath = aDatabasePath;
 
-  LPCTSTR databasePath = aDatabasePath.c_str();
-  mErrorMessage = ::MsiOpenDatabase(databasePath, MSIDBOPEN_DIRECT, &mDatabaseHandle);
+  MsiUtil::openDatabase(aDatabasePath, mDatabaseHandle);
+}
 
+DatabaseInfo::DatabaseInfo(const MSIHANDLE handleToDatabase)
+{
+  mDatabaseHandle = handleToDatabase;
+  mDatabasePath = L"";
 }
 
 void DatabaseInfo::updateConditionWith(const LogicCondition& anotherCondition)
@@ -278,9 +282,9 @@ void DatabaseInfo::populateMetadataForTargetColumns(MSIHANDLE selectRecord)
   }
 }
 
-TableMetadata DatabaseInfo::generateMetadataFromTarget()
+TableMetadata DatabaseInfo::generateMetadataFromTarget(const wstring& aTableName)
 {
-  auto tableMetadata = TableMetadata();
+  auto tableMetadata = TableMetadata(aTableName);
 
   for (auto& columnMetadata : mTargetTabel.columnMetadata)
   {
@@ -319,7 +323,7 @@ Table DatabaseInfo::createTableFromSqlQuerry(const wstring& sqlQuerry)
   populateMetadataForTargetColumns(viewHandle);
 
   // generate real metadata obj for selected table
-  auto metadata = generateMetadataFromTarget();
+  auto metadata = generateMetadataFromTarget(mTargetTabel.tableName);
 
   // create rowCollection
   auto rowCollection = generateRowCollection(metadata, viewHandle);
