@@ -12,6 +12,11 @@ unique_ptr<MetadataSchema> Table::getColumnInfo(const wstring & aColumnName)
   return mTableSchema[aColumnName];
 }
 
+int Table::getNumberOfRows()
+{
+  return mRowCollection.getNumberOfRows();
+}
+
 std::unique_ptr<Row> Table::operator[](int aRowNumber)
 {
   return mRowCollection[aRowNumber];
@@ -19,5 +24,5 @@ std::unique_ptr<Row> Table::operator[](int aRowNumber)
 
 unique_ptr<Row> Table::getRowWithNumber(int aRowNumber)
 {
-  return mRowCollection[aRowNumber];
+  return mRowCollection.getRowWithNumber(aRowNumber);
 }

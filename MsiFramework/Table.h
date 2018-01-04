@@ -13,8 +13,10 @@ public:
   unique_ptr<MetadataSchema> getColumnInfo(const wstring& aColumnName);
 
   // access row
+  int getNumberOfRows();
   unique_ptr<Row> operator[](int aRowNumber);
   unique_ptr<Row> getRowWithNumber(int aRowNumber);
+
 
 private:
   // access one column via columnName

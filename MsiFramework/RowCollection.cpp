@@ -21,6 +21,11 @@ unique_ptr<Row> RowCollection::getRowWithNumber(int aRowNumber)
   return make_unique<Row>(mRowCollection[aRowNumber]);
 }
 
+int RowCollection::getNumberOfRows()
+{
+  return mRowCollection.size();
+}
+
 bool RowCollection::addRow(map<wstring, wstring>& aRowData)
 {
 

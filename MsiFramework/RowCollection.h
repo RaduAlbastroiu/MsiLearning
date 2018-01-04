@@ -10,6 +10,8 @@ public:
   unique_ptr<Row> operator[](int aRowNumber);
   unique_ptr<Row> getRowWithNumber(int aRowNumber);
 
+  int getNumberOfRows();
+
   bool addRow(map<wstring, wstring>& aRowData);
 
 private:

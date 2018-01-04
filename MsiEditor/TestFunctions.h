@@ -95,11 +95,11 @@ void justUpdate(LPCTSTR msiPath)
 
   // Open View
   MSIHANDLE phView;
-  LPCTSTR sqlQuerry = L" SELECT `Control`, `Text` FROM `Control` WHERE ( ( ( `Dialog_` = 'WelcomeDlg' ) ) )";
+  LPCTSTR sqlQuerry = L" SELECT `Control`, `Text`, `Type` FROM `Control` WHERE ( ( ( `Dialog_` = 'WelcomeDlg' ) ) )";
   MsiUtil::openView(handleTest, sqlQuerry, phView);
 
   vector<map<wstring, wstring>> resultMap;
-  MsiUtil::getSelectedTable(phView, vector<wstring>{L"Control", L"Text"}, resultMap);
+  MsiUtil::getSelectedTable(phView, vector<wstring>{L"Control", L"Text", L"Type"}, resultMap);
 
   //map<wstring, wstring> columns;
   //MsiUtil::getColumnsInfo(phView, columns);
@@ -131,8 +131,12 @@ void msiFrameworkTree(LPCTSTR msiPath)
   //auto x = Equal(L"Type", L"Text").And(NotEqual(L"Text", L"Dialog_")).Or(LessEqualThan(L"Text", L"Dialog_")).getCondition();
  
   // select
-  auto row = database.inTable(L"Control")->withColumns(L"Control", L"X")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->select();
-  row;
+  auto ele = database.inTable(L"Control")->withColumns(L"Control", L"X", L"Y", L"Width")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->select();
+  auto t = ele->getRowWithNumber(3);
+  auto d = t->getElementFromColumn(L"Width");
+  d;
+
+
 
   //// update
   //auto updated3 = database.inTable(L"Condition")->whereConditionIs(Equal(L"Level", 11))->updateColumnWithValue(L"Condition", L"16")->update();
