@@ -147,6 +147,39 @@ namespace MsiUtil
     return ERROR_SUCCESS;
   }
 
+  UINT getLastError(wstring& error)
+  {
+    UINT errorMessage = ERROR_SUCCESS;
+    MSIHANDLE errorHandle = ::MsiGetLastErrorRecord();
+    wstring extracted;
+    
+    // error code
+    errorMessage = getStringFromRecord(errorHandle, 1, extracted);
+    if (errorMessage != ERROR_SUCCESS)
+      return errorMessage;
+
+    error  = L"Error Code: " + extracted;
+    
+    // found 
+    errorMessage = getStringFromRecord(errorHandle, 3, extracted);
+    if (errorMessage != ERROR_SUCCESS)
+      return errorMessage;
+
+    error += L"; Found: '" + extracted + L"'";
+    
+    // position
+    errorMessage = getStringFromRecord(errorHandle, 4, extracted);
+    if (errorMessage != ERROR_SUCCESS)
+      return errorMessage;
+
+    if (extracted.size())
+    {
+      error += L" In: " + extracted;
+    }
+
+    return errorMessage;
+  }
+
   UINT commit(MSIHANDLE databaseHandle)
   {
     return ::MsiDatabaseCommit(databaseHandle);

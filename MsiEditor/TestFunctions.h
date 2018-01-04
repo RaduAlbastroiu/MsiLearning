@@ -92,11 +92,15 @@ void justUpdate(LPCTSTR msiPath)
   
   MSIHANDLE handleTest;
   MsiUtil::openDatabase(msiPath, handleTest);
+  MsiUtil::openDatabase(msiPath, handleTest);
 
   // Open View
   MSIHANDLE phView;
   LPCTSTR sqlQuerry = L" SELECT `Control`, `Text`, `Type` FROM `Control` WHERE ( ( ( `Dialog_` = 'WelcomeDlg' ) ) )";
-  MsiUtil::openView(handleTest, sqlQuerry, phView);
+  errorMessage = MsiUtil::openView(handleTest, sqlQuerry, phView);
+
+  wstring err;
+  MsiUtil::getLastError(err);
 
   vector<map<wstring, wstring>> resultMap;
   MsiUtil::getSelectedTable(phView, vector<wstring>{L"Control", L"Text", L"Type"}, resultMap);
@@ -133,9 +137,12 @@ void msiFrameworkTree(LPCTSTR msiPath)
   // select
   auto ele = database.inTable(L"Control")->withColumns(L"Control", L"X", L"Y", L"Width")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->select();
   auto t = ele->getRowWithNumber(3);
+  
+  // special case for error handling
   auto d = t->getElementFromColumn(L"Width");
   d;
 
+  wstring g = database.getLastError();
 
 
   //// update

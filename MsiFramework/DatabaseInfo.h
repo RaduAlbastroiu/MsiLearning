@@ -3,6 +3,7 @@
 #include "Table.h"
 #include "LogicCondition.h"
 #include "MsiUtil.h"
+#include "ErrorHandling.h"
 
 #define SQLSELECT L" SELECT "
 #define SQLUPDATE L" UPDATE "
@@ -80,8 +81,9 @@ public:
   void createKeyColumn(const wstring& aColumnName, const ColumnType& aColumnType);
   UINT addTableToDatabase();
 
-  // DO NOT FORGET ABOUT 
-  // UINT addRowInTable(Values);
+  // error handling
+  bool isGood();
+  wstring getLastError();
 
   // run any query
   UINT runSql(const wstring& aSqlQuerry);
@@ -95,6 +97,8 @@ public:
 private: 
 
   UINT mErrorMessage = ERROR_SUCCESS;
+
+  ErrorHandling mErrorHandling;
 
   MSIHANDLE mDatabaseHandle;
 

@@ -23,6 +23,7 @@
     <ClCompile Include="CreateTableState.cpp" />
     <ClCompile Include="Database.cpp" />
     <ClCompile Include="DatabaseInfo.cpp" />
+    <ClCompile Include="ErrorHandling.cpp" />
     <ClCompile Include="InsertState.cpp" />
     <ClCompile Include="LogicCondition.cpp" />
     <ClCompile Include="MsiUtil.cpp" />
@@ -47,6 +48,7 @@
     <ClInclude Include="CreateTableState.h" />
     <ClInclude Include="Database.h" />
     <ClInclude Include="DatabaseInfo.h" />
+    <ClInclude Include="ErrorHandling.h" />
     <ClInclude Include="InsertState.h" />
     <ClInclude Include="LogicCondition.h" />
     <ClInclude Include="MsiUtil.h" />

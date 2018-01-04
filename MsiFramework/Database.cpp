@@ -23,3 +23,13 @@ UINT Database::runSqlQuerry(const wstring& aSqlQuerry)
 {
   return mDatabaseInfo.runSql(aSqlQuerry);
 }
+
+wstring Database::getLastError()
+{
+  return mDatabaseInfo.getLastError();
+}
+
+bool Database::isGood()
+{
+  return mDatabaseInfo.isGood();
+}

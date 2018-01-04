@@ -18,6 +18,10 @@ public:
   // run any custom sql
   UINT runSqlQuerry(const wstring& aSqlQuerry);
 
+  // error handling
+  wstring getLastError();
+  bool isGood();
+
 private:
   wstring mDatabasePath;
 

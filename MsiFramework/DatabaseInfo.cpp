@@ -109,6 +109,16 @@ UINT DatabaseInfo::addTableToDatabase()
   return runSql(L"");
 }
 
+bool DatabaseInfo::isGood()
+{
+  return mErrorHandling.isGood();
+}
+
+wstring DatabaseInfo::getLastError()
+{
+  return mErrorHandling.getLastError();
+}
+
 std::wstring DatabaseInfo::selectSqlCondition()
 {
   wstring sqlQuerry = SQLSELECT;

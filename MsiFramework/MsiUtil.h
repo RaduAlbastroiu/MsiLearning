@@ -15,6 +15,8 @@ namespace MsiUtil
 
   UINT getSelectedTable(MSIHANDLE viewHandle, vector<wstring> columnNames, vector < map<wstring, wstring> >& resultTable);
 
+  UINT getLastError(wstring& error);
+
   UINT commit(MSIHANDLE databaseHandle);
 }
  
