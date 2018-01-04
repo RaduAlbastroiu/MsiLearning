@@ -101,8 +101,6 @@ private:
 
   ErrorHandling mErrorHandling;
 
-  MSIHANDLE mDatabaseHandle;
-
   wstring selectSqlCondition();
   wstring updateSqlCondition();
   wstring insertSqlCondition();
@@ -124,6 +122,8 @@ private:
   Table createTableFromSqlQuerry(const wstring& sqlQuerry);
 
   wstring mDatabasePath;
+
+  MSIHANDLE mDatabaseHandle;
 
   vector<LogicCondition> mConditions;
 };

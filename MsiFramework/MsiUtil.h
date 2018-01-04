@@ -2,6 +2,8 @@
 
 namespace MsiUtil
 {
+  UINT commit(MSIHANDLE databaseHandle);
+
   UINT openDatabase(const wstring& filePath, MSIHANDLE& handleDatabase);
   
   UINT openView(MSIHANDLE aTargetHandle, const wstring& aSqlQuerry, MSIHANDLE& outputHandle);
@@ -15,8 +17,9 @@ namespace MsiUtil
 
   UINT getSelectedTable(MSIHANDLE viewHandle, vector<wstring> columnNames, vector < map<wstring, wstring> >& resultTable, vector<MSIHANDLE>& resultTableHandles);
 
-  UINT getLastError(wstring& error);
+  UINT setRecordInteger(MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int fieldNumber, int value);
+  UINT setRecordString(MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int fieldNumber, const wstring& value);
 
-  UINT commit(MSIHANDLE databaseHandle);
+  UINT getLastError(wstring& error);
 }
  

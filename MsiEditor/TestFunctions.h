@@ -92,12 +92,37 @@ void justUpdate(LPCTSTR msiPath)
   
   MSIHANDLE handleTest;
   MsiUtil::openDatabase(msiPath, handleTest);
-  MsiUtil::openDatabase(msiPath, handleTest);
 
   // Open View
   MSIHANDLE phView;
   LPCTSTR sqlQuerry = L" SELECT `Control`, `Text`, `Type` FROM `Control` WHERE ( ( ( `Dialog_` = 'WelcomeDlg' ) ) )";
   errorMessage = MsiUtil::openView(handleTest, sqlQuerry, phView);
+
+  MSIHANDLE recordHandle;
+  errorMessage = ::MsiViewExecute(phView, 0);
+  errorMessage = ::MsiViewFetch(phView, &recordHandle);
+  wstring value;
+
+  MSIHANDLE anotherRecordHandle;
+  errorMessage = ::MsiViewFetch(phView, &anotherRecordHandle);
+  errorMessage = ::MsiViewFetch(phView, &anotherRecordHandle);
+  errorMessage = ::MsiViewFetch(phView, &anotherRecordHandle);
+  MsiUtil::getStringFromRecord(anotherRecordHandle, 2, value);
+
+  errorMessage = MsiUtil::openView(handleTest, sqlQuerry, phView);
+  errorMessage = ::MsiViewExecute(phView, 0);
+  errorMessage = ::MsiViewFetch(phView, &recordHandle);
+
+  errorMessage = ::MsiRecordSetString(recordHandle, 2, L"another random string");
+  errorMessage = ::MsiViewModify(phView, MSIMODIFY_UPDATE, recordHandle);
+  errorMessage = ::MsiDatabaseCommit(handleTest);
+
+  errorMessage = MsiUtil::openView(handleTest, sqlQuerry, phView);
+
+  errorMessage = ::MsiViewExecute(phView, 0);
+  errorMessage = ::MsiViewFetch(phView, &recordHandle);
+  MsiUtil::getStringFromRecord(recordHandle, 2, value);
+
 
   wstring err;
   MsiUtil::getLastError(err);
@@ -135,14 +160,15 @@ void msiFrameworkTree(LPCTSTR msiPath)
   //auto x = Equal(L"Type", L"Text").And(NotEqual(L"Text", L"Dialog_")).Or(LessEqualThan(L"Text", L"Dialog_")).getCondition();
  
   // select
-  auto ele = database.inTable(L"Control")->withColumns(L"Control", L"X", L"Y", L"Width")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->select();
-  auto t = ele->getRowWithNumber(3);
+  auto ele = database.inTable(L"Control")->withColumns(L"Control", L"X", L"Y", L"Text")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->select();
+  auto t = ele->getRowWithNumber(3)->getElementFromColumn(L"Text");
   
-  // special case for error handling
-  auto d = t->getElementFromColumn(L"Width");
-  d;
+  t->update(L"some random value");
 
-  wstring g = database.getLastError();
+  //ele = database.inTable(L"Control")->withColumns(L"Control", L"X", L"Y", L"Text")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->select();
+  //t = ele->getRowWithNumber(3)->getElementFromColumn(L"Text");
+
+  wstring lastError = database.getLastError();
 
 
   //// update

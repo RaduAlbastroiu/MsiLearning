@@ -261,23 +261,26 @@ void DatabaseInfo::populateMetadataForTargetColumns(MSIHANDLE selectRecord)
   MsiUtil::getColumnsInfo(selectRecord, columnsInfo);
   MsiUtil::getPrimaryKeys(mDatabaseHandle, mTargetTabel.tableName, primaryKeys);
 
-  mTargetTabel.columnsCollection.clear();
-  for (const auto& [columnName, columnType] : columnsInfo)
+  for (auto targetColumnName : mTargetTabel.columnsCollection)
   {
-    mTargetTabel.columnsCollection.push_back(columnName);
-
-    bool nullable = (columnType[0] < L'a');
-    bool isKey = find(primaryKeys.begin(), primaryKeys.end(), columnName) != primaryKeys.end();
-
-    bool isInt = (columnType[0] == L'i' || columnType[0] == L'j');
-
-    if (isInt)
+    for (const auto&[columnName, columnType] : columnsInfo)
     {
-      mTargetTabel.columnMetadata.push_back(TargetMetadata(columnName, ColumnType::Integer, isKey, nullable));
-    }
-    else
-    {
-      mTargetTabel.columnMetadata.push_back(TargetMetadata(columnName, ColumnType::String, isKey, nullable));
+      if (targetColumnName == columnName)
+      {
+        bool nullable = (columnType[0] < L'a');
+        bool isKey = find(primaryKeys.begin(), primaryKeys.end(), columnName) != primaryKeys.end();
+
+        bool isInt = (columnType[0] == L'i' || columnType[0] == L'j');
+
+        if (isInt)
+        {
+          mTargetTabel.columnMetadata.push_back(TargetMetadata(columnName, ColumnType::Integer, isKey, nullable));
+        }
+        else
+        {
+          mTargetTabel.columnMetadata.push_back(TargetMetadata(columnName, ColumnType::String, isKey, nullable));
+        }
+      }
     }
   }
 }
@@ -299,7 +302,7 @@ TableMetadata DatabaseInfo::generateMetadataFromTarget(const wstring& aTableName
 
 RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE aViewHandle)
 {
-  RowCollection resultRowCollection(aTableMetadata);
+  RowCollection resultRowCollection(mDatabaseHandle, aViewHandle, aTableMetadata);
 
   vector<map<wstring, wstring>> tableData;
   vector<MSIHANDLE> tableHandles;
@@ -329,7 +332,7 @@ Table DatabaseInfo::createTableFromSqlQuerry(const wstring& sqlQuerry)
 
   // create rowCollection
   auto rowCollection = generateRowCollection(metadata, viewHandle);
-  
+
   Table t(metadata, rowCollection, viewHandle);
   return t;
 }

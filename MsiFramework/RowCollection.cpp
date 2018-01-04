@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "RowCollection.h"
 
-RowCollection::RowCollection(const TableMetadata& aMetadata)
-  :mMetadata(aMetadata)
+RowCollection::RowCollection(MSIHANDLE aDatabaseHandle, MSIHANDLE aViewHandle, const TableMetadata& aMetadata)
+  :mDatabaseHandle(aDatabaseHandle), mMetadata(aMetadata), mViewHandle(aViewHandle)
 {
 }
 
@@ -33,7 +33,10 @@ bool RowCollection::addRow(map<wstring, wstring>& aRowData, MSIHANDLE aRowHandle
   int i = 1;
   for (const auto& row : aRowData)
   {
-    Element element(row.second, row.first, mMetadata.getTableName(), aRowHandle, i++);
+    Element element(row.second, row.first, mMetadata.getTableName(), i++);
+    element.setRowHandle(aRowHandle);
+    element.setViewHandle(mViewHandle);
+    element.setDatabaseHandle(mDatabaseHandle);
     
     element.setIsInt(mMetadata[row.first]->mType == ColumnType::Integer);
     element.setKeyMember(mMetadata[row.first]->isKeyMember);

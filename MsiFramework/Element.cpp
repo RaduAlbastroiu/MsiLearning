@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "Element.h"
 
-Element::Element(const wstring & aValue, const wstring & aColumnName, const wstring & aTableName, MSIHANDLE aRowHandle, UINT aFieldNumber)
-  :mValue(aValue), mColumn(aColumnName), mTable(aTableName), mRowHandle(aRowHandle), mFieldNumber(aFieldNumber)
+Element::Element(const wstring & aValue, const wstring & aColumnName, const wstring & aTableName, UINT aFieldNumber)
+  :mValue(aValue), mColumn(aColumnName), mTable(aTableName), mFieldNumber(aFieldNumber)
 {
 }
 
@@ -18,6 +18,20 @@ int Element::getAsInt()
     return stoi(mValue);
   else
     return 0xfffffff;
+}
+
+void Element::update(const wstring & aNewValue)
+{
+  UINT errorMessage = MsiUtil::setRecordString(mDatabaseHandle, mViewHandle, mRowHandle, mFieldNumber, aNewValue);
+  if (errorMessage == ERROR_SUCCESS)
+    mValue = aNewValue;
+}
+
+void Element::update(int aNewValue)
+{
+  UINT errorMessage = MsiUtil::setRecordInteger(mDatabaseHandle, mViewHandle, mRowHandle, mFieldNumber, aNewValue);
+  if (errorMessage == ERROR_SUCCESS)
+    mValue = to_wstring(aNewValue);
 }
 
 bool Element::isNullable()
@@ -58,4 +72,19 @@ void Element::setKeyMember(bool isKeyMember)
 void Element::setIsInt(bool isInt)
 {
   mIsInt = isInt;
+}
+
+void Element::setRowHandle(MSIHANDLE aRowHandle)
+{
+  mRowHandle = aRowHandle;
+}
+
+void Element::setViewHandle(MSIHANDLE aViewHandle)
+{
+  mViewHandle = aViewHandle;
+}
+
+void Element::setDatabaseHandle(MSIHANDLE aDatabaseHandle)
+{
+  mDatabaseHandle = aDatabaseHandle;
 }

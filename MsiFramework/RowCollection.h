@@ -5,8 +5,9 @@
 
 class RowCollection {
 public:
-  RowCollection(const TableMetadata& aMetadata);
 
+  RowCollection(MSIHANDLE aDatabaseHandle, MSIHANDLE aViewHandle, const TableMetadata& aMetadata);
+  
   unique_ptr<Row> operator[](int aRowNumber);
   unique_ptr<Row> getRowWithNumber(int aRowNumber);
 
@@ -18,5 +19,6 @@ private:
   TableMetadata mMetadata;
   vector<Row> mRowCollection;
 
-  MSIHANDLE rowHandle;
+  MSIHANDLE mViewHandle;
+  MSIHANDLE mDatabaseHandle;
 };

@@ -1,12 +1,16 @@
 #pragma once
+#include "MsiUtil.h"
 
 class Element
 {
 public:
-  Element(const wstring& aValue, const wstring& aColumnName, const wstring& aTableName, MSIHANDLE aRowHandle, UINT aFieldNumber);
+  Element(const wstring& aValue, const wstring& aColumnName, const wstring& aTableName, UINT aFieldNumber);
 
   wstring getAsString();
   int getAsInt();
+
+  void update(const wstring& aNewValue);
+  void update(int aNewValue);
 
   bool isNullable();
   bool isKeyMember();
@@ -17,7 +21,10 @@ public:
   void setNullable(bool isNullable);
   void setKeyMember(bool isKeyMember);
   void setIsInt(bool isInt);
-  
+
+  void setRowHandle(MSIHANDLE aRowHandle);
+  void setViewHandle(MSIHANDLE aViewHandle);
+  void setDatabaseHandle(MSIHANDLE aDatabaseHandle);
 
 private:
   wstring mTable;
@@ -29,5 +36,7 @@ private:
 
   // update data
   MSIHANDLE mRowHandle;
+  MSIHANDLE mViewHandle;
+  MSIHANDLE mDatabaseHandle;
   UINT mFieldNumber;
 };

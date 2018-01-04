@@ -149,6 +149,35 @@ namespace MsiUtil
     return ERROR_SUCCESS;
   }
 
+  UINT setRecordInteger(MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int fieldNumber, int value)
+  {
+    UINT errorMessage = MsiRecordSetInteger(recordHandle, fieldNumber, value);
+    if (errorMessage == ERROR_SUCCESS)
+    {
+      errorMessage = ::MsiViewModify(viewHandle, MSIMODIFY_UPDATE, recordHandle);
+      if (errorMessage == ERROR_SUCCESS)
+      {
+        errorMessage = ::MsiDatabaseCommit(databaseHandle);
+      }
+    }
+    return errorMessage;
+  }
+
+  UINT setRecordString(MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int fieldNumber, const wstring& value)
+  {
+    LPCTSTR newValue = value.c_str();
+    UINT errorMessage = ::MsiRecordSetString(recordHandle, fieldNumber, newValue);
+    if (errorMessage == ERROR_SUCCESS)
+    {
+      errorMessage = ::MsiViewModify(viewHandle, MSIMODIFY_UPDATE, recordHandle);
+      if (errorMessage == ERROR_SUCCESS)
+      {
+        errorMessage = ::MsiDatabaseCommit(databaseHandle);
+      }
+    }
+    return errorMessage;
+  }
+
   UINT getLastError(wstring& error)
   {
     UINT errorMessage = ERROR_SUCCESS;
