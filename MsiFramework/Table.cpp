@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "Table.h"
 
-Table::Table(const TableMetadata & aMetadata, const RowCollection & aRowCollection)
-  :mTableSchema(aMetadata), mRowCollection(aRowCollection)
+Table::Table(const TableMetadata & aMetadata, const RowCollection & aRowCollection, const MSIHANDLE aDatabaseHandle)
+  :mTableSchema(aMetadata), mRowCollection(aRowCollection), mUpdater(aDatabaseHandle)
 {
 }
 

@@ -17,4 +17,5 @@ private:
 
   map<wstring, Element> mRowData;
 
+  // updater
 };

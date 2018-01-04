@@ -25,4 +25,6 @@ private:
   bool mIsNullable;
   bool mIsKeyMember;
   bool mIsInt;
+
+  // updater
 };

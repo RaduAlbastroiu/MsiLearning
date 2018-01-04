@@ -328,9 +328,7 @@ Table DatabaseInfo::createTableFromSqlQuerry(const wstring& sqlQuerry)
   // create rowCollection
   auto rowCollection = generateRowCollection(metadata, viewHandle);
   
-  // populate row collection
-
-  Table t(metadata, rowCollection);
+  Table t(metadata, rowCollection, mDatabaseHandle);
   return t;
 }
 

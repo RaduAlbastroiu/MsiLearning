@@ -16,7 +16,6 @@
 #define SQLCREATE L" CREATE "
 #define SQLTABLE L" TABLE "
 
-
 struct TargetMetadata {
   TargetMetadata(const wstring& aName, const ColumnType aType, bool isKeyMember, bool isNullable)
     :mName(aName), mType(aType), isKeyMember(isKeyMember), isNullable(isNullable) 
@@ -89,6 +88,7 @@ public:
   // run any query
   UINT runSql(const wstring& aSqlQuerry);
   
+  // set target table
   template<typename... Types>
   void addTableWithColumns(const Types... aColumns)
   {
