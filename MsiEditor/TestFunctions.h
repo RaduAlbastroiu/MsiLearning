@@ -193,8 +193,8 @@ void msiFrameworkTree(LPCTSTR msiPath)
   // select
   auto ele = database.inTable(L"Control")->withColumns(L"Control", L"X", L"Y", L"Text")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->select();
   auto t = ele->getRowWithNumber(3)->getElementFromColumn(L"Text");
-  auto s = t->getAsString();
-  t->update(L"finally works");
+  
+  t->update(L"Original string");
 
   //ele = database.inTable(L"Control")->withColumns(L"Control", L"X", L"Y", L"Text")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->select();
   //t = ele->getRowWithNumber(3)->getElementFromColumn(L"Text");

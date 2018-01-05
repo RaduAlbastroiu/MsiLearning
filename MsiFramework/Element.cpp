@@ -17,7 +17,7 @@ int Element::getAsInt()
   if (isInt())
     return stoi(mValue);
   else
-    return 0xfffffff;
+    return 0xffffffff;
 }
 
 void Element::update(const wstring & aNewValue)
