@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "Element.h"
 
-Element::Element(const wstring & aValue, const wstring & aColumnName, const wstring & aTableName, UINT aFieldNumber)
-  :mValue(aValue), mColumn(aColumnName), mTable(aTableName), mFieldNumber(aFieldNumber)
+Element::Element(const wstring & aValue, const wstring & aColumnName, const wstring & aTableName, UINT aFieldNumber, UINT aRowNumber)
+  :mValue(aValue), mColumn(aColumnName), mTable(aTableName), mFieldNumber(aFieldNumber), mRowNumber(aRowNumber)
 {
 }
 
@@ -22,14 +22,14 @@ int Element::getAsInt()
 
 void Element::update(const wstring & aNewValue)
 {
-  UINT errorMessage = MsiUtil::setRecordString(mDatabaseHandle, mViewHandle, mRowHandle, mFieldNumber, aNewValue);
+  UINT errorMessage = MsiUtil::setRecordString(mDatabaseHandle, mViewHandle, mRowHandle, mRowNumber, mFieldNumber, aNewValue);
   if (errorMessage == ERROR_SUCCESS)
     mValue = aNewValue;
 }
 
 void Element::update(int aNewValue)
 {
-  UINT errorMessage = MsiUtil::setRecordInteger(mDatabaseHandle, mViewHandle, mRowHandle, mFieldNumber, aNewValue);
+  UINT errorMessage = MsiUtil::setRecordInteger(mDatabaseHandle, mViewHandle, mRowHandle, mRowNumber, mFieldNumber, aNewValue);
   if (errorMessage == ERROR_SUCCESS)
     mValue = to_wstring(aNewValue);
 }

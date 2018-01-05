@@ -4,7 +4,7 @@
 class Element
 {
 public:
-  Element(const wstring& aValue, const wstring& aColumnName, const wstring& aTableName, UINT aFieldNumber);
+  Element(const wstring& aValue, const wstring& aColumnName, const wstring& aTableName, UINT aFieldNumber, UINT aRowNumber);
 
   wstring getAsString();
   int getAsInt();
@@ -38,5 +38,6 @@ private:
   MSIHANDLE mRowHandle;
   MSIHANDLE mViewHandle;
   MSIHANDLE mDatabaseHandle;
+  UINT mRowNumber;
   UINT mFieldNumber;
 };

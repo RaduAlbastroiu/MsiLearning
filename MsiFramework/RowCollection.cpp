@@ -26,17 +26,25 @@ int RowCollection::getNumberOfRows()
   return mRowCollection.size();
 }
 
-bool RowCollection::addRow(map<wstring, wstring>& aRowData, MSIHANDLE aRowHandle)
+bool RowCollection::addRow(map<wstring, wstring>& aRowData, MSIHANDLE aRowHandle, int rowNumber, vector<wstring>& columnNames)
 {
 
   map<wstring, Element> rowData;
-  int i = 1;
   for (const auto& row : aRowData)
   {
-    Element element(row.second, row.first, mMetadata.getTableName(), i++);
+    int i = 1;
+    for (auto& columnName : columnNames)
+    {
+      if (row.first == columnName)
+        break;
+      i++;
+    }
+
+    Element element(row.second, row.first, mMetadata.getTableName(), i++, rowNumber);
     element.setRowHandle(aRowHandle);
     element.setViewHandle(mViewHandle);
     element.setDatabaseHandle(mDatabaseHandle);
+
     
     element.setIsInt(mMetadata[row.first]->mType == ColumnType::Integer);
     element.setKeyMember(mMetadata[row.first]->isKeyMember);

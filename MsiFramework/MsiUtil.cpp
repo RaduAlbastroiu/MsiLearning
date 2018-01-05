@@ -149,9 +149,17 @@ namespace MsiUtil
     return ERROR_SUCCESS;
   }
 
-  UINT setRecordInteger(MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int fieldNumber, int value)
+  UINT setRecordInteger(MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, int value)
   {
-    UINT errorMessage = MsiRecordSetInteger(recordHandle, fieldNumber, value);
+    UINT errorMessage = ERROR_SUCCESS;
+    errorMessage = ::MsiViewExecute(viewHandle, 0);
+
+    for (unsigned int i = 0; i < rowNumber; i++)
+    {
+      errorMessage = ::MsiViewFetch(viewHandle, &recordHandle);
+    }
+
+    errorMessage = MsiRecordSetInteger(recordHandle, fieldNumber, value);
     if (errorMessage == ERROR_SUCCESS)
     {
       errorMessage = ::MsiViewModify(viewHandle, MSIMODIFY_UPDATE, recordHandle);
@@ -163,10 +171,18 @@ namespace MsiUtil
     return errorMessage;
   }
 
-  UINT setRecordString(MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int fieldNumber, const wstring& value)
+  UINT setRecordString(MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, const wstring& value)
   {
     LPCTSTR newValue = value.c_str();
-    UINT errorMessage = ::MsiRecordSetString(recordHandle, fieldNumber, newValue);
+    UINT errorMessage = ERROR_SUCCESS;
+    errorMessage = ::MsiViewExecute(viewHandle, 0);
+
+    for (unsigned int i = 0; i < rowNumber; i++)
+    {
+      errorMessage = ::MsiViewFetch(viewHandle, &recordHandle);
+    }
+
+    errorMessage = MsiRecordSetString(recordHandle, fieldNumber, newValue);
     if (errorMessage == ERROR_SUCCESS)
     {
       errorMessage = ::MsiViewModify(viewHandle, MSIMODIFY_UPDATE, recordHandle);

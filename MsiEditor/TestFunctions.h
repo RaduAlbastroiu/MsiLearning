@@ -98,30 +98,61 @@ void justUpdate(LPCTSTR msiPath)
   LPCTSTR sqlQuerry = L" SELECT `Control`, `Text`, `Type` FROM `Control` WHERE ( ( ( `Dialog_` = 'WelcomeDlg' ) ) )";
   errorMessage = MsiUtil::openView(handleTest, sqlQuerry, phView);
 
-  MSIHANDLE recordHandle;
+  MSIHANDLE recordNr1;
+  MSIHANDLE recordNr2;
+  MSIHANDLE recordNr3;
+  MSIHANDLE recordNr4;
+  MSIHANDLE recordNr5;
+  wstring valueBefore;
+  wstring valueAfter;
+
+  // fetch selected table
   errorMessage = ::MsiViewExecute(phView, 0);
-  errorMessage = ::MsiViewFetch(phView, &recordHandle);
-  wstring value;
+  errorMessage = ::MsiViewFetch(phView, &recordNr1);
+  errorMessage = ::MsiViewFetch(phView, &recordNr2);
+  errorMessage = ::MsiViewFetch(phView, &recordNr3);
+  errorMessage = ::MsiViewFetch(phView, &recordNr4);
+  errorMessage = ::MsiViewFetch(phView, &recordNr5);
 
-  MSIHANDLE anotherRecordHandle;
-  errorMessage = ::MsiViewFetch(phView, &anotherRecordHandle);
-  errorMessage = ::MsiViewFetch(phView, &anotherRecordHandle);
-  errorMessage = ::MsiViewFetch(phView, &anotherRecordHandle);
-  MsiUtil::getStringFromRecord(anotherRecordHandle, 2, value);
+  // doesn't work -> ERROR_FUNCTION_FAILED
+  errorMessage = ::MsiRecordSetString(recordNr3, 2, L"0987654321");
+  errorMessage = ::MsiViewModify(phView, MSIMODIFY_UPDATE, recordNr3);
 
-  errorMessage = MsiUtil::openView(handleTest, sqlQuerry, phView);
+  // update value process for recordNr3:
+  // 1. fetch again to recordNr3z
   errorMessage = ::MsiViewExecute(phView, 0);
-  errorMessage = ::MsiViewFetch(phView, &recordHandle);
+  errorMessage = ::MsiViewFetch(phView, &recordNr1);
+  errorMessage = ::MsiViewFetch(phView, &recordNr2);
+  errorMessage = ::MsiViewFetch(phView, &recordNr3);
 
-  errorMessage = ::MsiRecordSetString(recordHandle, 2, L"another random string");
-  errorMessage = ::MsiViewModify(phView, MSIMODIFY_UPDATE, recordHandle);
+  // 2. set record
+  errorMessage = ::MsiRecordSetString(recordNr3, 2, L"1234567890");
+  // 3. view modify
+  errorMessage = ::MsiViewModify(phView, MSIMODIFY_UPDATE, recordNr3);
+  // 4. database commit
   errorMessage = ::MsiDatabaseCommit(handleTest);
 
-  errorMessage = MsiUtil::openView(handleTest, sqlQuerry, phView);
+  
 
-  errorMessage = ::MsiViewExecute(phView, 0);
-  errorMessage = ::MsiViewFetch(phView, &recordHandle);
-  MsiUtil::getStringFromRecord(recordHandle, 2, value);
+  //MSIHANDLE anotherRecordHandle;
+  //errorMessage = ::MsiViewFetch(phView, &anotherRecordHandle);
+  //errorMessage = ::MsiViewFetch(phView, &anotherRecordHandle);
+  //errorMessage = ::MsiViewFetch(phView, &anotherRecordHandle);
+  //
+  //
+  //errorMessage = MsiUtil::openView(handleTest, sqlQuerry, phView);
+  //errorMessage = ::MsiViewExecute(phView, 0);
+  //errorMessage = ::MsiViewFetch(phView, &recordHandle);
+  //
+  
+  
+  //errorMessage = ::MsiDatabaseCommit(handleTest);
+  //
+  //errorMessage = MsiUtil::openView(handleTest, sqlQuerry, phView);
+  //
+  //errorMessage = ::MsiViewExecute(phView, 0);
+  //errorMessage = ::MsiViewFetch(phView, &recordHandle);
+  //MsiUtil::getStringFromRecord(recordHandle, 2, value);
 
 
   wstring err;
@@ -162,8 +193,8 @@ void msiFrameworkTree(LPCTSTR msiPath)
   // select
   auto ele = database.inTable(L"Control")->withColumns(L"Control", L"X", L"Y", L"Text")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->select();
   auto t = ele->getRowWithNumber(3)->getElementFromColumn(L"Text");
-  
-  t->update(L"some random value");
+  auto s = t->getAsString();
+  t->update(L"finally works");
 
   //ele = database.inTable(L"Control")->withColumns(L"Control", L"X", L"Y", L"Text")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->select();
   //t = ele->getRowWithNumber(3)->getElementFromColumn(L"Text");

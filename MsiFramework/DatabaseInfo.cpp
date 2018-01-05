@@ -312,7 +312,7 @@ RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMet
   int i = 0;
   for (auto &row : tableData)
   {
-    resultRowCollection.addRow(row, tableHandles[i++]);
+    resultRowCollection.addRow(row, tableHandles[i++], i, mTargetTabel.columnsCollection);
   }
 
   return resultRowCollection;

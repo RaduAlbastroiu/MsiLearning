@@ -13,7 +13,7 @@ public:
 
   int getNumberOfRows();
 
-  bool addRow(map<wstring, wstring>& aRowData, MSIHANDLE aRowHandle);
+  bool addRow(map<wstring, wstring>& aRowData, MSIHANDLE aRowHandle, int rowNumber, vector<wstring>& columnNames);
 
 private:
   TableMetadata mMetadata;
