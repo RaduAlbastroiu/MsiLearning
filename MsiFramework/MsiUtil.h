@@ -13,10 +13,10 @@ namespace MsiUtil
   UINT getFieldCount(MSIHANDLE recordHandle);
   UINT getStringFromRecord(MSIHANDLE recordHandle, int fieldNumber, wstring& resultString);
 
-  UINT getColumnsInfo(MSIHANDLE recordHandle, map<wstring, wstring>& columnsInfo);
+  UINT getColumnsInfo(MSIHANDLE recordHandle, vector<pair<wstring, wstring>>& columnsInfo);
   UINT getPrimaryKeys(MSIHANDLE databaseHandle, const wstring& tableName, vector<wstring>& output);
 
-  UINT getSelectedTable(MSIHANDLE viewHandle, vector<wstring> columnNames, vector < map<wstring, wstring> >& resultTable, vector<MSIHANDLE>& resultTableHandles);
+  UINT getSelectedTable(MSIHANDLE viewHandle, vector<UINT> columnNumbers, vector<vector<wstring>>& resultTable, vector<MSIHANDLE>& resultTableHandles);
 
   UINT setRecordInteger(MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, int value);
   UINT setRecordString(MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, const wstring& value);

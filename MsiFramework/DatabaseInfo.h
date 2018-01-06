@@ -16,8 +16,8 @@
 #define SQLCREATE L" CREATE "
 #define SQLTABLE L" TABLE "
 
-struct TargetMetadata {
-  TargetMetadata(const wstring& aName, const ColumnType aType, bool isKeyMember, bool isNullable)
+struct targetMetadata {
+  targetMetadata(const wstring& aName, const ColumnType aType, bool isKeyMember, bool isNullable)
     :mName(aName), mType(aType), isKeyMember(isKeyMember), isNullable(isNullable) 
   {
     if (mType == ColumnType::Integer)
@@ -33,17 +33,34 @@ struct TargetMetadata {
   bool isNullable;
 };
 
+struct targetColumn {
+  targetColumn() :mMetadata(L"", ColumnType::String, true, true) {}
+  targetColumn(const wstring& aColumnName) :mName(aColumnName), mMetadata(L"", ColumnType::String, true, true) {}
+
+  targetMetadata mMetadata;
+  UINT mNumber;
+  wstring mName;
+  wstring mNewValue;
+};
+
 struct targetTable {
   // constructor
   targetTable() = default;
-  targetTable(const wstring& aTableName, vector<wstring> aColumnCollection)
-    : tableName(aTableName), columnsCollection(aColumnCollection) {}
+  targetTable(const wstring& aTableName)
+    : tableName(aTableName) {}
+  // constructor with column names
+  targetTable(const wstring& aTableName, vector<wstring> aColumnNames) 
+    : tableName(aTableName)
+  {
+    for (auto& columnName : aColumnNames)
+    {
+      mColumnCollection.push_back(targetColumn(columnName));
+    }
+  }
 
   wstring tableName;
 
-  vector<wstring> columnsCollection;
-  vector<wstring> newValueForColumns;
-  vector<TargetMetadata> columnMetadata;
+  vector<targetColumn> mColumnCollection;
 };
 
 class DatabaseInfo
@@ -122,7 +139,7 @@ private:
   // single table
   targetTable mTargetTabel;
 
-  Table createTableFromSqlQuerry(const wstring& sqlQuerry);
+  Table createTableFromSqlQuerry(const wstring& sqlSelect);
 
   wstring mDatabasePath;
 

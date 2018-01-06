@@ -24,7 +24,7 @@ void DatabaseInfo::updateConditionWith(const LogicCondition& anotherCondition)
 
 void DatabaseInfo::setTargetTable(const wstring& aTableName)
 {
-  mTargetTabel = targetTable(aTableName, vector<wstring> {});
+  mTargetTabel = targetTable(aTableName);
 }
 
 std::unique_ptr<Table> DatabaseInfo::select()
@@ -47,8 +47,13 @@ UINT DatabaseInfo::update()
 
 void DatabaseInfo::updateColumnWithValue(const wstring& aColumnName, const wstring& aNewValue)
 {
-  mTargetTabel.columnsCollection.push_back(aColumnName);
-  mTargetTabel.newValueForColumns.push_back(aNewValue);
+  // create target column
+  targetColumn t;
+  t.mName = aColumnName;
+  t.mNewValue = aNewValue;
+
+  // add to collection
+  mTargetTabel.mColumnCollection.push_back(t);
 }
 
 UINT DatabaseInfo::deleteRows()
@@ -72,8 +77,13 @@ UINT DatabaseInfo::deleteAllRows()
 
 void DatabaseInfo::insertInColumnValue(const wstring& aColumnName, const wstring& aValue)
 {
-  mTargetTabel.columnsCollection.push_back(aColumnName);
-  mTargetTabel.newValueForColumns.push_back(aValue);
+  // create target column
+  targetColumn t;
+  t.mName = aColumnName;
+  t.mNewValue = aValue;
+
+  // add to collection
+  mTargetTabel.mColumnCollection.push_back(t);
 }
 
 UINT DatabaseInfo::insert()
@@ -88,20 +98,35 @@ void DatabaseInfo::createTable(const wstring& aTableName)
 
 void DatabaseInfo::createColumn(const wstring& aColumnName, const ColumnType& aColumnType)
 {
-  mTargetTabel.columnsCollection.push_back(aColumnName);
-  mTargetTabel.columnMetadata.push_back(TargetMetadata{ aColumnName, aColumnType, false, false });
+  // create target column
+  targetColumn t;
+  t.mName = aColumnName;
+  t.mMetadata = targetMetadata{ aColumnName, aColumnType, false, false };
+ 
+  // add to collection
+  mTargetTabel.mColumnCollection.push_back(t);
 }
 
 void DatabaseInfo::createNullableColumn(const wstring& aColumnName, const ColumnType& aColumnType)
 {
-  mTargetTabel.columnsCollection.push_back(aColumnName);
-  mTargetTabel.columnMetadata.push_back(TargetMetadata(aColumnName, aColumnType, false, true));
+  // create target column
+  targetColumn t;
+  t.mName = aColumnName;
+  t.mMetadata = targetMetadata{ aColumnName, aColumnType, false, true };
+
+  // add to collection
+  mTargetTabel.mColumnCollection.push_back(t);
 }
 
 void DatabaseInfo::createKeyColumn(const wstring& aColumnName, const ColumnType& aColumnType)
 {
-  mTargetTabel.columnsCollection.push_back(aColumnName);
-  mTargetTabel.columnMetadata.push_back(TargetMetadata(aColumnName, aColumnType, true, false));
+  // create target column
+  targetColumn t;
+  t.mName = aColumnName;
+  t.mMetadata = targetMetadata{ aColumnName, aColumnType, true, false };
+
+  // add to collection
+  mTargetTabel.mColumnCollection.push_back(t);
 }
 
 UINT DatabaseInfo::addTableToDatabase()
@@ -128,7 +153,21 @@ wstring DatabaseInfo::getLastError()
 std::wstring DatabaseInfo::selectSqlCondition()
 {
   wstring sqlQuerry = SQLSELECT;
-  sqlQuerry += composeSqlEnumerateColumns();
+
+  /*
+  Select all columns if working on CustAct
+  Select only the needed column if working on disk
+  */
+  if (isOpenFromDisk)
+  {
+    sqlQuerry += composeSqlEnumerateColumns();
+  }
+  else
+  {
+    //  If the framework is opened from CustAct only temporary modifications are made
+    sqlQuerry += L" * ";
+  }
+
   sqlQuerry += SQLFROM;
   sqlQuerry += composeSqlQuerryTable();
   sqlQuerry += SQLWHERE;
@@ -174,8 +213,8 @@ std::wstring DatabaseInfo::composeSqlEnumerateColumns()
 {
   // add columns with comas
   wstring result = L"`";
-  for (auto columnName : mTargetTabel.columnsCollection)
-    result += columnName + L"`, `";
+  for (auto column : mTargetTabel.mColumnCollection)
+    result += column.mName + L"`, `";
  
   // delete last coma
   result.pop_back();
@@ -190,8 +229,8 @@ std::wstring DatabaseInfo::composeSqlEnumerateColumnValues()
 {
   // add columns with comas
   wstring result = L"'";
-  for (auto columnValue : mTargetTabel.newValueForColumns)
-    result += columnValue + L"', '";
+  for (auto column : mTargetTabel.mColumnCollection)
+    result += column.mNewValue + L"', '";
 
   // delete last coma
   result.pop_back();
@@ -205,9 +244,9 @@ std::wstring DatabaseInfo::composeSqlUpdateColumns()
 {
   // add columns = value with comas
   wstring result = L"`";
-  for (size_t i = 0; i < mTargetTabel.columnsCollection.size(); i++)
+  for (const auto& column : mTargetTabel.mColumnCollection)
   {
-    result += mTargetTabel.columnsCollection[i] + L"` = '" + mTargetTabel.newValueForColumns[i] + L"', `";
+    result += column.mName + L"` = '" + column.mNewValue + L"` = '";
   }
 
   // delete las coma
@@ -222,9 +261,9 @@ std::wstring DatabaseInfo::composeSqlColumnTypes()
 {
   // add columns, dataType with comas
   wstring result = L"`";
-  for (size_t i = 0; i < mTargetTabel.columnsCollection.size(); i++)
+  for (const auto& column : mTargetTabel.mColumnCollection)
   {
-    result += mTargetTabel.columnsCollection[i] + L"` = `" + mTargetTabel.columnMetadata[i].mTypeString + L"`, `";
+    result += column.mName + L"` = '" + column.mMetadata.mTypeString + L"` = '";
   }
 
   // delete las coma
@@ -257,30 +296,38 @@ std::wstring DatabaseInfo::composeSqlCondition()
 
 void DatabaseInfo::populateMetadataForTargetColumns(MSIHANDLE selectRecord)
 {
-  map<wstring, wstring> columnsInfo;
+  // first: column name
+  // second: column type
+  vector<pair<wstring, wstring>> columnsInfo;
   vector<wstring> primaryKeys;
 
   MsiUtil::getColumnsInfo(selectRecord, columnsInfo);
   MsiUtil::getPrimaryKeys(mDatabaseHandle, mTargetTabel.tableName, primaryKeys);
 
-  for (auto targetColumnName : mTargetTabel.columnsCollection)
+  for (auto& aTargetColumn : mTargetTabel.mColumnCollection)
   {
-    for (const auto&[columnName, columnType] : columnsInfo)
+    UINT columnNr = 0;
+    for (;columnNr < columnsInfo.size(); columnNr++)
     {
-      if (targetColumnName == columnName)
-      {
-        bool nullable = (columnType[0] < L'a');
-        bool isKey = find(primaryKeys.begin(), primaryKeys.end(), columnName) != primaryKeys.end();
+      auto extractedColumnName = columnsInfo[columnNr].first;
+      auto extractedColumnType = columnsInfo[columnNr].second;
 
-        bool isInt = (columnType[0] == L'i' || columnType[0] == L'j');
+      if (aTargetColumn.mName == extractedColumnName)
+      {
+        // starts from 1 to n
+        aTargetColumn.mNumber = columnNr + 1;
+        bool nullable = (extractedColumnType[0] < L'a');
+        bool isKey = find(primaryKeys.begin(), primaryKeys.end(), extractedColumnName) != primaryKeys.end();
+
+        bool isInt = (extractedColumnType[0] == L'i' || extractedColumnType[0] == L'j');
 
         if (isInt)
         {
-          mTargetTabel.columnMetadata.push_back(TargetMetadata(columnName, ColumnType::Integer, isKey, nullable));
+          aTargetColumn.mMetadata = targetMetadata(extractedColumnName, ColumnType::Integer, isKey, nullable);
         }
         else
         {
-          mTargetTabel.columnMetadata.push_back(TargetMetadata(columnName, ColumnType::String, isKey, nullable));
+          aTargetColumn.mMetadata = targetMetadata(extractedColumnName, ColumnType::String, isKey, nullable);
         }
       }
     }
@@ -291,51 +338,75 @@ TableMetadata DatabaseInfo::generateMetadataFromTarget(const wstring& aTableName
 {
   auto tableMetadata = TableMetadata(aTableName);
 
-  for (auto& columnMetadata : mTargetTabel.columnMetadata)
+  for (auto& column : mTargetTabel.mColumnCollection)
   {
-    tableMetadata.addColumnInSchema(columnMetadata.mName,
-      columnMetadata.mType,
-      columnMetadata.isKeyMember,
-      columnMetadata.isNullable);
+    tableMetadata.addColumnInSchema(column.mMetadata.mName,
+      column.mMetadata.mType,
+      column.mMetadata.isKeyMember,
+      column.mMetadata.isNullable);
   }
 
   return tableMetadata;
 }
 
-RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE aViewHandle)
+RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE aHView)
 {
-  RowCollection resultRowCollection(mDatabaseHandle, aViewHandle, aTableMetadata);
+  // create row collection
+  RowCollection resultRowCollection(mDatabaseHandle, aHView, aTableMetadata);
 
-  vector<map<wstring, wstring>> tableData;
-  vector<MSIHANDLE> tableHandles;
-  MsiUtil::getSelectedTable(aViewHandle, mTargetTabel.columnsCollection, tableData, tableHandles);
+  vector<MSIHANDLE> rowHandles;
+  vector<vector<wstring>> tableExtracted;
+  vector<UINT> columnNumbers;
+  for (const auto& column : mTargetTabel.mColumnCollection)
+    columnNumbers.push_back(column.mNumber);
 
-  // add map(row) to row collection
-  int i = 0;
-  for (auto &row : tableData)
+  MsiUtil::getSelectedTable(aHView, columnNumbers, tableExtracted, rowHandles);
+
+  // create row collection
+  for (size_t i = 0; i < tableExtracted.size(); i++)
   {
-    resultRowCollection.addRow(row, tableHandles[i++], i, mTargetTabel.columnsCollection);
+    // create row
+    map<wstring, Element> rowData;
+    for (size_t j = 0; j < tableExtracted[i].size(); j++)
+    {
+      wstring columnName = mTargetTabel.mColumnCollection[j].mName;
+      
+      Element element(tableExtracted[i][j], columnName, mTargetTabel.tableName, mTargetTabel.mColumnCollection[j].mNumber, i + 1);
+
+      element.setRowHandle(rowHandles[i]);
+      element.setViewHandle(aHView);
+      element.setDatabaseHandle(mDatabaseHandle);
+
+
+      element.setIsInt(mTargetTabel.mColumnCollection[j].mMetadata.mType == ColumnType::Integer);
+      element.setKeyMember(mTargetTabel.mColumnCollection[j].mMetadata.isKeyMember);
+      element.setNullable(mTargetTabel.mColumnCollection[j].mMetadata.isNullable);
+
+      rowData.insert(pair<wstring, Element>(columnName, element));
+    }
+
+    resultRowCollection.addRow(rowData, rowHandles[i]);
   }
 
   return resultRowCollection;
 }
 
-Table DatabaseInfo::createTableFromSqlQuerry(const wstring& sqlQuerry)
+Table DatabaseInfo::createTableFromSqlQuerry(const wstring& sqlSelect)
 {
-  MSIHANDLE viewHandle;
+  MSIHANDLE hViewSelect;
   // open select view
-  MsiUtil::openView(mDatabaseHandle, sqlQuerry, viewHandle);
+  MsiUtil::openView(mDatabaseHandle, sqlSelect, hViewSelect);
 
   // takes target columns and get metadata
-  populateMetadataForTargetColumns(viewHandle);
+  populateMetadataForTargetColumns(hViewSelect);
 
   // generate real metadata obj for selected table
   auto metadata = generateMetadataFromTarget(mTargetTabel.tableName);
 
   // create rowCollection
-  auto rowCollection = generateRowCollection(metadata, viewHandle);
+  auto rowCollection = generateRowCollection(metadata, hViewSelect);
 
-  Table t(metadata, rowCollection, viewHandle);
+  Table t(metadata, rowCollection, hViewSelect);
   return t;
 }
 

@@ -78,11 +78,13 @@ namespace MsiUtil
     return errorMessage;
   }
 
-  UINT getColumnsInfo(MSIHANDLE recordHandle, map<wstring, wstring>& columnsInfo)
+  UINT getColumnsInfo(MSIHANDLE recordHandle, vector<pair<wstring, wstring>>& columnsInfo)
   {
+    // first: column name
+    // second: column type
+    
     MSIHANDLE nameHandle;
-    MSIHANDLE typeHandle;
-
+    MSIHANDLE typeHandle; 
     UINT errorMessage = MsiViewGetColumnInfo(recordHandle, MSICOLINFO_NAMES, &nameHandle);
     if (errorMessage == ERROR_SUCCESS)
     {
@@ -102,7 +104,7 @@ namespace MsiUtil
           wstring type = L"";
           getStringFromRecord(typeHandle, i, type);
 
-          columnsInfo[name] = type;
+          columnsInfo.push_back(make_pair(name, type));
         }
 
         return ERROR_SUCCESS;
@@ -131,28 +133,37 @@ namespace MsiUtil
     return errorMessage;
   }
 
-  UINT getSelectedTable(MSIHANDLE viewHandle, vector<wstring> columnNames, vector<map<wstring, wstring>>& resultTable, vector<MSIHANDLE>& resultTableHandles)
+  UINT getSelectedTable(MSIHANDLE hView, vector<UINT> columnNumbers, vector<vector<wstring>>& resultTable, vector<MSIHANDLE>& resultTableHandles)
   {
     MSIHANDLE fetch;
     UINT errorMessage = ERROR_SUCCESS;
-    while (true)
-    {
-      // fetch next row
-      errorMessage = ::MsiViewFetch(viewHandle, &fetch);
-      if (errorMessage != ERROR_SUCCESS)
-        return errorMessage;
-      else
-        resultTableHandles.push_back(fetch);
 
+    // execute view to move cursor at begin
+    errorMessage = ::MsiViewExecute(hView, 0);
+
+    // start fetching items
+    for(;;)
+    {
+      // fetch row
+      errorMessage = ::MsiViewFetch(hView, &fetch);
+      
+      // if last 
+      if (errorMessage == ERROR_NO_MORE_ITEMS)
+        return ERROR_SUCCESS;
+      
+      resultTableHandles.push_back(fetch);
+
+      // extract every from every column
       wstring extracted = L"";
-      map<wstring, wstring> row;
-      for (size_t i = 0; i < columnNames.size(); i++)
+      vector<wstring> rowData;
+      for (const auto& columnNr : columnNumbers )
       {
-        MsiUtil::getStringFromRecord(fetch, i + 1, extracted);
-        row[columnNames[i]] = extracted;
+        MsiUtil::getStringFromRecord(fetch, columnNr, extracted);
+        rowData.push_back(extracted);
       }
-      resultTable.push_back(row);
+      resultTable.push_back(rowData);
     }
+
     return ERROR_SUCCESS;
   }
 
