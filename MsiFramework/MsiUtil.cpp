@@ -9,11 +9,18 @@ namespace MsiUtil
     return ::MsiOpenDatabase(filePath, MSIDBOPEN_DIRECT, &handleDatabase);
   }
 
+  UINT openActiveDatabase(MSIHANDLE & hSession)
+  {
+    hSession = ::MsiGetActiveDatabase(hSession);
+    return ERROR_SUCCESS;
+  }
+
   UINT openView(MSIHANDLE aTargetHandle, const wstring & aSqlQuerry, MSIHANDLE & outputHandle)
   {
     LPCTSTR sqlQuerry = aSqlQuerry.c_str();
 
     UINT mErrorMessage = ::MsiDatabaseOpenView(aTargetHandle, sqlQuerry, &outputHandle);
+
     if (mErrorMessage == ERROR_SUCCESS)
     {
       mErrorMessage = ::MsiViewExecute(outputHandle, 0);
@@ -182,7 +189,7 @@ namespace MsiUtil
       errorMessage = ::MsiViewFetch(viewHandle, &recordHandle);
     }
 
-    errorMessage = MsiRecordSetString(recordHandle, fieldNumber, newValue);
+    errorMessage = ::MsiRecordSetString(recordHandle, fieldNumber, newValue);
     if (errorMessage == ERROR_SUCCESS)
     {
       errorMessage = ::MsiViewModify(viewHandle, MSIMODIFY_UPDATE, recordHandle);

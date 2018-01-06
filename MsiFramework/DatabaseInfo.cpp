@@ -5,13 +5,15 @@
 DatabaseInfo::DatabaseInfo(const wstring& aDatabasePath)
 {
   mDatabasePath = aDatabasePath;
-
+  isOpenFromDisk = true;
   MsiUtil::openDatabase(aDatabasePath, mDatabaseHandle);
 }
 
 DatabaseInfo::DatabaseInfo(const MSIHANDLE handleToDatabase)
 {
-  mDatabaseHandle = handleToDatabase;
+  MSIHANDLE hDatabase = handleToDatabase;
+  mDatabaseHandle = MsiUtil::openActiveDatabase(hDatabase);
+  isOpenFromDisk = false;
   mDatabasePath = L"";
 }
 

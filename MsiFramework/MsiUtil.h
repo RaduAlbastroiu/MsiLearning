@@ -5,6 +5,7 @@ namespace MsiUtil
   UINT commit(MSIHANDLE databaseHandle);
 
   UINT openDatabase(const wstring& filePath, MSIHANDLE& handleDatabase);
+  UINT openActiveDatabase(MSIHANDLE& hSession);
   
   UINT openView(MSIHANDLE aTargetHandle, const wstring& aSqlQuerry, MSIHANDLE& outputHandle);
   UINT runSqlQuerryCommit(MSIHANDLE aTargetHandle, const wstring& aSqlQuerry);

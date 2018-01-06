@@ -97,6 +97,9 @@ public:
 
 private: 
 
+  // if opened from CustAct -> false
+  bool isOpenFromDisk;
+
   UINT mErrorMessage = ERROR_SUCCESS;
 
   ErrorHandling mErrorHandling;
