@@ -9,10 +9,9 @@ namespace MsiUtil
     return ::MsiOpenDatabase(filePath, MSIDBOPEN_DIRECT, &handleDatabase);
   }
 
-  UINT openActiveDatabase(MSIHANDLE & hSession)
+  UINT openActiveDatabase(MSIHANDLE hSession)
   {
-    hSession = ::MsiGetActiveDatabase(hSession);
-    return ERROR_SUCCESS;
+    return ::MsiGetActiveDatabase(hSession);
   }
 
   UINT openView(MSIHANDLE aTargetHandle, const wstring & aSqlQuerry, MSIHANDLE & outputHandle)

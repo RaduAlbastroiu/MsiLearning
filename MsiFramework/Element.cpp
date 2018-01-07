@@ -22,7 +22,7 @@ int Element::getAsInt()
 
 UINT Element::update(const wstring & aNewValue)
 {
-  UINT errorMessage = MsiUtil::setRecordString(mDatabaseHandle, mViewHandle, mRowHandle, mRowNumber, mFieldNumber, aNewValue);
+  UINT errorMessage = MsiUtil::setRecordString(mIsFromCustact, mDatabaseHandle, mViewHandle, mRowHandle, mRowNumber, mFieldNumber, aNewValue);
   if (errorMessage == ERROR_SUCCESS)
     mValue = aNewValue;
   return errorMessage;
@@ -30,7 +30,7 @@ UINT Element::update(const wstring & aNewValue)
 
 UINT Element::update(int aNewValue)
 {
-  UINT errorMessage = MsiUtil::setRecordInteger(mDatabaseHandle, mViewHandle, mRowHandle, mRowNumber, mFieldNumber, aNewValue);
+  UINT errorMessage = MsiUtil::setRecordInteger(mIsFromCustact, mDatabaseHandle, mViewHandle, mRowHandle, mRowNumber, mFieldNumber, aNewValue);
   if (errorMessage == ERROR_SUCCESS)
     mValue = to_wstring(aNewValue);
   return errorMessage;
@@ -74,6 +74,11 @@ void Element::setKeyMember(bool isKeyMember)
 void Element::setIsInt(bool isInt)
 {
   mIsInt = isInt;
+}
+
+void Element::setOpenFromCustAct(bool isCustAct)
+{
+  mIsFromCustact = isCustAct;
 }
 
 void Element::setRowHandle(MSIHANDLE aRowHandle)

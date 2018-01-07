@@ -9,10 +9,9 @@ DatabaseInfo::DatabaseInfo(const wstring& aDatabasePath)
   MsiUtil::openDatabase(aDatabasePath, mDatabaseHandle);
 }
 
-DatabaseInfo::DatabaseInfo(const MSIHANDLE handleToDatabase)
+DatabaseInfo::DatabaseInfo(const MSIHANDLE hSession)
 {
-  MSIHANDLE hDatabase = handleToDatabase;
-  mDatabaseHandle = MsiUtil::openActiveDatabase(hDatabase);
+  mDatabaseHandle = MsiUtil::openActiveDatabase(hSession);
   isOpenFromDisk = false;
   mDatabasePath = L"";
 }
@@ -372,6 +371,8 @@ RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMet
       wstring columnName = mTargetTabel.mColumnCollection[j].mName;
       
       Element element(tableExtracted[i][j], columnName, mTargetTabel.tableName, mTargetTabel.mColumnCollection[j].mNumber, i + 1);
+
+      element.setOpenFromCustAct(!/* is not */isOpenFromDisk);
 
       element.setRowHandle(rowHandles[i]);
       element.setViewHandle(aHView);

@@ -22,6 +22,8 @@ public:
   void setKeyMember(bool isKeyMember);
   void setIsInt(bool isInt);
 
+  void setOpenFromCustAct(bool isCustAct);
+
   void setRowHandle(MSIHANDLE aRowHandle);
   void setViewHandle(MSIHANDLE aViewHandle);
   void setDatabaseHandle(MSIHANDLE aDatabaseHandle);
@@ -33,6 +35,8 @@ private:
   bool mIsNullable;
   bool mIsKeyMember;
   bool mIsInt;
+
+  bool mIsFromCustact;
 
   // update data
   MSIHANDLE mRowHandle;
