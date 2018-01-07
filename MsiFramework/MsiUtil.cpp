@@ -167,50 +167,87 @@ namespace MsiUtil
     return ERROR_SUCCESS;
   }
 
-  UINT setRecordInteger(MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, int value)
+  UINT setRecordInteger(bool isCustAct, MSIHANDLE databaseHandle, MSIHANDLE hView, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, int value)
   {
     UINT errorMessage = ERROR_SUCCESS;
-    errorMessage = ::MsiViewExecute(viewHandle, 0);
+    errorMessage = ::MsiViewExecute(hView, 0);
 
     for (unsigned int i = 0; i < rowNumber; i++)
     {
-      errorMessage = ::MsiViewFetch(viewHandle, &recordHandle);
+      errorMessage = ::MsiViewFetch(hView, &recordHandle);
     }
 
-    errorMessage = MsiRecordSetInteger(recordHandle, fieldNumber, value);
-    if (errorMessage == ERROR_SUCCESS)
+    if (isCustAct)
     {
-      errorMessage = ::MsiViewModify(viewHandle, MSIMODIFY_UPDATE, recordHandle);
+      // inside a custact
+      errorMessage = ::MsiViewModify(hView, MSIMODIFY_DELETE, recordHandle);
       if (errorMessage == ERROR_SUCCESS)
       {
-        errorMessage = ::MsiDatabaseCommit(databaseHandle);
+        errorMessage = ::MsiRecordSetInteger(recordHandle, fieldNumber, value);
+        if (errorMessage == ERROR_SUCCESS)
+        {
+          errorMessage = ::MsiViewModify(hView, MSIMODIFY_INSERT_TEMPORARY, recordHandle);
+        }
       }
     }
+    else
+    {
+      // database opened from the disk
+      errorMessage = ::MsiRecordSetInteger(recordHandle, fieldNumber, value);
+      if (errorMessage == ERROR_SUCCESS)
+      {
+        errorMessage = ::MsiViewModify(hView, MSIMODIFY_UPDATE, recordHandle);
+        if (errorMessage == ERROR_SUCCESS)
+        {
+          errorMessage = ::MsiDatabaseCommit(databaseHandle);
+        }
+      }
+    }
+
     return errorMessage;
   }
 
-  UINT setRecordString(MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, const wstring& value)
+  UINT setRecordString(bool isCustAct, MSIHANDLE databaseHandle, MSIHANDLE hView, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, const wstring& value)
   {
     LPCTSTR newValue = value.c_str();
     UINT errorMessage = ERROR_SUCCESS;
-    errorMessage = ::MsiViewExecute(viewHandle, 0);
+    errorMessage = ::MsiViewExecute(hView, 0);
 
+    // move cursor to target row
     for (unsigned int i = 0; i < rowNumber; i++)
     {
-      errorMessage = ::MsiViewFetch(viewHandle, &recordHandle);
+      errorMessage = ::MsiViewFetch(hView, &recordHandle);
     }
 
-    errorMessage = ::MsiRecordSetString(recordHandle, fieldNumber, newValue);
-    if (errorMessage == ERROR_SUCCESS)
+    if (isCustAct)
     {
-      errorMessage = ::MsiViewModify(viewHandle, MSIMODIFY_UPDATE, recordHandle);
+      // inside a custact
+      errorMessage = ::MsiViewModify(hView, MSIMODIFY_DELETE, recordHandle);
+      if(errorMessage == ERROR_SUCCESS)
+      {
+        errorMessage = ::MsiRecordSetString(recordHandle, fieldNumber, newValue);
+        if (errorMessage == ERROR_SUCCESS)
+        {
+          errorMessage = ::MsiViewModify(hView, MSIMODIFY_INSERT_TEMPORARY, recordHandle);
+        }
+      }
+    }
+    else
+    {
+      // database opened from the disk
+      errorMessage = ::MsiRecordSetString(recordHandle, fieldNumber, newValue);
       if (errorMessage == ERROR_SUCCESS)
       {
-        errorMessage = ::MsiDatabaseCommit(databaseHandle);
+        errorMessage = ::MsiViewModify(hView, MSIMODIFY_UPDATE, recordHandle);
+        if (errorMessage == ERROR_SUCCESS)
+        {
+          errorMessage = ::MsiDatabaseCommit(databaseHandle);
+        }
       }
     }
     return errorMessage;
   }
+
 
   UINT getLastError(wstring& error)
   {

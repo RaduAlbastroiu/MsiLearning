@@ -20,18 +20,20 @@ int Element::getAsInt()
     return 0xffffffff;
 }
 
-void Element::update(const wstring & aNewValue)
+UINT Element::update(const wstring & aNewValue)
 {
   UINT errorMessage = MsiUtil::setRecordString(mDatabaseHandle, mViewHandle, mRowHandle, mRowNumber, mFieldNumber, aNewValue);
   if (errorMessage == ERROR_SUCCESS)
     mValue = aNewValue;
+  return errorMessage;
 }
 
-void Element::update(int aNewValue)
+UINT Element::update(int aNewValue)
 {
   UINT errorMessage = MsiUtil::setRecordInteger(mDatabaseHandle, mViewHandle, mRowHandle, mRowNumber, mFieldNumber, aNewValue);
   if (errorMessage == ERROR_SUCCESS)
     mValue = to_wstring(aNewValue);
+  return errorMessage;
 }
 
 bool Element::isNullable()

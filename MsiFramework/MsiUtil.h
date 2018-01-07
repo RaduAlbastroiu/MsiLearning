@@ -18,8 +18,8 @@ namespace MsiUtil
 
   UINT getSelectedTable(MSIHANDLE viewHandle, vector<UINT> columnNumbers, vector<vector<wstring>>& resultTable, vector<MSIHANDLE>& resultTableHandles);
 
-  UINT setRecordInteger(MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, int value);
-  UINT setRecordString(MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, const wstring& value);
+  UINT setRecordInteger(bool isCustAct, MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, int value);
+  UINT setRecordString(bool isCustAct, MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, const wstring& value);
 
   UINT getLastError(wstring& error);
 }

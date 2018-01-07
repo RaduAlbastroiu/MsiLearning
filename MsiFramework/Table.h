@@ -12,9 +12,13 @@ public:
   // access metadata
   unique_ptr<MetadataSchema> getColumnInfo(const wstring& aColumnName);
 
-  // access row
+  // last row is numberOrRows - 1
   int getNumberOfRows();
+
+  // first index is 0
   unique_ptr<Row> operator[](int aRowNumber);
+
+  // first index is 0
   unique_ptr<Row> getRowWithNumber(int aRowNumber);
 
 

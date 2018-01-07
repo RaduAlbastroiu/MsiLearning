@@ -191,10 +191,14 @@ void msiFrameworkTree(LPCTSTR msiPath)
   //auto x = Equal(L"Type", L"Text").And(NotEqual(L"Text", L"Dialog_")).Or(LessEqualThan(L"Text", L"Dialog_")).getCondition();
  
   // select
-  auto ele = database.inTable(L"Control")->withColumns(L"Control", L"X", L"Y", L"Text")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->select();
-  auto t = ele->getRowWithNumber(3)->getElementFromColumn(L"Text");
-  
-  t->update(L"Original string");
+  auto ele = database.inTable(L"Control")->withColumns(L"Text")->whereConditionIs(Equal(L"Dialog_", L"ErrorDlg"))->select();
+  ele->getRowWithNumber(0)->getElementFromColumn(L"Text")->update(L"new string 0");
+  ele->getRowWithNumber(1)->getElementFromColumn(L"Text")->update(L"new string 1");
+  ele->getRowWithNumber(2)->getElementFromColumn(L"Text")->update(L"new string 2");
+  ele->getRowWithNumber(3)->getElementFromColumn(L"Text")->update(L"new string 3");
+  ele->getRowWithNumber(4)->getElementFromColumn(L"Text")->update(L"new string 4");
+  ele->getRowWithNumber(5)->getElementFromColumn(L"Text")->update(L"new string 5");
+  //t->update(L"Original string");
 
   //ele = database.inTable(L"Control")->withColumns(L"Control", L"X", L"Y", L"Text")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->select();
   //t = ele->getRowWithNumber(3)->getElementFromColumn(L"Text");

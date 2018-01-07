@@ -9,8 +9,8 @@ public:
   wstring getAsString();
   int getAsInt();
 
-  void update(const wstring& aNewValue);
-  void update(int aNewValue);
+  UINT update(const wstring& aNewValue);
+  UINT update(int aNewValue);
 
   bool isNullable();
   bool isKeyMember();

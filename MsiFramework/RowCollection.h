@@ -8,7 +8,9 @@ public:
 
   RowCollection(MSIHANDLE aDatabaseHandle, MSIHANDLE aViewHandle, const TableMetadata& aMetadata);
   
+  // first index is 0
   unique_ptr<Row> operator[](int aRowNumber);
+  // first index is 0
   unique_ptr<Row> getRowWithNumber(int aRowNumber);
 
   int getNumberOfRows();
