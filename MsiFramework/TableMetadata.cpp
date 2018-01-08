@@ -12,16 +12,19 @@ void TableMetadata::addColumnInSchema(const wstring& aNameColumn, ColumnType aTy
   mMetadataCollection.insert(pair<wstring, MetadataSchema>(aNameColumn, newColumnInfo));
 }
 
-unique_ptr<MetadataSchema> TableMetadata::operator[](const wstring& aColumnName)
+const MetadataSchema& TableMetadata::operator[](const wstring& aColumnName) const
 {
   auto it = mMetadataCollection.find(aColumnName);
-  if (it != mMetadataCollection.end())
-    return make_unique<MetadataSchema>(it->second);
-
-  return nullptr;
+  return it->second;
 }
 
-wstring TableMetadata::getTableName()
+const MetadataSchema & TableMetadata::getMetadataForColumn(const wstring & aColumnName) const 
+{
+  auto it = mMetadataCollection.find(aColumnName);
+  return it->second;
+}
+
+const wstring& TableMetadata::getTableName() const
 {
   return mTableName;
 }

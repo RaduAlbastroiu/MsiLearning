@@ -9,7 +9,6 @@ public:
   SelectedState(const DatabaseInfo& aDatabaseInfo);
  
   unique_ptr<Row> getRow(int aRowNumber);
-  unique_ptr<MetadataSchema> getColumnInfo(const wstring& aColumnName);
   
 private:
   DatabaseInfo mDatabaseInfo;

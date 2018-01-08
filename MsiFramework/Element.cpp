@@ -1,9 +1,10 @@
 #pragma once
 #include "stdafx.h"
 #include "Element.h"
+#include "TableMetadata.h"
 
-Element::Element(const wstring & aValue, const wstring & aColumnName, const wstring & aTableName, UINT aFieldNumber, UINT aRowNumber)
-  :mValue(aValue), mColumn(aColumnName), mTable(aTableName), mFieldNumber(aFieldNumber), mRowNumber(aRowNumber)
+Element::Element(const wstring & aValue, const wstring & aColumnName, const MetadataSchema & aColumnSchema, UINT aFieldNumber, UINT aRowNumber)
+  :mValue(aValue), mColumn(aColumnName), mColumnSchema(aColumnSchema), mFieldNumber(aFieldNumber), mRowNumber(aRowNumber)
 {
 }
 
@@ -38,17 +39,19 @@ UINT Element::update(int aNewValue)
 
 bool Element::isNullable()
 {
-  return mIsNullable;
+  return mColumnSchema.isNullable;
 }
 
 bool Element::isKeyMember()
 {
-  return mIsKeyMember;
+  return mColumnSchema.isKeyMember;
 }
 
 bool Element::isInt()
 {
-  return mIsInt;
+  if(mColumnSchema.mType == ColumnType::Integer)
+    return true;
+  return false;
 }
 
 wstring Element::getTable()
@@ -59,21 +62,6 @@ wstring Element::getTable()
 wstring Element::getColumn()
 {
   return mColumn;
-}
-
-void Element::setNullable(bool isNullable)
-{
-  mIsNullable = isNullable;
-}
-
-void Element::setKeyMember(bool isKeyMember)
-{
-  mIsKeyMember = isKeyMember;
-}
-
-void Element::setIsInt(bool isInt)
-{
-  mIsInt = isInt;
 }
 
 void Element::setOpenFromCustAct(bool isCustAct)

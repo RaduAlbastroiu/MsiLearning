@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "RowCollection.h"
 
-RowCollection::RowCollection(MSIHANDLE aDatabaseHandle, MSIHANDLE aViewHandle, const TableMetadata& aMetadata)
-  :mDatabaseHandle(aDatabaseHandle), mMetadata(aMetadata), mViewHandle(aViewHandle)
+RowCollection::RowCollection(MSIHANDLE aViewHandle)
+  :mViewHandle(aViewHandle)
 {
 }
 
@@ -29,7 +29,16 @@ int RowCollection::getNumberOfRows()
 bool RowCollection::addRow(map<wstring, Element>& aRowData, MSIHANDLE aRowHandle)
 {
 
-  mRowCollection.push_back(Row(mMetadata, aRowData, aRowHandle));
+  mRowCollection.push_back(Row(aRowData, aRowHandle));
 
   return true;
 }
+
+//UINT RowCollection::commitUpdates()
+//{
+//  vector<vector<pair<UINT, 
+//  for (auto& row : mRowCollection)
+//  {
+//
+//  }
+//}

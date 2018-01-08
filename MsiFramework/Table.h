@@ -10,7 +10,7 @@ public:
   Table(const TableMetadata& aMetadata, const RowCollection& aRowCollection, const MSIHANDLE aTableHandle);
 
   // access metadata
-  unique_ptr<MetadataSchema> getColumnInfo(const wstring& aColumnName);
+  const MetadataSchema& getColumnInfo(const wstring& aColumnName);
 
   // last row is numberOrRows - 1
   int getNumberOfRows();
@@ -21,6 +21,7 @@ public:
   // first index is 0
   unique_ptr<Row> getRowWithNumber(int aRowNumber);
 
+  UINT commitUpdates();
 
 private:
   // access one column via columnName

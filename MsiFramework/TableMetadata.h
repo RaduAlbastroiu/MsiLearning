@@ -32,13 +32,14 @@ public:
   void addColumnInSchema(const wstring& aNameColumn, ColumnType aType, bool aIsKeyMember, bool aIsNullable);
 
   // check info
-  unique_ptr<MetadataSchema> operator[](const wstring& aColumnName);
+  const MetadataSchema& operator[](const wstring& aColumnName) const;
+  const MetadataSchema& getMetadataForColumn(const wstring& aColumnName) const;
 
-  wstring getTableName();
+  const wstring& getTableName() const;
 
 private:
 
-  wstring mTableName;
+  const wstring mTableName;
   
   // collection of columns
   map<wstring, MetadataSchema> mMetadataCollection;

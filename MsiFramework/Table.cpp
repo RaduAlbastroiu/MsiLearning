@@ -7,7 +7,7 @@ Table::Table(const TableMetadata & aMetadata, const RowCollection & aRowCollecti
 {
 }
 
-unique_ptr<MetadataSchema> Table::getColumnInfo(const wstring & aColumnName)
+const MetadataSchema& Table::getColumnInfo(const wstring & aColumnName)
 {
   return mTableSchema[aColumnName];
 }
@@ -25,4 +25,9 @@ std::unique_ptr<Row> Table::operator[](int aRowNumber)
 unique_ptr<Row> Table::getRowWithNumber(int aRowNumber)
 {
   return mRowCollection.getRowWithNumber(aRowNumber);
+}
+
+UINT Table::commitUpdates()
+{
+  return 0;
 }

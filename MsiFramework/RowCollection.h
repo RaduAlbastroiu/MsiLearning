@@ -1,12 +1,11 @@
 #pragma once
 #include "stdafx.h"
 #include "Row.h"
-#include "TableMetadata.h"
 
 class RowCollection {
 public:
 
-  RowCollection(MSIHANDLE aDatabaseHandle, MSIHANDLE aViewHandle, const TableMetadata& aMetadata);
+  RowCollection(MSIHANDLE aViewHandle);
   
   // first index is 0
   unique_ptr<Row> operator[](int aRowNumber);
@@ -17,10 +16,10 @@ public:
 
   bool addRow(map<wstring, Element>& aRowData, MSIHANDLE aRowHandle);
 
+  //UINT commitUpdates();
+
 private:
-  TableMetadata mMetadata;
   vector<Row> mRowCollection;
 
   MSIHANDLE mViewHandle;
-  MSIHANDLE mDatabaseHandle;
 };

@@ -15,11 +15,9 @@ void testFunction(LPCTSTR msiPath)
 
   errorMessage = database.inTable(L"Control")->withColumns()->orderByAsc(L"Dialog_")->orderByAsc(L"Control")->order();
   auto t = database.inTable(L"Control")->withColumns(L"Control")->select();
+
   auto s = t->getRowWithNumber(0)->getElementFromColumn(L"Control")->getAsString();
-  s = t->getRowWithNumber(1)->getElementFromColumn(L"Control")->getAsString();
-  s = t->getRowWithNumber(2)->getElementFromColumn(L"Control")->getAsString();
-  s = t->getRowWithNumber(3)->getElementFromColumn(L"Control")->getAsString();
-  s = t->getRowWithNumber(4)->getElementFromColumn(L"Control")->getAsString();
+ 
 
   wstring err;
   MsiUtil::getLastError(err);
@@ -81,11 +79,11 @@ void msiFrameworkTree(LPCTSTR msiPath)
   
 }
 
-void orderAtoZ(LPCTSTR msiPath)
-{
-  Database database(msiPath);
-
-  errorMessage = database.inTable(L"Control")->withColumns()->orderByAsc(L"Dialog_")->orderByAsc(L"Control")->order();
-  auto t = database.inTable(L"Control")->withColumns(L"Control")->select();
-
-}
+//void orderAtoZ(LPCTSTR msiPath)
+//{
+//  Database database(msiPath);
+//
+//  errorMessage = database.inTable(L"Control")->withColumns()->orderByAsc(L"Dialog_")->orderByAsc(L"Control")->order();
+//  auto t = database.inTable(L"Control")->withColumns(L"Control")->select();
+//
+//}

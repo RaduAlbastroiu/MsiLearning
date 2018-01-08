@@ -395,7 +395,7 @@ TableMetadata DatabaseInfo::generateMetadataFromTarget(const wstring& aTableName
 RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE aHView)
 {
   // create row collection
-  RowCollection resultRowCollection(mDatabaseHandle, aHView, aTableMetadata);
+  RowCollection resultRowCollection(aHView);
 
   vector<MSIHANDLE> rowHandles;
   vector<vector<wstring>> tableExtracted;
@@ -414,18 +414,13 @@ RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMet
     {
       wstring columnName = mTargetTabel.mColumnCollection[j].mName;
       
-      Element element(tableExtracted[i][j], columnName, mTargetTabel.tableName, mTargetTabel.mColumnCollection[j].mNumber, i + 1);
+      Element element(tableExtracted[i][j], columnName, aTableMetadata.getMetadataForColumn(columnName), mTargetTabel.mColumnCollection[j].mNumber, i + 1);
 
       element.setOpenFromCustAct(!/* is not */isOpenFromDisk);
 
       element.setRowHandle(rowHandles[i]);
       element.setViewHandle(aHView);
       element.setDatabaseHandle(mDatabaseHandle);
-
-
-      element.setIsInt(mTargetTabel.mColumnCollection[j].mMetadata.mType == ColumnType::Integer);
-      element.setKeyMember(mTargetTabel.mColumnCollection[j].mMetadata.isKeyMember);
-      element.setNullable(mTargetTabel.mColumnCollection[j].mMetadata.isNullable);
 
       rowData.insert(pair<wstring, Element>(columnName, element));
     }

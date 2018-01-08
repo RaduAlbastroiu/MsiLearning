@@ -1,9 +1,10 @@
 #pragma once
 #include "stdafx.h"
+#include "TableMetadata.h"
 #include "Row.h"
 
-Row::Row(const TableMetadata&  aMetadata, const map<wstring, Element> aRowData, MSIHANDLE aRowHandle)
-  :mMetadata(aMetadata), mRowData(aRowData), mRowHandle(aRowHandle), mTableName(mMetadata.getTableName())
+Row::Row(const map<wstring, Element> aRowData, MSIHANDLE aRowHandle)
+  :mRowData(aRowData), mRowHandle(aRowHandle)
 {
 }
 
