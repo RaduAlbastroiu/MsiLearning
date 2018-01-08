@@ -169,8 +169,12 @@ std::wstring DatabaseInfo::selectSqlCondition()
 
   sqlQuerry += SQLFROM;
   sqlQuerry += composeSqlQuerryTable();
-  sqlQuerry += SQLWHERE;
-  sqlQuerry += composeSqlCondition();
+  wstring condition = composeSqlCondition();
+  if (condition.size())
+  {
+    sqlQuerry += SQLWHERE;
+    sqlQuerry += condition;
+  }
 
   return sqlQuerry;
 }
@@ -181,9 +185,13 @@ std::wstring DatabaseInfo::updateSqlCondition()
   sqlQuerry += composeSqlQuerryTable();
   sqlQuerry += SQLSET;
   sqlQuerry += composeSqlUpdateColumns();
-  sqlQuerry += SQLWHERE;
-  sqlQuerry += composeSqlCondition();
   
+  wstring condition = composeSqlCondition();
+  if (condition.size())
+  {
+    sqlQuerry += SQLWHERE;
+    sqlQuerry += condition;
+  }
   return sqlQuerry;
 }
 
@@ -283,12 +291,14 @@ std::wstring DatabaseInfo::composeSqlCondition()
   }
 
   // delete last AND
-  result.pop_back();
-  result.pop_back();
-  result.pop_back();
-  result.pop_back();
-  result.pop_back();
-
+  if (result.size())
+  {
+    result.pop_back();
+    result.pop_back();
+    result.pop_back();
+    result.pop_back();
+    result.pop_back();
+  }
   return result;
 
 }

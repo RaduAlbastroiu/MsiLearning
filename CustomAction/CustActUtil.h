@@ -7,4 +7,5 @@ namespace CustActUtil
   vector<wstring> tokenizeProperties(const wstring& aTokenizable);
   bool isProperty(const wstring& aProperty);
   wstring getPropertyValue(Table& aPropertyTable, const wstring& aProperty);
+  UINT getNrCharDisplayed(const wstring& aText);
 }

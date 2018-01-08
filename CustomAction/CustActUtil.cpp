@@ -12,6 +12,7 @@ namespace CustActUtil
     for (auto& token : tokenized)
     {
       token = getPropertyValue(propertyTable, token);
+      finalText += token;
     }
     return finalText;
   }
@@ -19,6 +20,8 @@ namespace CustActUtil
   vector<wstring> tokenizeProperties(const wstring & aTokenizable)
   {
     vector<wstring> tokenized;
+    tokenized.push_back({});
+
     bool isProp = false;
     for (auto& c : aTokenizable)
     {
@@ -50,11 +53,13 @@ namespace CustActUtil
 
   wstring getPropertyValue(Table& aPropertyTable, const wstring & aProperty)
   {
-    wstring propValue = L"";
+    wstring propValue = aProperty;
     if (isProperty(aProperty))
     {
       wstring prop = aProperty.substr(1);
-      prop.pop_back();
+      
+      if(prop.size())
+        prop.pop_back();
 
       for (int i = 0; i < aPropertyTable.getNumberOfRows(); ++i)
       {
@@ -66,5 +71,42 @@ namespace CustActUtil
       }
     }
     return propValue;
+  }
+
+  UINT getNrCharDisplayed(const wstring & aText)
+  {
+    UINT result = aText.size();
+
+    if (result > 2)
+    {
+      for (auto it = aText.begin(); it != aText.end() - 2; ++it)
+      {
+        // {verdanaBold 13} skip
+        if (*it == L'{')
+        {
+          it++;
+          UINT counter = 2;
+          while (it != aText.end() && *it != L'}')
+          {
+            it++;
+            counter++;
+          }
+          result -= counter;
+        }
+
+        // /" skip
+        if (*it == L'\'' && *(it + 1) == L'"')
+        {
+          result--;
+        }
+
+        // &Folder
+        if (*it == L'&' && ((*(it + 1) >= L'a' && *(it + 1) <= L'z') || (*(it + 1) >= L'A' && *(it + 1) <= L'Z')))
+        {
+          result--;
+        }
+      }
+    }
+    return result;
   }
 }
