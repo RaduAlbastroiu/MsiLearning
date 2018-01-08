@@ -15,6 +15,9 @@
 #define SQLWHERE L" WHERE "
 #define SQLCREATE L" CREATE "
 #define SQLTABLE L" TABLE "
+#define SQLORDERBY L" ORDER BY "
+#define SQLASC L" ASC ";
+#define SQLDESC L" DESC ";
 
 struct targetMetadata {
   targetMetadata(const wstring& aName, const ColumnType aType, bool isKeyMember, bool isNullable)
@@ -98,6 +101,10 @@ public:
   void createKeyColumn(const wstring& aColumnName, const ColumnType& aColumnType);
   UINT addTableToDatabase();
 
+  // order by
+  void orderBy(const wstring& aColumnName, bool ascending);
+  UINT order();
+
   // error handling
   bool isGood();
   wstring getLastError();
@@ -144,6 +151,8 @@ private:
   wstring mDatabasePath;
 
   MSIHANDLE mDatabaseHandle;
+
+  wstring mOrderByCondition = L"";
 
   vector<LogicCondition> mConditions;
 };

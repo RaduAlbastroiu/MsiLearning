@@ -29,6 +29,23 @@ unique_ptr<Table> ConditionState::select()
   return mDatabaseInfo.select();
 }
 
+unique_ptr<ConditionState> ConditionState::orderByAsc(const wstring & aColumnName)
+{
+  mDatabaseInfo.orderBy(aColumnName, true);
+  return make_unique<ConditionState>(mDatabaseInfo);
+}
+/*
+unique_ptr<ConditionState> ConditionState::orderByDesc(const wstring & aColumnName)
+{
+  mDatabaseInfo.orderBy(aColumnName, false);
+  return make_unique<ConditionState>(mDatabaseInfo);
+}
+*/
+UINT ConditionState::order()
+{
+  return mDatabaseInfo.order();
+}
+
 UINT ConditionState::deleteRows()
 {
   return mDatabaseInfo.deleteRows();

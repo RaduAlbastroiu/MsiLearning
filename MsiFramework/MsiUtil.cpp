@@ -37,6 +37,7 @@ namespace MsiUtil
     LPCTSTR sqlQuerry = aSqlQuerry.c_str();
 
     UINT mErrorMessage = ::MsiDatabaseOpenView(aTargetHandle, sqlQuerry, &phView);
+
     if (mErrorMessage == ERROR_SUCCESS)
     {
       mErrorMessage = ::MsiViewExecute(phView, 0);

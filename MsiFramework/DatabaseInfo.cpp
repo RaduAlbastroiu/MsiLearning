@@ -139,6 +139,34 @@ UINT DatabaseInfo::addTableToDatabase()
   return runSql(L"");
 }
 
+void DatabaseInfo::orderBy(const wstring & aColumnName, bool /*ascending*/)
+{
+  if (mOrderByCondition.size())
+  {
+    mOrderByCondition += L", ";
+  }
+
+  mOrderByCondition += L"`" + aColumnName + L"` ";
+  /*
+  if (ascending)
+  {
+    mOrderByCondition += SQLASC;
+  }
+  else
+  {
+    mOrderByCondition += SQLDESC;
+  }
+  */
+}
+
+UINT DatabaseInfo::order()
+{
+  wstring sqlQuery = selectSqlCondition();
+  sqlQuery += L" ORDER BY " + mOrderByCondition;
+
+  return runSql(sqlQuery);
+}
+
 bool DatabaseInfo::isGood()
 {
   return mErrorHandling.isGood();
@@ -219,14 +247,20 @@ std::wstring DatabaseInfo::composeSqlQuerryTable()
 std::wstring DatabaseInfo::composeSqlEnumerateColumns()
 {
   // add columns with comas
-  wstring result = L"`";
+  wstring result = L"";
   for (auto column : mTargetTabel.mColumnCollection)
-    result += column.mName + L"`, `";
+    result += L"`" + column.mName + L"`, ";
  
   // delete last coma
-  result.pop_back();
-  result.pop_back();
-  result.pop_back();
+  if (result.size())
+  {
+    result.pop_back();
+    result.pop_back();
+  }
+  else
+  {
+    result = L"*";
+  }
 
   return result;
 }
