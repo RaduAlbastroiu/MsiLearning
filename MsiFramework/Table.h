@@ -21,8 +21,6 @@ public:
   // first index is 0
   unique_ptr<Row> getRowWithNumber(int aRowNumber);
 
-  UINT commitUpdates();
-
 private:
   // access one column via columnName
   TableMetadata mTableSchema;

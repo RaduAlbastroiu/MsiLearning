@@ -26,8 +26,3 @@ unique_ptr<Row> Table::getRowWithNumber(int aRowNumber)
 {
   return mRowCollection.getRowWithNumber(aRowNumber);
 }
-
-UINT Table::commitUpdates()
-{
-  return 0;
-}

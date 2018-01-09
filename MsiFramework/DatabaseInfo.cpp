@@ -37,10 +37,44 @@ std::unique_ptr<Table> DatabaseInfo::select()
 
 UINT DatabaseInfo::update()
 {
-  wstring sqlUpdateQuerry = updateSqlCondition();
-  
-  mErrorMessage = runSql(sqlUpdateQuerry);
+  if (isOpenFromDisk)
+  {
+    // run sql query
+    wstring sqlUpdateQuery = updateSqlCondition();
 
+    mErrorMessage = runSql(sqlUpdateQuery);
+  }
+  else
+  {
+    /*
+    In case of update from a custom action the update
+    area will be selected and then updated using Element update
+    */
+
+    auto tRef = select();
+
+    if (tRef)
+    {
+      int nrRows = tRef->getNumberOfRows();
+      for (int i = 0; i < nrRows; i++)
+      {
+        for (const auto& targetColumn : mTargetTabel.mColumnCollection)
+        {
+          // for int 
+          if (targetColumn.mMetadata.mType == ColumnType::Integer)
+          {
+            int newValue = stoi(targetColumn.mNewValue);
+            mErrorMessage = tRef->getRowWithNumber(i)->getElementFromColumn(targetColumn.mName)->update(newValue);
+          }
+          // for wstring
+          else
+          {
+            mErrorMessage = tRef->getRowWithNumber(i)->getElementFromColumn(targetColumn.mName)->update(targetColumn.mNewValue);
+          }
+        }
+      }
+    }
+  }
   return mErrorMessage;
 }
 
@@ -416,7 +450,7 @@ RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMet
       
       Element element(tableExtracted[i][j], columnName, aTableMetadata.getMetadataForColumn(columnName), mTargetTabel.mColumnCollection[j].mNumber, i + 1);
 
-      element.setOpenFromCustAct(!/* is not */isOpenFromDisk);
+      element.setOpenFromCustAct(false == isOpenFromDisk);
 
       element.setRowHandle(rowHandles[i]);
       element.setViewHandle(aHView);
@@ -438,6 +472,7 @@ Table DatabaseInfo::createTableFromSqlQuerry(const wstring& sqlSelect)
   MsiUtil::openView(mDatabaseHandle, sqlSelect, hViewSelect);
 
   // takes target columns and get metadata
+  // also set column nr
   populateMetadataForTargetColumns(hViewSelect);
 
   // generate real metadata obj for selected table

@@ -6,18 +6,10 @@
 void testFunction(LPCTSTR msiPath)
 {
   UINT errorMessage = ERROR_SUCCESS;
-//  MSIHANDLE hDatabase;
-  //MsiUtil::openDatabase(msiPath, hDatabase);
-
-  //errorMessage = MsiUtil::runSqlQuerryCommit(hDatabase, L"SELECT * FROM `Control` ORDER BY `Control` ");
 
   Database database(msiPath);
 
-  errorMessage = database.inTable(L"Control")->withColumns()->orderByAsc(L"Dialog_")->orderByAsc(L"Control")->order();
-  auto t = database.inTable(L"Control")->withColumns(L"Control")->select();
-
-  auto s = t->getRowWithNumber(0)->getElementFromColumn(L"Control")->getAsString();
- 
+  errorMessage = database.inTable(L"Control")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->updateColumnWithValue(L"Control", L"32")->update();
 
   wstring err;
   MsiUtil::getLastError(err);
