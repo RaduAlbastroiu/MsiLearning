@@ -121,7 +121,53 @@ void DatabaseInfo::insertInColumnValue(const wstring& aColumnName, const wstring
 
 UINT DatabaseInfo::insert()
 {
-  return runSql(insertSqlCondition());
+  // from disk run query
+  if (isOpenFromDisk)
+  {
+    return runSql(insertSqlCondition());
+  }
+  else
+  {
+    /*
+    Open view for table
+    Create record
+    Insert record
+    */
+    
+    MSIHANDLE hView;
+    MSIHANDLE hNewRecord;
+    wstring sqlQuery = SQLSELECT;
+    sqlQuery += L"*";
+    sqlQuery += SQLFROM;
+    sqlQuery += mTargetTabel.tableName;
+    
+    // open view
+    mErrorMessage = MsiUtil::openView(mDatabaseHandle, sqlQuery, hView);
+
+    // create record
+    hNewRecord = MsiUtil::createRecord(MsiUtil::getFieldCountFromView(hView));
+
+    // take metadata
+    populateMetadataForTargetColumns(hView);
+
+    // data for record
+    vector<wstring> newValues;
+    vector<bool> isInt;
+    vector<UINT> fieldNr;
+    for (auto& elem : mTargetTabel.mColumnCollection)
+    {
+      newValues.push_back(elem.mNewValue);
+      isInt.push_back(elem.mMetadata.mType == ColumnType::Integer);
+      fieldNr.push_back(elem.mNumber);
+    }
+
+    // set record
+    MsiUtil::setRecord(hNewRecord, newValues, isInt, fieldNr);
+    
+    // insert record
+    MsiUtil::insertRecordInView(hView, hNewRecord);
+  }
+  return ERROR_SUCCESS;
 }
 
 void DatabaseInfo::createTable(const wstring& aTableName)
@@ -371,14 +417,14 @@ std::wstring DatabaseInfo::composeSqlCondition()
 
 }
 
-void DatabaseInfo::populateMetadataForTargetColumns(MSIHANDLE selectRecord)
+void DatabaseInfo::populateMetadataForTargetColumns(MSIHANDLE hView)
 {
   // first: column name
   // second: column type
   vector<pair<wstring, wstring>> columnsInfo;
   vector<wstring> primaryKeys;
 
-  MsiUtil::getColumnsInfo(selectRecord, columnsInfo);
+  MsiUtil::getColumnsInfo(hView, columnsInfo);
   MsiUtil::getPrimaryKeys(mDatabaseHandle, mTargetTabel.tableName, primaryKeys);
 
   for (auto& aTargetColumn : mTargetTabel.mColumnCollection)

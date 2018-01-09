@@ -139,7 +139,7 @@ private:
   wstring composeSqlColumnTypes();
   wstring composeSqlCondition();
 
-  void populateMetadataForTargetColumns(MSIHANDLE selectRecord);
+  void populateMetadataForTargetColumns(MSIHANDLE hView);
   TableMetadata generateMetadataFromTarget(const wstring& aTableName);
   RowCollection generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE aViewHandle);
 

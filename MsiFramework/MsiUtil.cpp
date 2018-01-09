@@ -14,11 +14,11 @@ namespace MsiUtil
     return ::MsiGetActiveDatabase(hSession);
   }
 
-  UINT openView(MSIHANDLE aTargetHandle, const wstring & aSqlQuerry, MSIHANDLE & outputHandle)
+  UINT openView(MSIHANDLE hDatabase, const wstring & aSqlQuerry, MSIHANDLE & outputHandle)
   {
     LPCTSTR sqlQuerry = aSqlQuerry.c_str();
 
-    UINT mErrorMessage = ::MsiDatabaseOpenView(aTargetHandle, sqlQuerry, &outputHandle);
+    UINT mErrorMessage = ::MsiDatabaseOpenView(hDatabase, sqlQuerry, &outputHandle);
 
     if (mErrorMessage == ERROR_SUCCESS)
     {
@@ -53,9 +53,33 @@ namespace MsiUtil
     return mErrorMessage;
   }
 
+  UINT insertRecordInView(MSIHANDLE hView, MSIHANDLE hRecord)
+  {
+    MSIHANDLE hFetch;
+    UINT errorMessage = ERROR_SUCCESS;
+    errorMessage = ::MsiViewExecute(hView, 0);
+    if (errorMessage == ERROR_SUCCESS)
+    {
+      errorMessage = ::MsiViewFetch(hView, &hFetch);
+      if (errorMessage == ERROR_SUCCESS)
+      {
+        errorMessage = ::MsiViewModify(hView, MSIMODIFY_INSERT_TEMPORARY, hRecord);
+      }
+    }
+    return errorMessage;
+  }
+
+  UINT getFieldCountFromView(MSIHANDLE hView)
+  {
+    UINT errorMessage = ERROR_SUCCESS;
+    MSIHANDLE hRecord;
+    errorMessage = ::MsiViewFetch(hView, &hRecord);
+    return ::MsiRecordGetFieldCount(hRecord);
+  }
+
   UINT getFieldCount(MSIHANDLE recordHandle)
   {
-    return MsiRecordGetFieldCount(recordHandle);
+    return ::MsiRecordGetFieldCount(recordHandle);
   }
 
   UINT getStringFromRecord(MSIHANDLE recordHandle, int fieldNumber, wstring & resultString)
@@ -165,6 +189,25 @@ namespace MsiUtil
     }
 
     return ERROR_SUCCESS;
+  }
+
+  UINT setRecord(MSIHANDLE hRecord, vector<wstring> values, vector<bool> type, vector<UINT> fieldNr)
+  {
+    UINT errorMessage = ERROR_SUCCESS;
+    for (size_t i = 0; i < values.size(); ++i)
+    {
+      if (type[i] == true)
+      {
+        int newValue = stoi(values[i]);
+        errorMessage = ::MsiRecordSetInteger(hRecord, fieldNr[i], newValue);
+      }
+      else
+      {
+        LPCTSTR newValue = values[i].c_str();
+        errorMessage = ::MsiRecordSetString(hRecord, fieldNr[i], newValue);
+      }
+    }
+    return errorMessage;
   }
 
   UINT setRecordInteger(bool isCustAct, MSIHANDLE databaseHandle, MSIHANDLE hView, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, int value)
@@ -285,6 +328,11 @@ namespace MsiUtil
   UINT commit(MSIHANDLE databaseHandle)
   {
     return ::MsiDatabaseCommit(databaseHandle);
+  }
+
+  UINT createRecord(UINT nrFields)
+  {
+    return MsiCreateRecord(nrFields);
   }
 
 }
