@@ -57,7 +57,7 @@ namespace MsiUtil
   {
     UINT errorMessage = ERROR_SUCCESS;
     MSIHANDLE hRecord;
-    errorMessage = ::MsiViewFetch(hView, &hRecord);
+    errorMessage = ::MsiViewGetColumnInfo(hView, MSICOLINFO_NAMES, &hRecord);
     return ::MsiRecordGetFieldCount(hRecord);
   }
 
@@ -309,38 +309,34 @@ namespace MsiUtil
     return errorMessage;
   }
 
-  UINT insertTemporaryRecordInView(MSIHANDLE hView, vector<wstring> values, vector<bool> type, vector<UINT> fieldNr)
+  UINT insertTemporaryRecordInView(MSIHANDLE hView, vector<wstring>& values, vector<bool>& type, vector<UINT>& fieldNr)
   {
-    MSIHANDLE hFetch;
     UINT errorMessage = ERROR_SUCCESS;
     errorMessage = ::MsiViewExecute(hView, 0);
     if (errorMessage == ERROR_SUCCESS)
     {
-      // first fetch
-      errorMessage = ::MsiViewFetch(hView, &hFetch);
+      int nrFields = MsiUtil::getFieldCountFromView(hView);
+      MSIHANDLE hRecord = ::MsiCreateRecord(nrFields);
 
-      // delete old data from record
-      errorMessage = ::MsiRecordClearData(hFetch);
-     
-      // modify hFetched and existing one
+      // modify record
       for (size_t i = 0; i < values.size(); ++i)
       {
         if (type[i] == true)
         {
           int newValue = stoi(values[i]);
-          errorMessage = ::MsiRecordSetInteger(hFetch, fieldNr[i], newValue);
+          errorMessage = ::MsiRecordSetInteger(hRecord, fieldNr[i], newValue);
         }
         else
         {
           LPCTSTR newValue = values[i].c_str();
-          errorMessage = ::MsiRecordSetString(hFetch, fieldNr[i], newValue);
+          errorMessage = ::MsiRecordSetString(hRecord, fieldNr[i], newValue);
         }
       }
 
       // insert
       if (errorMessage == ERROR_SUCCESS)
       {
-        errorMessage = ::MsiViewModify(hView, MSIMODIFY_INSERT_TEMPORARY, hFetch);
+        errorMessage = ::MsiViewModify(hView, MSIMODIFY_INSERT_TEMPORARY, hRecord);
       }
     }
     return errorMessage;
@@ -363,6 +359,27 @@ namespace MsiUtil
         }
       }
     }
+    return errorMessage;
+  }
+
+  UINT getValueFromProperty(MSIHANDLE hSession, const wstring & aPropertyName, wstring & aOutput)
+  {
+    DWORD stringLenght = 0;
+    LPCTSTR propertyName = aPropertyName.c_str();
+
+    // error more memory
+    UINT errorMessage = ::MsiGetProperty(hSession, propertyName, L"", &stringLenght);
+
+    // null terminated string
+    stringLenght++;
+
+    // get the string
+    wchar_t result[256];
+    errorMessage = ::MsiGetProperty(hSession, propertyName, result, &stringLenght);
+
+    // output parameter
+    aOutput = result;
+
     return errorMessage;
   }
 

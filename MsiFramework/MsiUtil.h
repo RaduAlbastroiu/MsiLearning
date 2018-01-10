@@ -26,8 +26,10 @@ namespace MsiUtil
   UINT setRecordInteger(bool isCustAct, MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, int value);
   UINT setRecordString(bool isCustAct, MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, const wstring& value);
 
-  UINT insertTemporaryRecordInView(MSIHANDLE hView, vector<wstring> values, vector<bool> type, vector<UINT> fieldNr);
+  UINT insertTemporaryRecordInView(MSIHANDLE hView, vector<wstring>& values, vector<bool>& type, vector<UINT>& fieldNr);
   UINT deleteTemporaryRecordFromView(MSIHANDLE hView);
+
+  UINT getValueFromProperty(MSIHANDLE hSession, const wstring& aPropertyName, wstring& aOutput);
 
   UINT getLastError(wstring& error);
 }
