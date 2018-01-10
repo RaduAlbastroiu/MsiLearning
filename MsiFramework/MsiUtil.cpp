@@ -309,7 +309,7 @@ namespace MsiUtil
     return errorMessage;
   }
 
-  UINT insertRecordInView(MSIHANDLE hView, vector<wstring> values, vector<bool> type, vector<UINT> fieldNr)
+  UINT insertTemporaryRecordInView(MSIHANDLE hView, vector<wstring> values, vector<bool> type, vector<UINT> fieldNr)
   {
     MSIHANDLE hFetch;
     UINT errorMessage = ERROR_SUCCESS;
@@ -341,6 +341,26 @@ namespace MsiUtil
       if (errorMessage == ERROR_SUCCESS)
       {
         errorMessage = ::MsiViewModify(hView, MSIMODIFY_INSERT_TEMPORARY, hFetch);
+      }
+    }
+    return errorMessage;
+  }
+
+  UINT deleteTemporaryRecordFromView(MSIHANDLE hView)
+  {
+    UINT errorMessage = ERROR_SUCCESS;
+    MSIHANDLE hFetched;
+    
+    errorMessage = ::MsiViewExecute(hView, 0);
+    if (errorMessage == ERROR_SUCCESS)
+    {
+      while (errorMessage == ERROR_SUCCESS)
+      {
+        errorMessage = ::MsiViewFetch(hView, &hFetched);
+        if (errorMessage == ERROR_SUCCESS)
+        {
+          errorMessage = ::MsiViewModify(hView, MSIMODIFY_DELETE, hFetched);
+        }
       }
     }
     return errorMessage;

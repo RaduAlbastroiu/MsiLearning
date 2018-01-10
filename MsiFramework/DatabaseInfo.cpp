@@ -91,13 +91,31 @@ void DatabaseInfo::updateColumnWithValue(const wstring& aColumnName, const wstri
 
 UINT DatabaseInfo::deleteRows()
 {
-  wstring sqlDeleteQuerry = SQLDELETE;
-  sqlDeleteQuerry += SQLFROM;
-  sqlDeleteQuerry += composeSqlQuerryTable();
-  sqlDeleteQuerry += SQLWHERE;
-  sqlDeleteQuerry += composeSqlCondition();
+  // run sql if on disc
+  if (isOpenFromDisk)
+  {
+    wstring sqlDeleteQuerry = SQLDELETE;
+    sqlDeleteQuerry += SQLFROM;
+    sqlDeleteQuerry += composeSqlQuerryTable();
+    sqlDeleteQuerry += SQLWHERE;
+    sqlDeleteQuerry += composeSqlCondition();
 
-  return runSql(sqlDeleteQuerry);
+    return runSql(sqlDeleteQuerry);
+  }
+  else
+  {
+    // on custom action open view and delete one by one
+    wstring sqlSelect = selectSqlCondition();
+    MSIHANDLE hViewSelect;
+
+    // open view
+    MsiUtil::openView(mDatabaseHandle, sqlSelect, hViewSelect);
+
+    // delete from view
+    MsiUtil::deleteTemporaryRecordFromView(hViewSelect);
+
+    return ERROR_SUCCESS;
+  }
 }
 
 UINT DatabaseInfo::deleteAllRows()
@@ -158,7 +176,7 @@ UINT DatabaseInfo::insert()
     }
 
     // insert record
-    MsiUtil::insertRecordInView(hView, newValues, isInt, fieldNr);
+    MsiUtil::insertTemporaryRecordInView(hView, newValues, isInt, fieldNr);
   }
   return ERROR_SUCCESS;
 }

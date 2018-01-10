@@ -12,8 +12,6 @@ namespace MsiUtil
   UINT openView(MSIHANDLE hDatabase, const wstring& aSqlQuerry, MSIHANDLE& outputHandle);
   UINT runSqlQuerryCommit(MSIHANDLE aTargetHandle, const wstring& aSqlQuerry);
 
-  UINT insertRecordInView(MSIHANDLE hView, vector<wstring> values, vector<bool> type, vector<UINT> fieldNr);
-
   UINT getFieldCountFromView(MSIHANDLE hView);
   UINT getFieldCount(MSIHANDLE recordHandle);
   UINT getStringFromRecord(MSIHANDLE recordHandle, int fieldNumber, wstring& resultString);
@@ -27,6 +25,9 @@ namespace MsiUtil
 
   UINT setRecordInteger(bool isCustAct, MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, int value);
   UINT setRecordString(bool isCustAct, MSIHANDLE databaseHandle, MSIHANDLE viewHandle, MSIHANDLE recordHandle, unsigned int rowNumber, unsigned int fieldNumber, const wstring& value);
+
+  UINT insertTemporaryRecordInView(MSIHANDLE hView, vector<wstring> values, vector<bool> type, vector<UINT> fieldNr);
+  UINT deleteTemporaryRecordFromView(MSIHANDLE hView);
 
   UINT getLastError(wstring& error);
 }
