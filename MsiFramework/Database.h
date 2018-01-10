@@ -24,6 +24,9 @@ public:
   wstring getLastError();
   bool isGood();
 
+  // get value from property
+  wstring getValueFromProperty(const wstring& aPropertyName);
+
 private:
   wstring mDatabasePath;
 

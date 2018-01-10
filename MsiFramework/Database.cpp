@@ -38,3 +38,8 @@ bool Database::isGood()
 {
   return mDatabaseInfo.isGood();
 }
+
+wstring Database::getValueFromProperty(const wstring & aPropertyName)
+{
+  return mDatabaseInfo.getPropertyValue(aPropertyName);
+}

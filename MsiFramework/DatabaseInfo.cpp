@@ -11,6 +11,7 @@ DatabaseInfo::DatabaseInfo(const wstring& aDatabasePath)
 
 DatabaseInfo::DatabaseInfo(const MSIHANDLE hSession)
 {
+  mSessionInstall = hSession;
   mDatabaseHandle = MsiUtil::openActiveDatabase(hSession);
   isOpenFromDisk = false;
   mDatabasePath = L"";
@@ -256,6 +257,20 @@ UINT DatabaseInfo::order()
   sqlQuery += L" ORDER BY " + mOrderByCondition;
 
   return runSql(sqlQuery);
+}
+
+wstring DatabaseInfo::getPropertyValue(const wstring & aPropertyName)
+{
+  wstring s;
+  UINT err = MsiUtil::getValueFromProperty(mSessionInstall, aPropertyName, s);
+  if (err == ERROR_SUCCESS)
+  {
+    return s;
+  }
+  else
+  {
+    return L"";
+  }
 }
 
 bool DatabaseInfo::isGood()

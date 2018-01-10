@@ -105,6 +105,9 @@ public:
   void orderBy(const wstring& aColumnName, bool ascending);
   UINT order();
 
+  // get property
+  wstring getPropertyValue(const wstring& aPropertyName);
+
   // error handling
   bool isGood();
   wstring getLastError();
@@ -151,6 +154,7 @@ private:
   wstring mDatabasePath;
 
   MSIHANDLE mDatabaseHandle;
+  MSIHANDLE mSessionInstall;
 
   wstring mOrderByCondition = L"";
 
