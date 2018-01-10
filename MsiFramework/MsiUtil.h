@@ -12,7 +12,7 @@ namespace MsiUtil
   UINT openView(MSIHANDLE hDatabase, const wstring& aSqlQuerry, MSIHANDLE& outputHandle);
   UINT runSqlQuerryCommit(MSIHANDLE aTargetHandle, const wstring& aSqlQuerry);
 
-  UINT insertRecordInView(MSIHANDLE hView, MSIHANDLE hRecord);
+  UINT insertRecordInView(MSIHANDLE hView, vector<wstring> values, vector<bool> type, vector<UINT> fieldNr);
 
   UINT getFieldCountFromView(MSIHANDLE hView);
   UINT getFieldCount(MSIHANDLE recordHandle);

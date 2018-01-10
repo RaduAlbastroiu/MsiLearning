@@ -53,22 +53,6 @@ namespace MsiUtil
     return mErrorMessage;
   }
 
-  UINT insertRecordInView(MSIHANDLE hView, MSIHANDLE hRecord)
-  {
-    MSIHANDLE hFetch;
-    UINT errorMessage = ERROR_SUCCESS;
-    errorMessage = ::MsiViewExecute(hView, 0);
-    if (errorMessage == ERROR_SUCCESS)
-    {
-      errorMessage = ::MsiViewFetch(hView, &hFetch);
-      if (errorMessage == ERROR_SUCCESS)
-      {
-        errorMessage = ::MsiViewModify(hView, MSIMODIFY_INSERT_TEMPORARY, hRecord);
-      }
-    }
-    return errorMessage;
-  }
-
   UINT getFieldCountFromView(MSIHANDLE hView)
   {
     UINT errorMessage = ERROR_SUCCESS;
@@ -322,6 +306,43 @@ namespace MsiUtil
       error += L" In: " + extracted;
     }
 
+    return errorMessage;
+  }
+
+  UINT insertRecordInView(MSIHANDLE hView, vector<wstring> values, vector<bool> type, vector<UINT> fieldNr)
+  {
+    MSIHANDLE hFetch;
+    UINT errorMessage = ERROR_SUCCESS;
+    errorMessage = ::MsiViewExecute(hView, 0);
+    if (errorMessage == ERROR_SUCCESS)
+    {
+      // first fetch
+      errorMessage = ::MsiViewFetch(hView, &hFetch);
+
+      // delete old data from record
+      errorMessage = ::MsiRecordClearData(hFetch);
+     
+      // modify hFetched and existing one
+      for (size_t i = 0; i < values.size(); ++i)
+      {
+        if (type[i] == true)
+        {
+          int newValue = stoi(values[i]);
+          errorMessage = ::MsiRecordSetInteger(hFetch, fieldNr[i], newValue);
+        }
+        else
+        {
+          LPCTSTR newValue = values[i].c_str();
+          errorMessage = ::MsiRecordSetString(hFetch, fieldNr[i], newValue);
+        }
+      }
+
+      // insert
+      if (errorMessage == ERROR_SUCCESS)
+      {
+        errorMessage = ::MsiViewModify(hView, MSIMODIFY_INSERT_TEMPORARY, hFetch);
+      }
+    }
     return errorMessage;
   }
 

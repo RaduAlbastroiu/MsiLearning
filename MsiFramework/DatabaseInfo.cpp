@@ -135,7 +135,6 @@ UINT DatabaseInfo::insert()
     */
     
     MSIHANDLE hView;
-    MSIHANDLE hNewRecord;
     wstring sqlQuery = SQLSELECT;
     sqlQuery += L"*";
     sqlQuery += SQLFROM;
@@ -143,9 +142,6 @@ UINT DatabaseInfo::insert()
     
     // open view
     mErrorMessage = MsiUtil::openView(mDatabaseHandle, sqlQuery, hView);
-
-    // create record
-    hNewRecord = MsiUtil::createRecord(MsiUtil::getFieldCountFromView(hView));
 
     // take metadata
     populateMetadataForTargetColumns(hView);
@@ -161,11 +157,8 @@ UINT DatabaseInfo::insert()
       fieldNr.push_back(elem.mNumber);
     }
 
-    // set record
-    MsiUtil::setRecord(hNewRecord, newValues, isInt, fieldNr);
-    
     // insert record
-    MsiUtil::insertRecordInView(hView, hNewRecord);
+    MsiUtil::insertRecordInView(hView, newValues, isInt, fieldNr);
   }
   return ERROR_SUCCESS;
 }
