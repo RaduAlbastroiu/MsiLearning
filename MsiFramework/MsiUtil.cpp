@@ -383,6 +383,13 @@ namespace MsiUtil
     return errorMessage;
   }
 
+  UINT setValueInProperty(MSIHANDLE hSession, const wstring & aPropertyName, const wstring & aNewValue)
+  {
+    LPCTSTR szName = aPropertyName.c_str();
+    LPCTSTR szValue = aNewValue.c_str();
+    return ::MsiSetProperty(hSession, szName, szValue);
+  }
+
   UINT commit(MSIHANDLE databaseHandle)
   {
     return ::MsiDatabaseCommit(databaseHandle);

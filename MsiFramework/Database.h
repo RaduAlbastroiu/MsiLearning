@@ -26,6 +26,7 @@ public:
 
   // get value from property
   wstring getValueFromProperty(const wstring& aPropertyName);
+  UINT setValueInProperty(const wstring& aPropertyName, const wstring& aNewValue);
 
 private:
   wstring mDatabasePath;

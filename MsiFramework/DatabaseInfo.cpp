@@ -273,6 +273,11 @@ wstring DatabaseInfo::getPropertyValue(const wstring & aPropertyName)
   }
 }
 
+UINT DatabaseInfo::setPropertyValue(const wstring & aPropertyName, const wstring & aNewValue)
+{
+  return MsiUtil::setValueInProperty(mSessionInstall, aPropertyName, aNewValue);
+}
+
 bool DatabaseInfo::isGood()
 {
   return mErrorHandling.isGood();

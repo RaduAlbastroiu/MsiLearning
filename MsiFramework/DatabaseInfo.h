@@ -107,6 +107,7 @@ public:
 
   // get property
   wstring getPropertyValue(const wstring& aPropertyName);
+  UINT setPropertyValue(const wstring& aPropertyName, const wstring& aNewValue);
 
   // error handling
   bool isGood();

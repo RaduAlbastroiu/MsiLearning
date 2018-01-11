@@ -43,3 +43,8 @@ wstring Database::getValueFromProperty(const wstring & aPropertyName)
 {
   return mDatabaseInfo.getPropertyValue(aPropertyName);
 }
+
+UINT Database::setValueInProperty(const wstring & aPropertyName, const wstring & aNewValue)
+{
+  return mDatabaseInfo.setPropertyValue(aPropertyName, aNewValue);
+}

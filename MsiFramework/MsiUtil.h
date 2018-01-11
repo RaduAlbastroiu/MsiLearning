@@ -30,6 +30,7 @@ namespace MsiUtil
   UINT deleteTemporaryRecordFromView(MSIHANDLE hView);
 
   UINT getValueFromProperty(MSIHANDLE hSession, const wstring& aPropertyName, wstring& aOutput);
+  UINT setValueInProperty(MSIHANDLE hSession, const wstring& aPropertyName, const wstring& aNewValue);
 
   UINT getLastError(wstring& error);
 }
