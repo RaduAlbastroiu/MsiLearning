@@ -121,10 +121,17 @@ UINT DatabaseInfo::deleteRows()
 
 UINT DatabaseInfo::deleteAllRows()
 {
-  wstring sqlDeleteQuerry = SQLDELETE;
-  sqlDeleteQuerry += composeSqlQuerryTable();
-  
-  return runSql(sqlDeleteQuerry);
+  if (isOpenFromDisk)
+  {
+    wstring sqlDeleteQuerry = SQLDELETE;
+    sqlDeleteQuerry += composeSqlQuerryTable();
+
+    return runSql(sqlDeleteQuerry);
+  }
+  else
+  {
+    return deleteRows();
+  }
 }
 
 void DatabaseInfo::insertInColumnValue(const wstring& aColumnName, const wstring& aValue)
@@ -251,14 +258,6 @@ void DatabaseInfo::orderBy(const wstring & aColumnName, bool /*ascending*/)
   */
 }
 
-UINT DatabaseInfo::order()
-{
-  wstring sqlQuery = selectSqlCondition();
-  sqlQuery += L" ORDER BY " + mOrderByCondition;
-
-  return runSql(sqlQuery);
-}
-
 wstring DatabaseInfo::getPropertyValue(const wstring & aPropertyName)
 {
   wstring s;
@@ -313,6 +312,11 @@ std::wstring DatabaseInfo::selectSqlCondition()
   {
     sqlQuerry += SQLWHERE;
     sqlQuerry += condition;
+  }
+
+  if (mOrderByCondition.size())
+  {
+    sqlQuerry += SQLORDERBY + mOrderByCondition;
   }
 
   return sqlQuerry;

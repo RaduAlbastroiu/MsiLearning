@@ -41,10 +41,6 @@ unique_ptr<ConditionState> ConditionState::orderByDesc(const wstring & aColumnNa
   return make_unique<ConditionState>(mDatabaseInfo);
 }
 */
-UINT ConditionState::order()
-{
-  return mDatabaseInfo.order();
-}
 
 UINT ConditionState::deleteRows()
 {

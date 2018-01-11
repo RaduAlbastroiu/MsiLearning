@@ -103,7 +103,6 @@ public:
 
   // order by
   void orderBy(const wstring& aColumnName, bool ascending);
-  UINT order();
 
   // get property
   wstring getPropertyValue(const wstring& aPropertyName);
