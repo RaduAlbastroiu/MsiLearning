@@ -172,9 +172,11 @@ namespace CustActUtil
   vector<wstring> getAllFilesFromDirectory(Database& aDatabase, const wstring& aDirectoryId)
   {
     vector<wstring> result;
-    wstring componentId = aDatabase.inTable(L"Component")->withColumns(L"Component")
-      ->whereConditionIs(Equal(L"Directory_", aDirectoryId))->select()->getRowWithNumber(0)
-      ->getElementFromColumn(L"Component")->getAsString();
+    Table table = *aDatabase.inTable(L"Component")->withColumns(L"Component")
+      ->whereConditionIs(Equal(L"Directory_", aDirectoryId))->select();
+
+    int nr = table.getNumberOfRows();
+    wstring componentId = table.getRowWithNumber(nr-1)->getElementFromColumn(L"Component")->getAsString();
 
     Table fileTable = *aDatabase.inTable(L"File")->withColumns(L"FileName")
       ->whereConditionIs(Equal(L"Component_", componentId))->select();
@@ -191,8 +193,17 @@ namespace CustActUtil
   // get all files from sub tree
   vector<wstring> getAllFilesFromSubTreeOfDirectory(Database& aDatabase, const wstring& aDirectoryId)
   {
+    // find dirName
+    wstring dirName = aDatabase.inTable(L"Directory")->withColumns(L"DefaultDir")
+      ->whereConditionIs(Equal(L"Directory", aDirectoryId))->select()->getRowWithNumber(0)
+      ->getElementFromColumn(L"DefaultDir")->getAsString();
+
     // files in local directory
     vector<wstring> allFileNames = getAllFilesFromDirectory(aDatabase, aDirectoryId);
+    for (auto& fileName : allFileNames)
+    {
+      fileName = dirName + L"/" + fileName;
+    }
 
     // all folder names
     vector<wstring> folderIds = findAllKidsForDirectory(aDatabase, aDirectoryId);
@@ -202,7 +213,7 @@ namespace CustActUtil
       vector<wstring> kidFolderFiles = getAllFilesFromSubTreeOfDirectory(aDatabase, folderId);
       for (auto& kidFile : kidFolderFiles)
       {
-        allFileNames.push_back(kidFile);
+        allFileNames.push_back(dirName + L"/" + kidFile);
       }
     }
 
