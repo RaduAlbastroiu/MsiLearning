@@ -277,6 +277,34 @@ UINT DatabaseInfo::setPropertyValue(const wstring & aPropertyName, const wstring
   return MsiUtil::setValueInProperty(mSessionInstall, aPropertyName, aNewValue);
 }
 
+void DatabaseInfo::insertElementsInListBox(const wstring & listBoxProp, vector<wstring>& values)
+{
+  // insert elements in listbox
+  for (size_t i = 0; i < values.size(); i++)
+  {
+    setTargetTable(L"ListBox");
+    insertInColumnValue(L"Property", listBoxProp);
+    insertInColumnValue(L"Order", to_wstring(i + 1));
+    insertInColumnValue(L"Value", values[i]);
+    insertInColumnValue(L"Text", values[i]);
+    insert();
+  }
+}
+
+void DatabaseInfo::insertElementsInComboBox(const wstring & comboBoxProp, vector<wstring>& values)
+{
+  // insert elements in combobox
+  for (size_t i = 0; i < values.size(); i++)
+  {
+    setTargetTable(L"ComboBox");
+    insertInColumnValue(L"Property", comboBoxProp);
+    insertInColumnValue(L"Order", to_wstring(i + 1));
+    insertInColumnValue(L"Value", values[i]);
+    insertInColumnValue(L"Text", values[i]);
+    insert();
+  }
+}
+
 bool DatabaseInfo::isGood()
 {
   return mErrorHandling.isGood();

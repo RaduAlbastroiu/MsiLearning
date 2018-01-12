@@ -48,3 +48,13 @@ UINT Database::setValueInProperty(const wstring & aPropertyName, const wstring &
 {
   return mDatabaseInfo.setPropertyValue(aPropertyName, aNewValue);
 }
+
+void Database::insertElementsInListBox(const wstring & listBoxProp, vector<wstring>& values)
+{
+  mDatabaseInfo.insertElementsInListBox(listBoxProp, values);
+}
+
+void Database::insertElementsInComboBox(const wstring & comboBoxProp, vector<wstring>& values)
+{
+  mDatabaseInfo.insertElementsInComboBox(comboBoxProp, values);
+}

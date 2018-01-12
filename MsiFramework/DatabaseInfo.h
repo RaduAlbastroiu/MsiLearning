@@ -108,6 +108,11 @@ public:
   wstring getPropertyValue(const wstring& aPropertyName);
   UINT setPropertyValue(const wstring& aPropertyName, const wstring& aNewValue);
 
+  // insert element in listbox
+  void insertElementsInListBox(const wstring& listBoxProp, vector<wstring>& values);
+  // insert element in combobox
+  void insertElementsInComboBox(const wstring& comboBoxProp, vector<wstring>& values);
+
   // error handling
   bool isGood();
   wstring getLastError();

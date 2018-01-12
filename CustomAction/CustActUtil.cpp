@@ -110,34 +110,6 @@ namespace CustActUtil
     return result;
   }
 
-  UINT insertElementsInComboBox(Database & aDatabase, const wstring& comboBoxProp, vector<wstring>& values)
-  {
-    // insert elements in combobox
-    for (size_t i = 0; i < values.size(); i++)
-    {
-      auto inserter = aDatabase.inTable(L"ComboBox")->insertInColumnWithValue(L"Property", comboBoxProp);
-      inserter = inserter->insertInColumnWithValue(L"Order", to_wstring(i + 1));
-      inserter = inserter->insertInColumnWithValue(L"Value", values[i]);
-      inserter = inserter->insertInColumnWithValue(L"Text", values[i]);
-      inserter->insert();
-    }
-    return ERROR_SUCCESS;
-  }
-
-  UINT insertElementsInListBox(Database & aDatabase, const wstring& listBoxProp, vector<wstring>& values)
-  {
-    // insert elements in listbox
-    for (size_t i = 0; i < values.size(); i++)
-    {
-      auto inserter = aDatabase.inTable(L"ListBox")->insertInColumnWithValue(L"Property", listBoxProp);
-      inserter = inserter->insertInColumnWithValue(L"Order", to_wstring(i + 1));
-      inserter = inserter->insertInColumnWithValue(L"Value", values[i]);
-      inserter = inserter->insertInColumnWithValue(L"Text", values[i]); 
-      inserter->insert();
-    }
-    return ERROR_SUCCESS;
-  }
-
   // dfs on directory graph
   wstring findFullPathForDirectory(Database& aDatabase, const wstring& aDirectoryId)
   {
@@ -240,7 +212,7 @@ namespace CustActUtil
     database.inTable(L"ListBox")->whereConditionIs(Equal(L"Property", L"LISTBOX_2_PROP"))->deleteRows();
 
     // insert files in listBox
-    CustActUtil::insertElementsInListBox(database, L"LISTBOX_2_PROP", allFiles);
+    database.insertElementsInListBox(L"LISTBOX_2_PROP", allFiles);
 
     return ERROR_SUCCESS;
   }
