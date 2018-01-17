@@ -147,17 +147,21 @@ namespace CustActUtil
     Table table = *aDatabase.inTable(L"Component")->withColumns(L"Component")
       ->whereConditionIs(Equal(L"Directory_", aDirectoryId))->select();
 
+
+    vector<wstring> componentIds;
     int nr = table.getNumberOfRows();
-    wstring componentId = table.getRowWithNumber(nr-1)->getElementFromColumn(L"Component")->getAsString();
-
-    Table fileTable = *aDatabase.inTable(L"File")->withColumns(L"FileName")
-      ->whereConditionIs(Equal(L"Component_", componentId))->select();
-
-    int nrRows = fileTable.getNumberOfRows();
-    for (int i = 0; i < nrRows; i++)
+    for (int j = 0; j < nr; j++)
     {
-      wstring fileName = fileTable.getRowWithNumber(i)->getElementFromColumn(L"FileName")->getAsString();
-      result.push_back(fileName);
+      wstring componentId = table.getRowWithNumber(j)->getElementFromColumn(L"Component")->getAsString();
+      Table fileTable = *aDatabase.inTable(L"File")->withColumns(L"FileName")
+        ->whereConditionIs(Equal(L"Component_", componentId))->select();
+
+      int nrRows = fileTable.getNumberOfRows();
+      for (int i = 0; i < nrRows; i++)
+      {
+        wstring fileName = fileTable.getRowWithNumber(i)->getElementFromColumn(L"FileName")->getAsString();
+        result.push_back(fileName);
+      }
     }
     return result;
   }

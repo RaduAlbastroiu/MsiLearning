@@ -21,6 +21,8 @@ public:
   // first index is 0
   unique_ptr<Row> getRowWithNumber(int aRowNumber);
 
+  // TODO: get rid of i = 0; i < getNrOfRows and create an iterable range
+
 private:
   // access one column via columnName
   TableMetadata mTableSchema;

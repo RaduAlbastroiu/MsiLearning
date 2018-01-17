@@ -77,12 +77,15 @@ namespace MsiUtil
     stringLenght++;
 
     // get the string
-    wchar_t result[256];
+    wchar_t* result = new wchar_t[stringLenght];
     errorMessage = ::MsiRecordGetString(recordHandle, fieldNumber, result, &stringLenght);
 
     // output parameter
     resultString = result;
 
+    // remove heap memory
+    delete result;
+    
     return errorMessage;
   }
 
@@ -374,11 +377,14 @@ namespace MsiUtil
     stringLenght++;
 
     // get the string
-    wchar_t result[256];
+    wchar_t* result = new wchar_t[stringLenght];
     errorMessage = ::MsiGetProperty(hSession, propertyName, result, &stringLenght);
 
     // output parameter
     aOutput = result;
+
+    // remove heap memory
+    delete result;
 
     return errorMessage;
   }
