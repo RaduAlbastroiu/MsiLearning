@@ -83,10 +83,10 @@ public:
   void setTargetTable(const wstring& aTableName);
 
   // TODO: use one select with default parameter
+  // TODO: lambda support for select
   unique_ptr<Table> select();
   unique_ptr<Table> select(IEvaluator& aEvaluator);
-  template<typename F>
-  unique_ptr<Table> select(F functor);
+  unique_ptr<Table> select(function<bool(Row&)> func);
 
   // update
   UINT update();
@@ -176,18 +176,3 @@ private:
 
   vector<LogicCondition> mConditions;
 };
-
-template<typename F>
-inline unique_ptr<Table> DatabaseInfo::select(F functor)
-{
-  // default evaluator
-  AlwaysTrueEvaluator aEvaluator;
-
-  function<bool<Row&>> func = functor;
-
-  wstring sqlSelectQuerry = selectSqlCondition();
-
-  Table resultTable = createTableFromSqlQuerry(sqlSelectQuerry, aEvaluator);
-
-  return make_unique<Table>(resultTable);
-}

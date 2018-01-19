@@ -49,6 +49,18 @@ unique_ptr<Table> DatabaseInfo::select(IEvaluator& aEvaluator)
   return make_unique<Table>(resultTable);
 }
 
+unique_ptr<Table> DatabaseInfo::select(function<bool(Row&)> func)
+{
+  // default evaluator
+  AlwaysTrueEvaluator aEvaluator;
+
+  wstring sqlSelectQuerry = selectSqlCondition();
+
+  Table resultTable = createTableFromSqlQuerry(sqlSelectQuerry, aEvaluator);
+
+  return make_unique<Table>(resultTable);
+}
+
 UINT DatabaseInfo::update()
 {
   if (isOpenFromDisk)

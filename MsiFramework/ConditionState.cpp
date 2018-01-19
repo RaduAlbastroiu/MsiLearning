@@ -34,6 +34,11 @@ unique_ptr<Table> ConditionState::select(IEvaluator & aEvaluator)
   return mDatabaseInfo.select(aEvaluator);
 }
 
+unique_ptr<Table> ConditionState::select(function<bool(Row&)> func)
+{
+  return mDatabaseInfo.select(func);
+}
+
 unique_ptr<ConditionState> ConditionState::orderByAsc(const wstring & aColumnName)
 {
   mDatabaseInfo.orderBy(aColumnName, true);
