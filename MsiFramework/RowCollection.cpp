@@ -26,10 +26,10 @@ int RowCollection::getNumberOfRows()
   return mRowCollection.size();
 }
 
-bool RowCollection::addRow(map<wstring, Element>& aRowData, MSIHANDLE aRowHandle)
+bool RowCollection::addRow(Row& aRow)
 {
 
-  mRowCollection.push_back(Row(aRowData, aRowHandle));
+  mRowCollection.push_back(aRow);
 
   return true;
 }

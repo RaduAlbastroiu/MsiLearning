@@ -6,7 +6,8 @@ class Element
 {
 public:
   Element(const wstring& aValue, const wstring& aColumnName, const MetadataSchema& aTableName, UINT aFieldNumber, UINT aRowNumber);
-
+  
+  // TODO: getAsX() -> getValue() with type deduction
   wstring getAsString();
   int getAsInt();
 
@@ -39,4 +40,8 @@ private:
   MSIHANDLE mDatabaseHandle;
   UINT mRowNumber;
   UINT mFieldNumber;
+};
+
+class ElementString : public Element {
+
 };

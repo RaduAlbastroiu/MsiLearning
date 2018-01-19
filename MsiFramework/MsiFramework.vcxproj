@@ -25,6 +25,7 @@
     <ClCompile Include="DatabaseInfo.cpp" />
     <ClCompile Include="Element.cpp" />
     <ClCompile Include="ErrorHandling.cpp" />
+    <ClCompile Include="IEvaluator.cpp" />
     <ClCompile Include="InsertState.cpp" />
     <ClCompile Include="LogicCondition.cpp" />
     <ClCompile Include="MsiUtil.cpp" />
@@ -51,6 +52,7 @@
     <ClInclude Include="DatabaseInfo.h" />
     <ClInclude Include="Element.h" />
     <ClInclude Include="ErrorHandling.h" />
+    <ClInclude Include="IEvaluator.h" />
     <ClInclude Include="InsertState.h" />
     <ClInclude Include="LogicCondition.h" />
     <ClInclude Include="MsiUtil.h" />

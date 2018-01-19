@@ -14,7 +14,7 @@ public:
 
   int getNumberOfRows();
 
-  bool addRow(map<wstring, Element>& aRowData, MSIHANDLE aRowHandle);
+  bool addRow(Row& aRow);
 
   vector<Row>::iterator begin();
   vector<Row>::iterator end();

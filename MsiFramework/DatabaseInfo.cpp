@@ -29,9 +29,22 @@ void DatabaseInfo::setTargetTable(const wstring& aTableName)
 
 std::unique_ptr<Table> DatabaseInfo::select()
 {
+  // default evaluator
+  AlwaysTrueEvaluator aEvaluator;
+
   wstring sqlSelectQuerry = selectSqlCondition();
 
-  Table resultTable = createTableFromSqlQuerry(sqlSelectQuerry);
+  Table resultTable = createTableFromSqlQuerry(sqlSelectQuerry, aEvaluator);
+
+  return make_unique<Table>(resultTable);
+}
+
+unique_ptr<Table> DatabaseInfo::select(IEvaluator& aEvaluator)
+{
+  // custom evaluator
+  wstring sqlSelectQuerry = selectSqlCondition();
+
+  Table resultTable = createTableFromSqlQuerry(sqlSelectQuerry, aEvaluator);
 
   return make_unique<Table>(resultTable);
 }
@@ -535,7 +548,7 @@ TableMetadata DatabaseInfo::generateMetadataFromTarget(const wstring& aTableName
   return tableMetadata;
 }
 
-RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE aHView)
+RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE aHView, IEvaluator& aEvaluator)
 {
   // create row collection
   RowCollection resultRowCollection(aHView);
@@ -568,13 +581,17 @@ RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMet
       rowData.insert(pair<wstring, Element>(columnName, element));
     }
 
-    resultRowCollection.addRow(rowData, rowHandles[i]);
+    Row row(rowData, rowHandles[i]);
+    if (aEvaluator.evaluate(row))
+    {
+      resultRowCollection.addRow(row);
+    }
   }
 
   return resultRowCollection;
 }
 
-Table DatabaseInfo::createTableFromSqlQuerry(const wstring& sqlSelect)
+Table DatabaseInfo::createTableFromSqlQuerry(const wstring& sqlSelect, IEvaluator& aEvaluator)
 {
   MSIHANDLE hViewSelect;
   // open select view
@@ -588,7 +605,7 @@ Table DatabaseInfo::createTableFromSqlQuerry(const wstring& sqlSelect)
   auto metadata = generateMetadataFromTarget(mTargetTabel.tableName);
 
   // create rowCollection
-  auto rowCollection = generateRowCollection(metadata, hViewSelect);
+  auto rowCollection = generateRowCollection(metadata, hViewSelect, aEvaluator);
 
   Table t(metadata, rowCollection, hViewSelect);
   return t;

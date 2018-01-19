@@ -4,6 +4,7 @@
 #include "LogicCondition.h"
 #include "MsiUtil.h"
 #include "ErrorHandling.h"
+#include "IEvaluator.h"
 
 #define SQLSELECT L" SELECT "
 #define SQLUPDATE L" UPDATE "
@@ -80,7 +81,12 @@ public:
   
   // select
   void setTargetTable(const wstring& aTableName);
+
+  // TODO: use one select with default parameter
   unique_ptr<Table> select();
+  unique_ptr<Table> select(IEvaluator& aEvaluator);
+  template<typename F>
+  unique_ptr<Table> select(F functor);
 
   // update
   UINT update();
@@ -149,12 +155,17 @@ private:
 
   void populateMetadataForTargetColumns(MSIHANDLE hView);
   TableMetadata generateMetadataFromTarget(const wstring& aTableName);
-  RowCollection generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE aViewHandle);
+
+  RowCollection generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE aHView, IEvaluator& aEvaluator);
+  //template<typename F>
+  //RowCollection generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE aHView, F functor);
 
   // single table
   targetTable mTargetTabel;
 
-  Table createTableFromSqlQuerry(const wstring& sqlSelect);
+  Table createTableFromSqlQuerry(const wstring& sqlSelect, IEvaluator& aEvaluator);
+  //template<typename F>
+  //Table createTableFromSqlQuerry(const wstring& sqlSelect, F functor);
 
   wstring mDatabasePath;
 
@@ -165,3 +176,18 @@ private:
 
   vector<LogicCondition> mConditions;
 };
+
+template<typename F>
+inline unique_ptr<Table> DatabaseInfo::select(F functor)
+{
+  // default evaluator
+  AlwaysTrueEvaluator aEvaluator;
+
+  function<bool<Row&>> func = functor;
+
+  wstring sqlSelectQuerry = selectSqlCondition();
+
+  Table resultTable = createTableFromSqlQuerry(sqlSelectQuerry, aEvaluator);
+
+  return make_unique<Table>(resultTable);
+}

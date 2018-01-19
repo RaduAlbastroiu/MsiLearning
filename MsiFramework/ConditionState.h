@@ -15,13 +15,14 @@ public:
   unique_ptr<ConditionState> whereConditionIs(const LogicCondition& aCondition);
   unique_ptr<UpdateState> updateColumnWithValue(const wstring& aColumnName, const wstring& aNewValue);
   unique_ptr<Table> select();
-  
+  unique_ptr<Table> select(IEvaluator& aEvaluator);
+
   unique_ptr<ConditionState> orderByAsc(const wstring& aColumnName);
   //unique_ptr<ConditionState> orderByDesc(const wstring& aColumnName);
-  UINT order();
-
+  
   UINT deleteRows();
 
 private:
   DatabaseInfo mDatabaseInfo;
 };
+
