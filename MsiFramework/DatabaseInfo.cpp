@@ -578,7 +578,7 @@ Table DatabaseInfo::createTableFromSqlQuerry(const wstring& sqlSelect)
 {
   MSIHANDLE hViewSelect;
   // open select view
-  auto err = MsiUtil::openView(mDatabaseHandle, sqlSelect, hViewSelect);
+  MsiUtil::openView(mDatabaseHandle, sqlSelect, hViewSelect);
 
   // takes target columns and get metadata
   // also set column nr

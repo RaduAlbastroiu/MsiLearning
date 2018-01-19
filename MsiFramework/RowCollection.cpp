@@ -34,6 +34,16 @@ bool RowCollection::addRow(map<wstring, Element>& aRowData, MSIHANDLE aRowHandle
   return true;
 }
 
+vector<Row>::iterator RowCollection::begin()
+{
+  return mRowCollection.begin();
+}
+
+vector<Row>::iterator RowCollection::end()
+{
+  return mRowCollection.end();
+}
+
 //UINT RowCollection::commitUpdates()
 //{
 //  vector<vector<pair<UINT, 

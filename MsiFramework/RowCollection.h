@@ -16,7 +16,8 @@ public:
 
   bool addRow(map<wstring, Element>& aRowData, MSIHANDLE aRowHandle);
 
-  //UINT commitUpdates();
+  vector<Row>::iterator begin();
+  vector<Row>::iterator end();
 
 private:
   vector<Row> mRowCollection;

@@ -26,3 +26,13 @@ unique_ptr<Row> Table::getRowWithNumber(int aRowNumber)
 {
   return mRowCollection.getRowWithNumber(aRowNumber);
 }
+
+vector<Row>::iterator Table::begin()
+{
+  return mRowCollection.begin();
+}
+
+vector<Row>::iterator Table::end()
+{
+  return mRowCollection.end();
+}
