@@ -131,10 +131,10 @@ namespace CustActUtil
     vector<wstring> result;
     Table table = *aDatabase.inTable(L"Directory")->withColumns(L"Directory")->
       whereConditionIs(Equal(L"Directory_Parent", aDirectoryId))->select();
-    int nr = table.getNumberOfRows();
-    for (int i = 0; i < nr; i++)
+   
+    for (auto& row : table)
     {
-      wstring dirId = table.getRowWithNumber(i)->getElementFromColumn(L"Directory")->getAsString();
+      wstring dirId = row.getElementFromColumn(L"Directory")->getAsString();
       result.push_back(dirId);
     }
     return result;
@@ -145,21 +145,23 @@ namespace CustActUtil
   {
     vector<wstring> result;
     Table table = *aDatabase.inTable(L"Component")->withColumns(L"Component")
-      ->whereConditionIs(Equal(L"Directory_", aDirectoryId))->select();
+      ->whereConditionIs(Equal(L"Directory_", aDirectoryId))->select([](Row& aRow) -> bool {
+      if (aRow.getElementFromColumn(L"Component")->getAsString() == L"ProductInformation")
+        return false;
+      return true;
+    });
 
 
     vector<wstring> componentIds;
-    int nr = table.getNumberOfRows();
-    for (int j = 0; j < nr; j++)
+    for (auto& row : table)
     {
-      wstring componentId = table.getRowWithNumber(j)->getElementFromColumn(L"Component")->getAsString();
+      wstring componentId = row.getElementFromColumn(L"Component")->getAsString();
       Table fileTable = *aDatabase.inTable(L"File")->withColumns(L"FileName")
         ->whereConditionIs(Equal(L"Component_", componentId))->select();
 
-      int nrRows = fileTable.getNumberOfRows();
-      for (int i = 0; i < nrRows; i++)
+      for (auto& rowFileTable : fileTable)
       {
-        wstring fileName = fileTable.getRowWithNumber(i)->getElementFromColumn(L"FileName")->getAsString();
+        wstring fileName = rowFileTable.getElementFromColumn(L"FileName")->getAsString();
         result.push_back(fileName);
       }
     }
