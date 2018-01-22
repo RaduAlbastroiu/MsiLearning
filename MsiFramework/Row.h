@@ -14,6 +14,7 @@ public:
 private:
 
   map<wstring, Element> mRowData;
+  //map<wstring, unique_ptr<IElement<wstring>>> mRowData;
   
   MSIHANDLE mRowHandle;
 };

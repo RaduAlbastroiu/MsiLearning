@@ -2,25 +2,40 @@
 #include "MsiUtil.h"
 
 class MetadataSchema;
+
+template<class T>
+class IElement {
+public:
+  virtual T getValue() = 0;
+  virtual UINT update(const T& aNewValue) = 0;
+  virtual wstring getTable() = 0;
+  virtual wstring getColumn() = 0;
+  virtual const MetadataSchema& getColumnMetadata() = 0;
+  virtual void setOpenFromCustAct(bool isCustAct) = 0;
+  virtual void setRowHandle(MSIHANDLE aRowHandle) = 0;
+  virtual void setViewHandle(MSIHANDLE aViewHandle) = 0;
+  virtual void setDatabaseHandle(MSIHANDLE aDatabaseHandle) = 0;
+};
+
+
+//template<class T>
 class Element
 {
 public:
-  Element(const wstring& aValue, const wstring& aColumnName, const MetadataSchema& aTableName, UINT aFieldNumber, UINT aRowNumber);
+  Element(const wstring& aValue, const wstring& aColumnName, const MetadataSchema& aTableName, UINT aFieldNumber, UINT aRowNumber, bool aIsCustact);
   
   // TODO: getAsX() -> getValue() with type deduction
   wstring getAsString();
   int getAsInt();
+  //T getValue();
 
   UINT update(const wstring& aNewValue);
   UINT update(int aNewValue);
+  //UINT update(const T& aNewValue);
 
-  bool isNullable();
-  bool isKeyMember();
-  bool isInt();
   wstring getTable();
   wstring getColumn();
-
-  void setOpenFromCustAct(bool isCustAct);
+  const MetadataSchema& getColumnMetadata();
 
   void setRowHandle(MSIHANDLE aRowHandle);
   void setViewHandle(MSIHANDLE aViewHandle);
@@ -40,8 +55,4 @@ private:
   MSIHANDLE mDatabaseHandle;
   UINT mRowNumber;
   UINT mFieldNumber;
-};
-
-class ElementString : public Element {
-
 };

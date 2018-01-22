@@ -580,9 +580,7 @@ RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMet
     {
       wstring columnName = mTargetTabel.mColumnCollection[j].mName;
       
-      Element element(tableExtracted[i][j], columnName, aTableMetadata.getMetadataForColumn(columnName), mTargetTabel.mColumnCollection[j].mNumber, i + 1);
-
-      element.setOpenFromCustAct(false == isOpenFromDisk);
+      Element element(tableExtracted[i][j], columnName, aTableMetadata.getMetadataForColumn(columnName), mTargetTabel.mColumnCollection[j].mNumber, i + 1, false == isOpenFromDisk);
 
       element.setRowHandle(rowHandles[i]);
       element.setViewHandle(aHView);
@@ -623,9 +621,7 @@ RowCollection DatabaseInfo::generateRowCollection(const TableMetadata & aTableMe
     {
       wstring columnName = mTargetTabel.mColumnCollection[j].mName;
 
-      Element element(tableExtracted[i][j], columnName, aTableMetadata.getMetadataForColumn(columnName), mTargetTabel.mColumnCollection[j].mNumber, i + 1);
-
-      element.setOpenFromCustAct(false == isOpenFromDisk);
+      Element element(tableExtracted[i][j], columnName, aTableMetadata.getMetadataForColumn(columnName), mTargetTabel.mColumnCollection[j].mNumber, i + 1, false == isOpenFromDisk);
 
       element.setRowHandle(rowHandles[i]);
       element.setViewHandle(aHView);

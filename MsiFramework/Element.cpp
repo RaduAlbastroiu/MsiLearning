@@ -3,8 +3,9 @@
 #include "Element.h"
 #include "TableMetadata.h"
 
-Element::Element(const wstring & aValue, const wstring & aColumnName, const MetadataSchema & aColumnSchema, UINT aFieldNumber, UINT aRowNumber)
-  :mValue(aValue), mColumn(aColumnName), mColumnSchema(aColumnSchema), mFieldNumber(aFieldNumber), mRowNumber(aRowNumber)
+//template <class T>
+Element::Element(const wstring & aValue, const wstring & aColumnName, const MetadataSchema & aColumnSchema, UINT aFieldNumber, UINT aRowNumber, bool aIsCustact)
+  :mValue(aValue), mColumn(aColumnName), mColumnSchema(aColumnSchema), mFieldNumber(aFieldNumber), mRowNumber(aRowNumber), mIsFromCustact(aIsCustact)
 {
 }
 
@@ -15,12 +16,19 @@ wstring Element::getAsString()
 
 int Element::getAsInt()
 {
-  if (isInt())
+  if (mColumnSchema.mType == ColumnType::Integer)
     return stoi(mValue);
   else
     return 0xffffffff;
 }
 
+//template<class T>
+//T Element<T>::getValue()
+//{
+//  return mValue;
+//}
+
+//template<class T>
 UINT Element::update(const wstring & aNewValue)
 {
   UINT errorMessage = MsiUtil::setRecordString(mIsFromCustact, mDatabaseHandle, mViewHandle, mRowHandle, mRowNumber, mFieldNumber, aNewValue);
@@ -29,6 +37,7 @@ UINT Element::update(const wstring & aNewValue)
   return errorMessage;
 }
 
+//template<class T>
 UINT Element::update(int aNewValue)
 {
   UINT errorMessage = MsiUtil::setRecordInteger(mIsFromCustact, mDatabaseHandle, mViewHandle, mRowHandle, mRowNumber, mFieldNumber, aNewValue);
@@ -37,48 +46,36 @@ UINT Element::update(int aNewValue)
   return errorMessage;
 }
 
-bool Element::isNullable()
-{
-  return mColumnSchema.isNullable;
-}
-
-bool Element::isKeyMember()
-{
-  return mColumnSchema.isKeyMember;
-}
-
-bool Element::isInt()
-{
-  if(mColumnSchema.mType == ColumnType::Integer)
-    return true;
-  return false;
-}
-
+//template<class T>
 wstring Element::getTable()
 {
   return mTable;
 }
 
+//template<class T>
 wstring Element::getColumn()
 {
   return mColumn;
 }
 
-void Element::setOpenFromCustAct(bool isCustAct)
+const MetadataSchema& Element::getColumnMetadata()
 {
-  mIsFromCustact = isCustAct;
+  return mColumnSchema;
 }
 
+//template<class T>
 void Element::setRowHandle(MSIHANDLE aRowHandle)
 {
   mRowHandle = aRowHandle;
 }
 
+//template<class T>
 void Element::setViewHandle(MSIHANDLE aViewHandle)
 {
   mViewHandle = aViewHandle;
 }
 
+//template<class T>
 void Element::setDatabaseHandle(MSIHANDLE aDatabaseHandle)
 {
   mDatabaseHandle = aDatabaseHandle;
