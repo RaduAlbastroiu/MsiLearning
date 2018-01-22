@@ -83,7 +83,6 @@ public:
   void setTargetTable(const wstring& aTableName);
 
   // TODO: use one select with default parameter
-  // TODO: lambda support for select
   unique_ptr<Table> select();
   unique_ptr<Table> select(IEvaluator& aEvaluator);
   unique_ptr<Table> select(function<bool(Row&)> func);
@@ -157,15 +156,13 @@ private:
   TableMetadata generateMetadataFromTarget(const wstring& aTableName);
 
   RowCollection generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE aHView, IEvaluator& aEvaluator);
-  //template<typename F>
-  //RowCollection generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE aHView, F functor);
+  RowCollection generateRowCollection(const TableMetadata& aTableMetadata, MSIHANDLE aHView, function<bool(Row&)> func);
 
   // single table
   targetTable mTargetTabel;
 
   Table createTableFromSqlQuerry(const wstring& sqlSelect, IEvaluator& aEvaluator);
-  //template<typename F>
-  //Table createTableFromSqlQuerry(const wstring& sqlSelect, F functor);
+  Table createTableFromSqlQuerry(const wstring& sqlSelect, function<bool(Row&)> func);
 
   wstring mDatabasePath;
 

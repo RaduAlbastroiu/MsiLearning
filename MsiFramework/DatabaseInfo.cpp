@@ -51,12 +51,10 @@ unique_ptr<Table> DatabaseInfo::select(IEvaluator& aEvaluator)
 
 unique_ptr<Table> DatabaseInfo::select(function<bool(Row&)> func)
 {
-  // default evaluator
-  AlwaysTrueEvaluator aEvaluator;
-
+  // lambda evaluator
   wstring sqlSelectQuerry = selectSqlCondition();
 
-  Table resultTable = createTableFromSqlQuerry(sqlSelectQuerry, aEvaluator);
+  Table resultTable = createTableFromSqlQuerry(sqlSelectQuerry, func);
 
   return make_unique<Table>(resultTable);
 }
@@ -603,6 +601,49 @@ RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMet
   return resultRowCollection;
 }
 
+RowCollection DatabaseInfo::generateRowCollection(const TableMetadata & aTableMetadata, MSIHANDLE aHView, function<bool(Row&)> func)
+{
+  // create row collection
+  RowCollection resultRowCollection(aHView);
+
+  vector<MSIHANDLE> rowHandles;
+  vector<vector<wstring>> tableExtracted;
+  vector<UINT> columnNumbers;
+  for (const auto& column : mTargetTabel.mColumnCollection)
+    columnNumbers.push_back(column.mNumber);
+
+  MsiUtil::getSelectedTable(aHView, columnNumbers, tableExtracted, rowHandles);
+
+  // create row collection
+  for (size_t i = 0; i < tableExtracted.size(); i++)
+  {
+    // create row
+    map<wstring, Element> rowData;
+    for (size_t j = 0; j < tableExtracted[i].size(); j++)
+    {
+      wstring columnName = mTargetTabel.mColumnCollection[j].mName;
+
+      Element element(tableExtracted[i][j], columnName, aTableMetadata.getMetadataForColumn(columnName), mTargetTabel.mColumnCollection[j].mNumber, i + 1);
+
+      element.setOpenFromCustAct(false == isOpenFromDisk);
+
+      element.setRowHandle(rowHandles[i]);
+      element.setViewHandle(aHView);
+      element.setDatabaseHandle(mDatabaseHandle);
+
+      rowData.insert(pair<wstring, Element>(columnName, element));
+    }
+
+    Row row(rowData, rowHandles[i]);
+    if (func(row))
+    {
+      resultRowCollection.addRow(row);
+    }
+  }
+
+  return resultRowCollection;
+}
+
 Table DatabaseInfo::createTableFromSqlQuerry(const wstring& sqlSelect, IEvaluator& aEvaluator)
 {
   MSIHANDLE hViewSelect;
@@ -618,6 +659,26 @@ Table DatabaseInfo::createTableFromSqlQuerry(const wstring& sqlSelect, IEvaluato
 
   // create rowCollection
   auto rowCollection = generateRowCollection(metadata, hViewSelect, aEvaluator);
+
+  Table t(metadata, rowCollection, hViewSelect);
+  return t;
+}
+
+Table DatabaseInfo::createTableFromSqlQuerry(const wstring & sqlSelect, function<bool(Row&)> func)
+{
+  MSIHANDLE hViewSelect;
+  // open select view
+  MsiUtil::openView(mDatabaseHandle, sqlSelect, hViewSelect);
+
+  // takes target columns and get metadata
+  // also set column nr
+  populateMetadataForTargetColumns(hViewSelect);
+
+  // generate real metadata obj for selected table
+  auto metadata = generateMetadataFromTarget(mTargetTabel.tableName);
+
+  // create rowCollection
+  auto rowCollection = generateRowCollection(metadata, hViewSelect, func);
 
   Table t(metadata, rowCollection, hViewSelect);
   return t;
