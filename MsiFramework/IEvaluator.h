@@ -19,7 +19,6 @@ public:
 
 };
 
-
 class InstallComponentEvaluator : public IEvaluator
 {
 public:
@@ -33,3 +32,14 @@ private:
 
 };
 
+class EvaluateCondition : public IEvaluator
+{
+public:
+  EvaluateCondition(MSIHANDLE& hInstall, wstring& aCondition) : hInstall(hInstall), mCondition(aCondition.c_str()) {}
+
+  bool virtual operator()(Row& aRow) override;
+
+private:
+  MSIHANDLE hInstall;
+  LPCTSTR mCondition;
+};

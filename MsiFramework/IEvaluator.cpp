@@ -23,3 +23,17 @@ bool InstallComponentEvaluator::operator()(Row & aRow)
   }
   return false;
 }
+
+bool EvaluateCondition::operator()(Row & /*aRow*/)
+{
+  MSICONDITION cond = MsiEvaluateCondition(hInstall, mCondition);
+
+  // if condition evaluates to true or there is no expression passed
+  if (cond == MSICONDITION_TRUE && cond == MSICONDITION_NONE)
+    return true;
+ 
+  if (cond == MSICONDITION_FALSE)
+    return false;
+
+  return false;
+}
