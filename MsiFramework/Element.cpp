@@ -16,10 +16,7 @@ wstring Element::getAsString()
 
 int Element::getAsInt()
 {
-  if (mColumnSchema.mType == ColumnType::Integer)
-    return stoi(mValue);
-  else
-    return 0xffffffff;
+  return stoi(mValue);
 }
 
 //template<class T>

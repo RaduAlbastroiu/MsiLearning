@@ -7,12 +7,16 @@ void testFunction(LPCTSTR msiPath)
 {
   UINT errorMessage = ERROR_SUCCESS;
 
-  Database database(msiPath);
+  //Database database(msiPath);
+  //
+  //errorMessage = database.inTable(L"Control")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->updateColumnWithValue(L"Control", L"32")->update();
+  //
+  //wstring err;
+  //MsiUtil::getLastError(err);
 
-  errorMessage = database.inTable(L"Control")->whereConditionIs(Equal(L"Dialog_", L"WelcomeDlg"))->updateColumnWithValue(L"Control", L"32")->update();
+  MSIHANDLE hDatabase;
+  errorMessage = MsiOpenDatabase(msiPath, MSIDBOPEN_CREATEDIRECT, &hDatabase);
 
-  wstring err;
-  MsiUtil::getLastError(err);
 
 }
 

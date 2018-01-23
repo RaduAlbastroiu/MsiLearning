@@ -141,16 +141,38 @@ namespace CustActUtil
   }
 
   // get all files from one directory
-  vector<wstring> getAllFilesFromDirectory(Database& aDatabase, const wstring& aDirectoryId)
+  vector<wstring> getAllFilesFromDirectory(Database& aDatabase, const wstring& aDirectoryId, bool installed)
   {
     vector<wstring> result;
     Table table = *aDatabase.inTable(L"Component")->withColumns(L"Component")
-      ->whereConditionIs(Equal(L"Directory_", aDirectoryId))->select([](Row& aRow) -> bool {
-      if (aRow.getElementFromColumn(L"Component")->getAsString() == L"ProductInformation")
-        return false;
-      return true;
-    });
+      ->whereConditionIs(Equal(L"Directory_", aDirectoryId))->select([&](Row& aRow) -> bool {
+      
+      if (installed)
+      {
+        Table feature = *aDatabase.inTable(L"FeatureComponents")->withColumns(L"Feature_")
+          ->whereConditionIs(Equal(L"Component_", aRow.getElementFromColumn(L"Component")->getAsString()))->select();
 
+        for (auto& aFeature : feature)
+        {
+          auto t = *aDatabase.inTable(L"Feature")->withColumns(L"Level")
+            ->whereConditionIs(Equal(L"Feature", aFeature.getElementFromColumn(L"Feature_")->getAsString()))
+            ->select();
+          auto t2 = t.getRowWithNumber(0);
+          auto t3 = t2->getElementFromColumn(L"Level");
+          int level = t3->getAsInt();
+
+          if (level < 4)
+          {
+            return true;
+          }
+        }
+        return false;
+      }
+      else
+      {
+        return true;
+      }
+    });
 
     vector<wstring> componentIds;
     for (auto& row : table)
@@ -169,7 +191,7 @@ namespace CustActUtil
   }
 
   // get all files from sub tree
-  vector<wstring> getAllFilesFromSubTreeOfDirectory(Database& aDatabase, const wstring& aDirectoryId)
+  vector<wstring> getAllFilesFromSubTreeOfDirectory(Database& aDatabase, const wstring& aDirectoryId, bool installed)
   {
     // find dirName
     wstring dirName = aDatabase.inTable(L"Directory")->withColumns(L"DefaultDir")
@@ -177,7 +199,7 @@ namespace CustActUtil
       ->getElementFromColumn(L"DefaultDir")->getAsString();
 
     // files in local directory
-    vector<wstring> allFileNames = getAllFilesFromDirectory(aDatabase, aDirectoryId);
+    vector<wstring> allFileNames = getAllFilesFromDirectory(aDatabase, aDirectoryId, installed);
     for (auto& fileName : allFileNames)
     {
       fileName = dirName + L"/" + fileName;
@@ -188,7 +210,7 @@ namespace CustActUtil
 
     for (auto& folderId : folderIds)
     {
-      vector<wstring> kidFolderFiles = getAllFilesFromSubTreeOfDirectory(aDatabase, folderId);
+      vector<wstring> kidFolderFiles = getAllFilesFromSubTreeOfDirectory(aDatabase, folderId, installed);
       for (auto& kidFile : kidFolderFiles)
       {
         allFileNames.push_back(dirName + L"/" + kidFile);
@@ -198,7 +220,7 @@ namespace CustActUtil
     return allFileNames;
   }
 
-  UINT DirectorFilesPopulateListBox(MSIHANDLE hSession)
+  UINT DirectorFilesPopulateListBox(MSIHANDLE hSession, bool installed)
   {
     Database database(hSession);
 
@@ -212,7 +234,7 @@ namespace CustActUtil
       whereConditionIs(Equal(L"DefaultDir", dirName))->select()->getRowWithNumber(0)->
       getElementFromColumn(L"Directory")->getAsString();
 
-    vector<wstring> allFiles = getAllFilesFromSubTreeOfDirectory(database, dirID);
+    vector<wstring> allFiles = getAllFilesFromSubTreeOfDirectory(database, dirID, installed);
 
     // delete elements from listbox
     database.inTable(L"ListBox")->whereConditionIs(Equal(L"Property", L"LISTBOX_2_PROP"))->deleteRows();

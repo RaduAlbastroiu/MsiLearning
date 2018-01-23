@@ -6,5 +6,6 @@ EXPORTS
  PopulateListBoxAtoZ
  PopulateListBoxTabOrder
  DirectorFiles
+ DirectorFilesInstall
  TestCustAct
  PopulateComboboxDirectoryNames
