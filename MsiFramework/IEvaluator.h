@@ -1,19 +1,35 @@
 #pragma once
 #include "Row.h"
+#include "Database.h"
 
 // interface
 class IEvaluator 
 {
 public:
-
-  virtual bool evaluate(Row& aRow) = 0;
-
+  
+  bool virtual operator()(Row& aRow) = 0;
+ 
 };
 
 class AlwaysTrueEvaluator : public IEvaluator
 {
 public:
 
-  bool evaluate(Row& /*aRow*/) override { return true; }
+  bool virtual operator()(Row& /*aRow*/) override { return true; }
 
 };
+
+
+class InstallComponentEvaluator : public IEvaluator
+{
+public:
+
+  InstallComponentEvaluator(Database& aDatabase) :mDatabase(aDatabase) {}
+
+  bool virtual operator()(Row& aRow) override;
+  
+private:
+  Database mDatabase;
+
+};
+

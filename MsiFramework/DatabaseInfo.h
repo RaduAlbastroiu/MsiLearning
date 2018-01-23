@@ -4,7 +4,6 @@
 #include "LogicCondition.h"
 #include "MsiUtil.h"
 #include "ErrorHandling.h"
-#include "IEvaluator.h"
 
 #define SQLSELECT L" SELECT "
 #define SQLUPDATE L" UPDATE "
@@ -19,6 +18,8 @@
 #define SQLORDERBY L" ORDER BY "
 #define SQLASC L" ASC ";
 #define SQLDESC L" DESC ";
+
+class IEvaluator;
 
 struct targetMetadata {
   targetMetadata(const wstring& aName, const ColumnType aType, bool isKeyMember, bool isNullable)

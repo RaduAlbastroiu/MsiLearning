@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "DatabaseInfo.h"
+#include "IEvaluator.h"
 
 DatabaseInfo::DatabaseInfo(const wstring& aDatabasePath)
 {
@@ -590,7 +591,7 @@ RowCollection DatabaseInfo::generateRowCollection(const TableMetadata& aTableMet
     }
 
     Row row(rowData, rowHandles[i]);
-    if (aEvaluator.evaluate(row))
+    if (aEvaluator(row))
     {
       resultRowCollection.addRow(row);
     }
