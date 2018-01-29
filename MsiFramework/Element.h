@@ -24,10 +24,11 @@ class Element
 public:
   Element(const wstring& aValue, const wstring& aColumnName, const MetadataSchema& aTableName, UINT aFieldNumber, UINT aRowNumber, bool aIsCustact);
   
-  // TODO: getAsX() -> getValue() with type deduction
   wstring getAsString();
   int getAsInt();
-  //T getValue();
+
+  // TODO: getAsX() -> getValue() with type deduction
+  std::any getValue();
 
   UINT update(const wstring& aNewValue);
   UINT update(int aNewValue);

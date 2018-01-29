@@ -19,6 +19,14 @@ int Element::getAsInt()
   return stoi(mValue);
 }
 
+std::any Element::getValue()
+{
+  if (mColumnSchema.mType == ColumnType::Integer)
+    return stoi(mValue);
+  else
+    return mValue;
+}
+
 //template<class T>
 //T Element<T>::getValue()
 //{
